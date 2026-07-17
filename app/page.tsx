@@ -1,0 +1,148 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
+type Tag="ground"|"protect"|"expand"|"act"|"connect"|"integrate"|"reflect"|"create";
+type Metrics={alpha:number;iy:number;cm:number;q:number;t:number};
+type Card={id:string;plate:string;process:string;arabic:number;roman:string;tags:Tag[]};
+type Choice={id:string;title:string;tag:Tag;symbol?:string;desc:string};
+type Draft={states:string[];geometry:string;point:string;az:string;buka:string;tx:string;axis:"yes"|"partly"|"no";reflection:string;induction:string;inversion:string};
+type LogItem={card:Card;quality:number;az:string;buka:string;tx:string;geometry:string;point:string;deltas:Metrics;source:number;layer:string};
+
+const tagNames:Record<Tag,string>={ground:"основание",protect:"сохранение",expand:"расширение",act:"действие",connect:"связь",integrate:"интеграция",reflect:"различение",create:"творение"};
+const plates=[
+ {id:"РЕСУРС",mark:"R",processes:[
+  ["БАЗОВЫЕ ПОТРЕБНОСТИ",["ground","protect"]],["ДОБЫВАТЬ ЗАЩИТУ",["protect","act"]],["ПРОДОЛЖАТЬ РОД",["connect","create"]],
+  ["УЛУЧШАТЬ УСЛОВИЯ",["ground","expand"]],["РАЗВИВАТЬ ТЕХНИКУ",["create","act"]],["ДОБИВАТЬСЯ УСПЕХА",["expand","act"]],
+ ]},
+ {id:"ВЛАСТЬ",mark:"P",processes:[
+  ["ОБЕСПЕЧЬ БЕЗОПАСНОСТЬ",["protect","ground"]],["СОХРАНИ СЕМЬЮ",["protect","connect"]],["ЗАЩИТИ РОД",["protect","act"]],
+  ["ВОССТАНОВИ ВНИМАНИЕ",["reflect","integrate"]],["ЦЕНИ РАВЕНСТВО",["connect","reflect"]],["ОТВЕЧАЙ НА ЧУВСТВА",["connect","integrate"]],
+ ]},
+ {id:"ОТНОШЕНИЯ",mark:"C",processes:[
+  ["БРОСАТЬ ВЫЗОВ",["act","expand"]],["УТВЕРЖДАТЬ СЕБЯ",["ground","act"]],["СТРЕМИТЬСЯ К ДЕЙСТВИЮ",["act","create"]],
+  ["СТРЕМИТЬСЯ К РАВНОВЕСИЮ",["integrate","connect"]],["СОЗДАВАТЬ СИСТЕМЫ",["create","connect"]],["ЦЕНИТЬ ЕСТЕСТВЕННОСТЬ",["reflect","ground"]],
+ ]},
+ {id:"РЕЗУЛЬТАТ",mark:"O",processes:[
+  ["АДАПТИРОВАТЬСЯ К ВЕРОВАНИЯМ",["reflect","integrate"]],["ЖЕРТВОВАТЬ ИНТЕРЕСАМИ",["connect","protect"]],["СОБЛЮДАТЬ ДИСЦИПЛИНУ",["ground","act"]],
+  ["БЫТЬ В МОДЕЛИ ЦЕЛОГО",["integrate","reflect"]],["СОЕДИНЯТЬ ТОЧКИ",["connect","create"]],["ВОССТАНАВЛИВАТЬ ДУХОВНОСТЬ",["integrate","ground"]],
+ ]},
+] as const;
+
+const sourcePhases=[
+ ["I₁","Разброс","Внимание рассыпано; поле ещё сильнее позиции."],["I₂","Сбор внимания","Возникает первая точка внутренней опоры."],
+ ["I₃","Присутствие","Субъект различает: «я здесь»."],["I₄","Вектор","Намерение получает направление."],
+ ["I₅","Решимость","Внутреннее согласие выдерживает неизвестность."],["I₆","Первое действие","Вектор впервые касается материи."],
+ ["I₇","Резонанс","Поле начинает отвечать субъекту."],["I₈","Формализация","Ответ получает структуру и договор."],
+ ["I₉","Масштаб","Форма проверяется ростом."],["I₁₀","Интеграция","Опыт входит в историю системы."],
+ ["I₁₁","Перезапуск","Старая форма падает, ядро остаётся."],["I₁₂","Тишина","Новый виток существует ещё до формы."],
+];
+const geometries:Choice[]=[
+ {id:"Euclid",title:"Евклид",tag:"ground",symbol:"△",desc:"Объекты, границы, прямой ход."},
+ {id:"Lobachevsky",title:"Лобачевский",tag:"expand",symbol:"⋔",desc:"Один вход раскрывает много траекторий."},
+ {id:"Riemann",title:"Риман",tag:"connect",symbol:"○",desc:"Целое искривляет путь каждой части."},
+ {id:"Projective",title:"Проектив",tag:"reflect",symbol:"◇",desc:"Видимое зависит от позиции."},
+ {id:"Supra",title:"Супра",tag:"integrate",symbol:"⊙",desc:"Инвариант делает сущее сущим."},
+];
+const points=[
+ {id:"Разрыв",desc:"Сшить порог",tx:["TX1","TX7"]},{id:"Залипание",desc:"Вернуть движение",tx:["TX2","TX3"]},
+ {id:"Вход",desc:"Принять сигнал",tx:["TX3","TX4"]},{id:"Интеграция",desc:"Встроить и закрыть",tx:["TX6","TX5"]},
+];
+const transmissions:Choice[]=[
+ {id:"TX1",title:"Ядро",tag:"ground",symbol:"⊙",desc:"Вернуть действие к основанию."},
+ {id:"TX2",title:"Орбита",tag:"expand",symbol:"◌",desc:"Создать движение вокруг ядра."},
+ {id:"TX3",title:"Резонанс",tag:"connect",symbol:"≈",desc:"Настроить взаимный отклик."},
+ {id:"TX4",title:"Мост",tag:"connect",symbol:"⌒",desc:"Провести связь между мирами."},
+ {id:"TX5",title:"Материализация",tag:"act",symbol:"◆",desc:"Закрепить волну в форме."},
+ {id:"TX6",title:"Интеграция",tag:"integrate",symbol:"⊕",desc:"Встроить опыт в целое."},
+ {id:"TX7",title:"Перезапуск",tag:"create",symbol:"↻",desc:"Отпустить форму, сохранив ядро."},
+];
+const azNames=["Азъ","Буки","Веди","Глаголь","Добро","Есть","Живѣтє","Зело","Земля","Иже","И","Како","Люди","Мыслете","Наш","Он","Покой","Рцы","Слово","Твердо","Ук","Ферт","Хер","Ци","Червь","Ша","Ща","Твёрдый знак","Ы","Мягкий знак","Э","Ю","Я","⊕","∴","∞","Резон","Явь","Поле","Точка","Архе","Тень","Врата","Лик","Суть","Глас","Дыхание","Вибрация","Свет"];
+const azTags:Tag[]=["ground","ground","reflect","create","integrate","ground","connect","act","ground","connect","connect","reflect","connect","reflect","integrate","reflect","ground","create","connect","protect","act","expand","reflect","act","integrate","expand","reflect","protect","integrate","connect","reflect","act","ground","integrate","act","expand","connect","ground","expand","act","ground","integrate","connect","reflect","integrate","create","connect","act","integrate"];
+const az:Choice[]=azNames.map((title,i)=>({id:`A${i+1}`,title,tag:azTags[i],desc:`Внутренняя частота: ${tagNames[azTags[i]]}.`}));
+const bukaRaw=[
+ ["⊕","Суперпозиция","integrate"],["∅","Пустота","create"],["τ","Пластичность времени","expand"],["Ψ","Волновая форма","connect"],
+ ["C⊕","⊕‑Капитал","ground"],["Σ","Сумма резонансов","connect"],["φ","Фаза пробуждения","reflect"],["Rᶠ","Резонанс с будущим","create"],
+ ["∇","Градиент","act"],["IЯ","Интеграция ядра","integrate"],["⊗","Точка кристаллизации","ground"],["Fₛ","Поток смысла","connect"],
+ ["λ","Длина волны","expand"],["A","Амплитуда переживания","act"],["∆S","Изменение смысла","create"],["Q","Качество отклика","reflect"],
+ ["T","Текучесть","expand"],["Sᶠ","Структурная форма","protect"],["Cₘ","Контейнер смыслов","protect"],["E⊕","Энтропическая энергия","act"],
+ ["α","Соответствие","reflect"],["k","Плотность восприятия","ground"],["ω","Частота обновления","act"],["⊕Σ","Суперпозиция систем","integrate"],
+] as const;
+const buka:Choice[]=bukaRaw.map((v,i)=>({id:`B${i+1}`,symbol:v[0],title:v[1],tag:v[2] as Tag,desc:`Внешняя форма: ${tagNames[v[2] as Tag]}.`}));
+const layers=[
+ {id:"body",title:"Тело",prompt:"Что в теле подтверждает или отвергает этот ход?"},{id:"emotion",title:"Эмоции",prompt:"Какая эмоция несёт энергию этого хода?"},
+ {id:"mind",title:"Мысль",prompt:"Какое различение сейчас нельзя потерять?"},{id:"creator",title:"Творец",prompt:"Какое новое решение становится возможным?"},
+];
+const mEvents=[
+ ["M⁷","Разветвление миров","Один ход открыл несколько ветвей. Выбери проводящую, не захватывая остальные."],
+ ["M⁸","Согласованность","Тело, эмоции, мысль и действие проверяют единый вектор."],
+ ["M⁹","Синхронизация","Твой ритм соотносится с ритмом людей и систем."],
+ ["M¹⁰","Сшивание уровней","Одно решение изменяет личный, семейный и профессиональный контуры."],
+ ["M¹¹","Мета‑контейнер","Рождается форма, способная выдерживать хаос и рост."],
+ ["M¹²","Тишина Источника","Ничего не нужно доказывать: следующий виток уже сущий."],
+];
+const tacticSteps=["Стабилизация","Фокус","Решение","Действие","Результат","Интеграция","Синтез"];
+
+const clamp=(n:number)=>Math.max(0,Math.min(100,Math.round(n)));
+const shuffle=<T,>(a:T[])=>[...a].sort(()=>Math.random()-.5);
+const blankDraft=():Draft=>({states:[],geometry:"",point:"",az:"",buka:"",tx:"",axis:"partly",reflection:"",induction:"",inversion:""});
+function makeDeck(mode:"quick"|"full"){
+ return plates.flatMap(p=>{
+  const pool:Card[]=[];p.processes.forEach((proc,pi)=>["I","II","III","IV"].forEach((roman,ri)=>pool.push({id:`${p.mark}-${String(pi*4+ri+1).padStart(2,"0")}`,plate:p.id,process:proc[0] as string,arabic:pi+1,roman,tags:proc[1] as Tag[]})));
+  return shuffle(pool).slice(0,mode==="quick"?1:6);
+ });
+}
+function offers(source:Choice[],tags:Tag[],count:number){const good=shuffle(source.filter(x=>tags.includes(x.tag))).slice(0,1);return shuffle([...good,...shuffle(source.filter(x=>!good.includes(x))).slice(0,count-good.length)]);}
+function metricAverage(m:Metrics){return (m.alpha+m.iy+m.cm+m.q+m.t)/5}
+
+export default function Home(){
+ const [screen,setScreen]=useState<"intro"|"setup"|"game"|"end">("intro");
+ const [guide,setGuide]=useState(false);const [tactic,setTactic]=useState(false);
+ const [mode,setMode]=useState<"quick"|"full">("quick");const [intent,setIntent]=useState("");const [invariant,setInvariant]=useState("");
+ const [source,setSource]=useState(2);const [deck,setDeck]=useState<Card[]>([]);const [turn,setTurn]=useState(0);const [stage,setStage]=useState<"observe"|"shape"|"act"|"result">("observe");
+ const [metrics,setMetrics]=useState<Metrics>({alpha:56,iy:58,cm:52,q:54,t:57});const [gradient,setGradient]=useState(8);const [draft,setDraft]=useState<Draft>(blankDraft());
+ const [stateInput,setStateInput]=useState("");const [log,setLog]=useState<LogItem[]>([]);const [lastResult,setLastResult]=useState<{quality:number;deltas:Metrics;message:string}|null>(null);const [tacticsUsed,setTacticsUsed]=useState<string[]>([]);
+ const card=deck[turn];const layer=layers[turn%layers.length];const plateIndex=card?plates.findIndex(p=>p.id===card.plate):0;
+ const azOffers=useMemo(()=>card?offers(az,card.tags,4):[],[card]);const bukaOffers=useMemo(()=>card?offers(buka,card.tags,3):[],[card]);
+ const completion=deck.length?turn/deck.length:0;
+ function start(){if(!intent.trim()||!invariant.trim())return;setDeck(makeDeck(mode));setTurn(0);setMetrics({alpha:56,iy:58,cm:52,q:54,t:57});setGradient(8);setDraft(blankDraft());setLog([]);setTacticsUsed([]);setStage("observe");setScreen("game")}
+ function addState(){const v=stateInput.trim();if(!v||!card||draft.states.length>=card.arabic)return;setDraft(d=>({...d,states:[...d.states,v]}));setStateInput("")}
+ function removeState(i:number){setDraft(d=>({...d,states:d.states.filter((_,x)=>x!==i)}))}
+ function conduct(){if(!card)return;const a=az.find(x=>x.id===draft.az)!,b=buka.find(x=>x.id===draft.buka)!,g=geometries.find(x=>x.id===draft.geometry)!,tx=transmissions.find(x=>x.id===draft.tx)!;const pt=points.find(x=>x.id===draft.point)!;
+  const tagHits=[a,b,g,tx].filter(x=>card.tags.includes(x.tag)).length;const txFit=pt.tx.includes(tx.id)?1:0;const romanPoint:Record<string,string>={I:"Вход",II:"Залипание",III:"Разрыв",IV:"Интеграция"};const pointFit=romanPoint[card.roman]===draft.point?1:0;const axis=draft.axis==="yes"?1:draft.axis==="partly"?0.5:0;const quality=(tagHits+txFit+pointFit+axis)/7;
+  const deltas:Metrics={alpha:Math.round(quality*12-4),iy:Math.round(axis*9+pointFit*3-4),cm:Math.round((draft.states.length/card.arabic)*8+Math.min(card.arabic,4)-4),q:Math.round((tagHits/4)*10+txFit*3-4),t:Math.round((txFit+pointFit)*4+quality*5-5)};
+  const next:Metrics={alpha:clamp(metrics.alpha+deltas.alpha),iy:clamp(metrics.iy+deltas.iy),cm:clamp(metrics.cm+deltas.cm),q:clamp(metrics.q+deltas.q),t:clamp(metrics.t+deltas.t)};setMetrics(next);setGradient(x=>clamp(x+5+quality*9));const ns=clamp(source+(quality>.72?1:quality<.35?-1:0));setSource(Math.min(11,Math.max(0,ns)));const message=quality>=.78?"Формула проводит намерение и сохраняет ядро.":quality>=.55?"Ход состоялся, но часть энергии ушла на внутреннее сопротивление.":quality>=.35?"Форма движется, однако связь с инвариантом ослабла.":"Поле захватило ход: требуется стабилизация и пересборка.";setLastResult({quality,deltas,message});setLog(v=>[...v,{card,quality,az:a.title,buka:`${b.symbol} ${b.title}`,tx:tx.title,geometry:g.title,point:draft.point,deltas,source:ns,layer:layer.title}]);setStage("result");try{navigator.vibrate?.(quality>.65?20:[28,35,28])}catch{}
+ }
+ function nextTurn(){if(turn>=deck.length-1){setScreen("end");return}setTurn(x=>x+1);setDraft(blankDraft());setStateInput("");setStage("observe");setLastResult(null)}
+ function useTactic(i:number){if(!card||tacticsUsed.includes(card.plate))return;const keys=(Object.keys(metrics) as (keyof Metrics)[]).sort((a,b)=>metrics[a]-metrics[b]);setMetrics(m=>({...m,[keys[0]]:clamp(m[keys[0]]+8),[keys[1]]:clamp(m[keys[1]]+5)}));setGradient(x=>clamp(x-5));setTacticsUsed(v=>[...v,card.plate]);setTactic(false);setDraft(d=>({...d,reflection:`${tacticSteps[i]}: ${d.reflection}`.trim()}))}
+ const coherence=clamp(metricAverage(metrics)-(Math.max(...Object.values(metrics))-Math.min(...Object.values(metrics)))*.28-Math.max(0,gradient-metrics.iy)*.15);
+ const dominant=(key:"az"|"buka"|"tx")=>{const c:Record<string,number>={};log.forEach(x=>c[x[key]]=(c[x[key]]||0)+1);return Object.entries(c).sort((a,b)=>b[1]-a[1])[0]?.[0]||"—"};
+ function exportTrace(){const blob=new Blob([JSON.stringify({title:"ЯДРО СУБЪЕКТА · ЖИВОЙ ЦИКЛ",intent,invariant,mode,source:sourcePhases[source],metrics,gradient,coherence,log},null,2)],{type:"application/json"});const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download="subject-core-trace.json";a.click();URL.revokeObjectURL(u)}
+
+ return <main className="appShell">
+  <div className="cosmos" aria-hidden><i/><i/><i/><b/></div>
+  {screen==="intro"&&<section className="intro screen"><div className="kicker">Тензорная Архитектоника · опыт 002</div><div className="coreSigil"><span>⊕</span><i/><i/><i/></div><h1>ЯДРО<br/><em>СУБЪЕКТА</em></h1><p className="subtitle">Стратегическая игра становления</p><p className="thesis">Проведи живое намерение через архитектуру мира.<br/><b>Достигни формы, не потеряв Источник.</b></p><button className="primary" onClick={()=>setScreen("setup")}>ВОЙТИ В ЖИВОЙ ЦИКЛ</button><button className="textButton" onClick={()=>setGuide(true)}>принцип игры</button></section>}
+
+  {screen==="setup"&&<section className="setup screen"><header className="simpleHead"><button className="back" onClick={()=>setScreen("intro")}>←</button><div><div className="kicker">Калибровка входа</div><h2>Осевание</h2></div><button className="help" onClick={()=>setGuide(true)}>?</button></header><div className="setupScroll"><article className="setupCard"><label>Живое намерение<span>Что ты проводишь через цикл?</span></label><textarea value={intent} onChange={e=>setIntent(e.target.value)} placeholder="Например: создать устойчивую форму для…" rows={3}/><label>Инвариант<span>Что должно сохраниться при любых изменениях формы?</span></label><textarea value={invariant} onChange={e=>setInvariant(e.target.value)} placeholder="Моё неизменное основание…" rows={3}/></article><article className="setupCard"><div className="sectionLabel">Масштаб прохождения</div><div className="modeGrid"><button className={mode==="quick"?"selected":""} onClick={()=>setMode("quick")}><b>Быстрый</b><span>4 узла · одна карта на плиту</span></button><button className={mode==="full"?"selected":""} onClick={()=>setMode("full")}><b>Полный</b><span>24 узла · канон 6 × 4</span></button></div></article><article className="setupCard"><div className="sectionLabel">Текущая фаза Источника</div><div className="phaseGrid">{sourcePhases.map((p,i)=><button key={p[0]} className={source===i?"selected":""} onClick={()=>setSource(i)}><b>{p[0]}</b><span>{p[1]}</span></button>)}</div><div className="phaseRead"><b>{sourcePhases[source][0]} · {sourcePhases[source][1]}</b><span>{sourcePhases[source][2]}</span></div></article></div><button className="primary stickyAction" disabled={!intent.trim()||!invariant.trim()} onClick={start}>РОДИТЬ ТОЧКУ</button></section>}
+
+  {screen==="game"&&card&&<section className="game screen"><header className="gameHead"><div><div className="kicker">{card.plate}</div><div className="turnLabel">УЗЕЛ {turn+1} / {deck.length}</div></div><div className="sourceBadge"><span>{sourcePhases[source][0]}</span><b>{sourcePhases[source][1]}</b></div><button className="help" onClick={()=>setGuide(true)}>?</button></header><div className="progress"><i style={{width:`${Math.max(3,completion*100)}%`}}/></div><div className="metricStrip"><Metric label="α" value={metrics.alpha}/><Metric label="IЯ" value={metrics.iy}/><Metric label="Cₘ" value={metrics.cm}/><Metric label="Q" value={metrics.q}/><Metric label="T" value={metrics.t}/></div><div className="gameScroll"><article className="eventCard"><div className="eventTop"><span>{card.id}</span><span>ФАЗА {card.roman}</span><span>N = {card.arabic}</span></div><h2>{card.process}</h2><p>Поле требует различить <b>{card.arabic}</b> {card.arabic===1?"состояние":card.arabic<5?"состояния":"состояний"} и провести намерение через плиту «{card.plate.toLowerCase()}».</p><div className="axisLine"><span>Ось цикла</span><b>{invariant}</b></div></article>
+
+   {stage==="observe"&&<article className="actionCard"><div className="stepNo">01 · НАБЛЮДЕНИЕ</div><h3>Различи состояния поля</h3><p>Не объясняй их. Назови ровно столько, сколько удерживает карта.</p><div className="stateChips">{draft.states.map((s,i)=><button key={i} onClick={()=>removeState(i)}>{s}<small>×</small></button>)}</div><div className="inputRow"><input value={stateInput} onChange={e=>setStateInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"){e.preventDefault();addState()}}} placeholder={`Состояние ${draft.states.length+1}`}/><button onClick={addState} disabled={draft.states.length>=card.arabic}>＋</button></div><div className="countLine"><span>{draft.states.length} / {card.arabic}</span><i style={{width:`${draft.states.length/card.arabic*100}%`}}/></div><button className="primary inner" disabled={draft.states.length!==card.arabic} onClick={()=>setStage("shape")}>УВИДЕТЬ ГЕОМЕТРИЮ</button></article>}
+
+   {stage==="shape"&&<article className="actionCard"><div className="stepNo">02 · КОНФИГУРАЦИЯ</div><h3>Как устроен этот узел?</h3><div className="choiceGrid geometryGrid">{geometries.map(g=><ChoiceButton key={g.id} item={g} selected={draft.geometry===g.id} onClick={()=>setDraft(d=>({...d,geometry:g.id}))}/>)}</div><div className="subLabel">Тип точки</div><div className="pointGrid">{points.map(p=><button key={p.id} className={draft.point===p.id?"selected":""} onClick={()=>setDraft(d=>({...d,point:p.id}))}><b>{p.id}</b><span>{p.desc}</span></button>)}</div><div className="creatorCheck"><span>{layer.title}</span><p>{layer.prompt}</p><textarea rows={2} value={draft.reflection} onChange={e=>setDraft(d=>({...d,reflection:e.target.value}))} placeholder="Короткое свидетельство слоя…"/></div><button className="primary inner" disabled={!draft.geometry||!draft.point} onClick={()=>setStage("act")}>СОБРАТЬ ФОРМУЛУ</button></article>}
+
+   {stage==="act"&&<article className="actionCard"><div className="stepNo">03 · ФОРМУЛА ХОДА</div><h3>Аз × Бука → Передача</h3><div className="subLabel">Аз · внутренняя частота</div><div className="formulaChoices">{azOffers.map(x=><ChoiceButton key={x.id} item={x} selected={draft.az===x.id} onClick={()=>setDraft(d=>({...d,az:x.id}))}/>)}</div><div className="subLabel">Бука · внешняя форма</div><div className="formulaChoices three">{bukaOffers.map(x=><ChoiceButton key={x.id} item={x} selected={draft.buka===x.id} onClick={()=>setDraft(d=>({...d,buka:x.id}))}/>)}</div><div className="subLabel">Передача · оператор перехода</div><div className="txGrid">{transmissions.map(x=><ChoiceButton key={x.id} item={x} selected={draft.tx===x.id} onClick={()=>setDraft(d=>({...d,tx:x.id}))}/>)}</div><div className="inductionGrid"><label>Индукция<input value={draft.induction} onChange={e=>setDraft(d=>({...d,induction:e.target.value}))} placeholder="Что активирую внутри?"/></label><label>Инверсия<input value={draft.inversion} onChange={e=>setDraft(d=>({...d,inversion:e.target.value}))} placeholder="Что втягиваю из будущего?"/></label></div><div className="subLabel">Проверка оси</div><div className="axisCheck">{[["yes","Сохраняет"],["partly","Частично"],["no","Теряет"]].map(x=><button key={x[0]} className={draft.axis===x[0]?"selected":""} onClick={()=>setDraft(d=>({...d,axis:x[0] as Draft["axis"]}))}>{x[1]}</button>)}</div><button className="primary inner" disabled={!draft.az||!draft.buka||!draft.tx} onClick={conduct}>ПРОВЕСТИ ФОРМУЛУ</button></article>}
+
+   {stage==="result"&&lastResult&&<article className="actionCard resultCard"><div className="resultOrb" style={{"--quality":`${lastResult.quality*360}deg`} as React.CSSProperties}><span>{Math.round(lastResult.quality*100)}</span></div><div className="stepNo">04 · ОТКЛИК ПОЛЯ</div><h3>{lastResult.quality>=.78?"Когерентное проведение":lastResult.quality>=.55?"Ход состоялся":lastResult.quality>=.35?"Частичная проводимость":"Захват позиции"}</h3><p>{lastResult.message}</p><div className="formulaResult"><b>{az.find(x=>x.id===draft.az)?.title}</b><span>×</span><b>{buka.find(x=>x.id===draft.buka)?.symbol} {buka.find(x=>x.id===draft.buka)?.title}</b><span>→</span><b>{transmissions.find(x=>x.id===draft.tx)?.title}</b></div><div className="deltaGrid">{([['α','alpha'],['IЯ','iy'],['Cₘ','cm'],['Q','q'],['T','t']] as const).map(([l,k])=><div key={k}><span>{l}</span><b className={lastResult.deltas[k]>=0?"plus":"minus"}>{lastResult.deltas[k]>=0?"+":""}{lastResult.deltas[k]}</b></div>)}</div>{source>=6&&<div className="mEvent"><span>{mEvents[Math.min(5,source-6)][0]}</span><div><b>{mEvents[Math.min(5,source-6)][1]}</b><p>{mEvents[Math.min(5,source-6)][2]}</p></div></div>}<button className="primary inner" onClick={nextTurn}>{turn===deck.length-1?"СВЕРНУТЬ ЦИКЛ":"СЛЕДУЮЩИЙ УЗЕЛ"}</button></article>}
+  </div><button className="tacticButton" disabled={tacticsUsed.includes(card.plate)} onClick={()=>setTactic(true)}>✦ {tacticsUsed.includes(card.plate)?"Тактика использована":"Тактический контур"}</button></section>}
+
+  {screen==="end"&&<section className="end screen"><div className="kicker">Цикл свёрнут</div><div className="finalCore" style={{"--score":`${coherence*3.6}deg`} as React.CSSProperties}><div><b>{coherence}</b><span>КОГЕРЕНТНОСТЬ</span></div></div><h2>{coherence>=82?"СУБЪЕКТ ПРОВЁЛ ФОРМУ":coherence>=66?"АРХИТЕКТУРА СОБРАНА":coherence>=48?"ЯДРО СОХРАНЕНО НЕ ПОЛНОСТЬЮ":"ФОРМА ЗАХВАТИЛА ЯДРО"}</h2><p className="endText">{coherence>=82?"Намерение достигло формы, а Источник остался несущим основанием результата.":coherence>=66?"Цикл завершён с сохранённой проводимостью. Несколько связей требуют интеграции.":coherence>=48?"Материализация состоялась ценой части осевой устойчивости. Траектория показывает место сноса.":"Градиент стал сильнее позиции. Архив цикла сохранил точку, из которой возможна новая сборка."}</p><div className="finalFormula"><span>Исходное намерение</span><b>{intent}</b><i>⊕</i><span>Сохранённый инвариант</span><b>{invariant}</b></div><div className="finalStats"><Metric label="α" value={metrics.alpha}/><Metric label="IЯ" value={metrics.iy}/><Metric label="Cₘ" value={metrics.cm}/><Metric label="Q" value={metrics.q}/><Metric label="T" value={metrics.t}/></div><div className="dominants"><div><span>Ведущий Аз</span><b>{dominant("az")}</b></div><div><span>Ведущая Бука</span><b>{dominant("buka")}</b></div><div><span>Ведущая Передача</span><b>{dominant("tx")}</b></div></div><button className="primary" onClick={()=>setScreen("setup")}>НОВЫЙ ВИТОК</button><button className="secondary" onClick={exportTrace}>СОХРАНИТЬ ЧЕРТЁЖ JSON</button></section>}
+
+  {guide&&<Modal close={()=>setGuide(false)}><div className="kicker">Карта игры</div><h2>Не выбрать ответ.<br/>Провести намерение.</h2><p className="guideFormula"><b>Карта</b> создаёт напряжение → <b>геометрия</b> раскрывает устройство → <b>Аз</b> задаёт внутреннюю частоту → <b>Бука</b> создаёт внешнюю форму → <b>Передача</b> проводит изменение.</p><div className="guideList"><div><i>01</i><b>Осевание</b><span>Инвариант остаётся сущим при смене формы.</span></div><div><i>02</i><b>Четыре плиты</b><span>Ресурс → Власть → Отношения → Результат.</span></div><div><i>03</i><b>Нет верного ответа</b><span>Каждая формула имеет проводимость и последствия.</span></div><div><i>04</i><b>Победа</b><span>Материализовать намерение, не отдав ядро градиенту.</span></div></div><button className="primary" onClick={()=>setGuide(false)}>ПОНЯТНО</button></Modal>}
+  {tactic&&<Modal close={()=>setTactic(false)}><div className="kicker">Аварийный протокол</div><h2>Вернуть проводимость</h2><p className="modalText">Выбери один micro‑оператор. Он усилит две наиболее слабые метрики, но может быть применён только однажды на плиту.</p><div className="tacticGrid">{tacticSteps.map((x,i)=><button key={x} onClick={()=>useTactic(i)}><i>0{i+1}</i><b>{x}</b></button>)}</div></Modal>}
+ </main>
+}
+
+function Metric({label,value}:{label:string;value:number}){return <div className="metric"><span>{label}</span><b>{value}</b><i><em style={{width:`${value}%`}}/></i></div>}
+function ChoiceButton({item,selected,onClick}:{item:Choice;selected:boolean;onClick:()=>void}){return <button className={selected?"choice selected":"choice"} onClick={onClick}>{item.symbol&&<i>{item.symbol}</i>}<b>{item.title}</b><span>{item.desc}</span></button>}
+function Modal({children,close}:{children:React.ReactNode;close:()=>void}){return <div className="modalBack" onClick={close}><article className="modal" onClick={e=>e.stopPropagation()}><button className="modalClose" onClick={close}>×</button>{children}</article></div>}
