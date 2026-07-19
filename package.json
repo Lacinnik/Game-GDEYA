@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "ЯДРО СУБЪЕКТА · ЖИВОЙ ЦИКЛ — стратегическая игра становления на основе ТзАрх.",
   "private": true,
-  "homepage": "https://subject-core-game.alexander-la-6500.chatgpt.site/",
+  "homepage": "https://lacinnik.github.io/Game-GDEYA/",
   "repository": {
     "type": "git",
     "url": "https://github.com/Lacinnik/Game-GDEYA.git"
@@ -15,6 +15,7 @@
     "install:ci": "bash scripts/install-ci.sh",
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vite",
     "build": "bash scripts/build-verified.sh",
+    "build:public": "vite build --config public-web/vite.config.ts",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
