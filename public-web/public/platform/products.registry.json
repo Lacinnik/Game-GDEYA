@@ -71,8 +71,8 @@
     },
     {
       "id": "reson", "order": 5, "name": "РЕЗОН", "code": "RESON", "glyph": "≈", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#d9b86c",
-      "subtitle": "Групповая Т-игра", "description": "Полевая практика согласования: голоса поля, тело, коды ядра и переход от суперпозиции к совместному действию.", "function": "Помогает группе различить общее напряжение и собрать сообразный ход без потери отдельных голосов.",
-      "parent_ids": ["architectonics"], "depends_on": ["collective-meta-core", "seven-transmissions"], "entrypoints": [{"label": "Запустить РЕЗОН", "url": "https://lacinnik.github.io/reason-/", "external": true}], "audience": ["группа 3–6", "ведущий"], "geometry": "поле", "version": "live", "tags": ["группа", "поле", "2 часа"], "tasks": ["practice"]
+      "subtitle": "Лаборатория коллективного поля", "description": "Рабочая вершина коллективной вертикали. Объединяет стабильный автономный переводческий контур и кандидат групповой проверки поля.", "function": "Даёт коллективным инструментам общий адрес, сохраняет отдельные голоса и различает готовые выпуски от проверяемых гипотез.",
+      "parent_ids": ["architectonics"], "depends_on": ["collective-meta-core", "seven-transmissions"], "entrypoints": [{"label": "Запустить Translator 2.0", "url": "https://lacinnik.github.io/reason-/", "external": true}, {"label": "Запустить Field Check RC", "url": "https://lacinnik.github.io/reason-/field-check/", "external": true}], "audience": ["группа", "ведущий", "организация"], "geometry": "коллективное поле", "version": "live laboratory", "tags": ["Field Check", "offline", "группа"], "tasks": ["practice"]
     },
     {
       "id": "module", "order": 6, "name": "МОДУЛЬ", "code": "MODULE", "glyph": "∂", "layer": 2, "kind": "space", "status": "prototype", "status_label": "формируется", "accent": "#bf8cff",
