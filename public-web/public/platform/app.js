@@ -52,6 +52,7 @@
     updateNavigation(name);
 
     if (name === 'enter') renderEntry();
+    else if (name === 'hypothesis') renderHypothesis();
     else if (name === 'map') renderMap();
     else if (name === 'product' && parts[1]) renderDossier(decodeURIComponent(parts[1]));
     else renderHome();
@@ -87,6 +88,57 @@
           <div><p class="eyebrow">ОСЕВОЙ ПРИНЦИП</p><h2>${escapeHtml(registry.platform.principle)}</h2></div>
           <p>Платформа сначала различает тип задачи, затем показывает пространство действия и только после этого — встроенные движки и материалы, которые поддерживают переход.</p>
         </section>
+        <section class="hypothesis-teaser shell">
+          <div><p class="eyebrow">РАБОЧАЯ ГИПОТЕЗА · 10 / 10</p><h2>Две лаборатории.<br>Двадцать контуров.</h2></div>
+          <div class="teaser-branches">
+            ${registry.hypothesis.branches.map(branch => `<div style="--branch-accent:${escapeHtml(branch.accent)}"><span>${escapeHtml(branch.code)}</span><b>${escapeHtml(branch.name)}</b><small>${escapeHtml(branch.focus)}</small></div>`).join('')}
+          </div>
+          <a class="button ghost" href="#/hypothesis"><span>Открыть гипотезу</span><span>→</span></a>
+        </section>
+      </div>`;
+  }
+
+  function hypothesisEntityRow(entity, index) {
+    return `
+      <a class="hypothesis-entity" href="${entityLink(entity.id)}" style="--entity-accent:${escapeHtml(entity.accent)}">
+        <span class="hypothesis-index">${String(index + 1).padStart(2, '0')}</span>
+        <span class="hypothesis-glyph">${escapeHtml(entity.glyph)}</span>
+        <span><b>${escapeHtml(entity.name)}</b><small>${escapeHtml(entity.subtitle)}</small></span>
+        <span class="hypothesis-status">${escapeHtml(statusText(entity))}</span>
+        <span>→</span>
+      </a>`;
+  }
+
+  function renderHypothesis() {
+    setTitle('Гипотеза 10/10');
+    const branches = registry.hypothesis.branches.map(branch => {
+      const entities = names(branch.entity_ids);
+      const product = byId.get(branch.product_id);
+      return `
+        <section class="hypothesis-branch" style="--branch-accent:${escapeHtml(branch.accent)}">
+          <header class="branch-head">
+            <span class="branch-code">${escapeHtml(branch.code)}</span>
+            <div class="branch-symbol">${escapeHtml(product.glyph)}</div>
+            <h2>${escapeHtml(branch.name)}</h2>
+            <p class="branch-focus">${escapeHtml(branch.focus)}</p>
+            <p>${escapeHtml(branch.description)}</p>
+            <a class="text-link" href="${entityLink(product.id)}">Открыть рабочий продукт →</a>
+          </header>
+          <div class="hypothesis-entities">${entities.map(hypothesisEntityRow).join('')}</div>
+        </section>`;
+    }).join('');
+
+    app.innerHTML = `
+      <div class="view">
+        <section class="page-head shell">
+          <div class="crumbs"><a href="#/home">Главная</a><span>/</span><span>Гипотеза 10/10</span></div>
+          <div class="page-head-row">
+            <h1>${escapeHtml(registry.hypothesis.title)}</h1>
+            <p class="intro">${escapeHtml(registry.hypothesis.statement)}</p>
+          </div>
+        </section>
+        <section class="hypothesis-board shell">${branches}</section>
+        <section class="hypothesis-note shell"><span>⊕</span><p>Фундаментальные элементы могут действовать в обеих лабораториях. Здесь указан их первичный полигон проверки — распределение будет меняться по фактическим результатам.</p></section>
       </div>`;
   }
 
@@ -257,6 +309,7 @@
     const parents = names(entity.parent_ids);
     const dependencies = names(entity.depends_on);
     const consumers = registry.entities.filter(other => other.id !== entity.id && [...(other.parent_ids || []), ...(other.depends_on || [])].includes(entity.id));
+    const laboratory = registry.hypothesis.branches.find(branch => branch.entity_ids.includes(entity.id));
     const functionText = entity.kind === 'engine' ? 'Этот движок не является отдельным продуктом запуска. Его задача — исполнять конкретный контракт внутри одного или нескольких пространств.' : entity.function;
 
     app.innerHTML = `
@@ -278,6 +331,7 @@
               <div><dt>Геометрия</dt><dd>${escapeHtml(entity.geometry)}</dd></div>
               <div><dt>Версия</dt><dd>${escapeHtml(entity.version)}</dd></div>
               <div><dt>Для кого</dt><dd>${escapeHtml(entity.audience.join(', '))}</dd></div>
+              ${laboratory ? `<div><dt>Полигон</dt><dd>${escapeHtml(laboratory.name)} · ${escapeHtml(laboratory.focus)}</dd></div>` : ''}
             </dl>
           </aside>
         </section>
