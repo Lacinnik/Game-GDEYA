@@ -28,12 +28,12 @@
       "parent_ids": [], "depends_on": ["architectonics"], "entrypoints": [{"label": "Открыть платформу", "url": "#/home", "external": false}], "audience": ["участник", "автор", "архитектор"], "geometry": "оболочка", "version": "2.0", "tags": ["навигация", "реестр", "запуск"], "tasks": []
     },
     {
-      "id": "architectonics", "order": 2, "name": "Архитектоника", "code": "ARCH", "glyph": "А", "layer": 1, "kind": "core", "status": "live", "status_label": "корпус открыт", "accent": "#56e2cc",
+      "id": "architectonics", "order": 2, "name": "Архитектоника", "code": "ARCH", "glyph": "А", "layer": 1, "kind": "core", "status": "published", "status_label": "открытый корпус", "accent": "#56e2cc",
       "subtitle": "Система различения и сборки", "description": "Общее основание экосистемы: способ видеть сущности, отношения, границы и переходы как единую архитектуру.", "function": "Задаёт ось, относительно которой продукты остаются самостоятельными, но не распадаются на случайный набор.",
       "parent_ids": [], "depends_on": [], "entrypoints": [{"label": "Открыть корпус", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["автор", "исследователь", "архитектор"], "geometry": "ось", "version": "корпус", "tags": ["метод", "система", "онтология"], "tasks": ["study"]
     },
     {
-      "id": "tzar", "order": 3, "name": "ТзАр", "alt_name": "Тензорная Архитектоника", "code": "TZAR", "glyph": "τ", "layer": 1, "kind": "core", "status": "live", "status_label": "ядро открыто", "accent": "#8aa7ff",
+      "id": "tzar", "order": 3, "name": "ТзАр", "alt_name": "Тензорная Архитектоника", "code": "TZAR", "glyph": "τ", "layer": 1, "kind": "core", "status": "published", "status_label": "открытый корпус", "accent": "#8aa7ff",
       "subtitle": "Тензорное ядро дисциплины", "description": "Математическое и аксиоматическое ядро, в котором отношения, напряжения и переходы получают строгий язык.", "function": "Хранит декларации, инварианты и контракты авторских движков.",
       "parent_ids": ["architectonics"], "depends_on": ["architectonics"], "entrypoints": [{"label": "Открыть ядро", "url": "https://github.com/Lacinnik/-tensor-architectonics", "external": true}], "audience": ["исследователь", "разработчик", "архитектор"], "geometry": "тензор", "version": "ядро", "tags": ["аксиоматика", "математика", "инварианты"], "tasks": ["study"]
     },
@@ -93,7 +93,7 @@
       "parent_ids": ["gdeya"], "depends_on": ["architectonics"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "точка субъекта", "version": "embedded", "contract": "действует", "tags": ["субъект", "намерение", "ось"], "tasks": []
     },
     {
-      "id": "alphabet-singularity", "order": 15, "name": "Алфавит Сингулярности", "code": "ALPHABET", "glyph": "Ѧ", "layer": 4, "kind": "corpus", "status": "live", "status_label": "корпус открыт", "accent": "#bf8cff",
+      "id": "alphabet-singularity", "order": 15, "name": "Алфавит Сингулярности", "code": "ALPHABET", "glyph": "Ѧ", "layer": 4, "kind": "corpus", "status": "published", "status_label": "открытый корпус", "accent": "#bf8cff",
       "subtitle": "49 Азов", "description": "Авторский корпус из 49 Азов и визуальных знаков, задающих различимые состояния и способы перехода.", "function": "Служит первичным словарём МОДУЛЯ и артефактной памятью Архитектоники.",
       "parent_ids": ["module", "architectonics"], "depends_on": ["architectonics"], "entrypoints": [{"label": "Открыть корпус", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["читатель", "практик", "исследователь"], "geometry": "49 знаков", "version": "corpus", "tags": ["49 Азов", "SVG", "алфавит"], "tasks": ["study"]
     },
