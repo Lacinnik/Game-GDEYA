@@ -1,4 +1,4 @@
-export const MODULE_SCHEMA = "architectonica.module-passport/1.0.0-rc.1";
+export const MODULE_SCHEMA = "architectonica.module-passport/1.0.0";
 
 export function wordCount(value) {
   return String(value || "").trim().split(/\s+/u).filter(Boolean).length;
@@ -35,7 +35,7 @@ export function buildPassport(draft, catalog, environment = {}) {
     id: uuid(),
     createdAt: now(),
     laboratory: "gdeya",
-    lifecycleState: "release-candidate",
+    lifecycleState: "stable",
     intent: draft.intent.trim(),
     invariant: draft.invariant.trim(),
     formula: {
