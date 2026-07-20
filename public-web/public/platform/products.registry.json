@@ -6,6 +6,33 @@
     "tagline": "Не каталог. Среда запуска.",
     "principle": "Одна задача не обязана оставаться в одной геометрии."
   },
+  "hypothesis": {
+    "id": "10-10",
+    "title": "Две лаборатории · двадцать контуров",
+    "statement": "Каждая из двадцати развиваемых сущностей получает первичную среду испытания. Распределение определяет полигон проверки, а не право собственности.",
+    "branches": [
+      {
+        "id": "gdeya-lab",
+        "name": "ГДЕЯ",
+        "code": "10 / SUBJECT",
+        "focus": "Лаборатория субъекта",
+        "description": "Личное намерение, различение состояния и вертикальный переход к действию.",
+        "accent": "#56e2cc",
+        "product_id": "gdeya",
+        "entity_ids": ["subject-core", "skellu", "voidocr", "axis-interface", "module", "alphabet-singularity", "az-buki", "transition-spells", "meta-core-v2", "saver"]
+      },
+      {
+        "id": "reson-lab",
+        "name": "РЕЗОН",
+        "code": "10 / FIELD",
+        "focus": "Лаборатория коллективного поля",
+        "description": "Групповое напряжение, согласование голосов и коллективный переход.",
+        "accent": "#d9b86c",
+        "product_id": "reson",
+        "entity_ids": ["collective-meta-core", "demons-guardians", "seven-transmissions", "tzar-qengine", "tzar", "architectonics", "offline-translator", "private-corporate-contour", "private-research-contour", "product-platform"]
+      }
+    ]
+  },
   "layers": [
     {"id": 0, "name": "Оболочка", "short": "Единый вход", "description": "Навигация, запуск и связность всей экосистемы."},
     {"id": 1, "name": "Ядра", "short": "Основания", "description": "Дисциплина и система, задающие общий язык и инварианты."},
