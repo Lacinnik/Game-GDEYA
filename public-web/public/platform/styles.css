@@ -231,6 +231,22 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .home-principle h2 { margin: 0; font: 400 clamp(35px, 4vw, 58px)/1.08 Georgia, serif; letter-spacing: -.035em; }
 .home-principle > p { color: #8fa39f; line-height: 1.85; font-size: 14px; }
 
+.hypothesis-teaser {
+  border-top: 1px solid var(--line);
+  padding-top: 82px;
+  padding-bottom: 94px;
+  display: grid;
+  grid-template-columns: minmax(280px, .9fr) minmax(360px, 1fr) auto;
+  gap: 46px;
+  align-items: center;
+}
+.hypothesis-teaser h2 { margin: 0; font: 400 clamp(35px, 4vw, 56px)/1.08 Georgia, serif; letter-spacing: -.035em; }
+.teaser-branches { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.teaser-branches > div { min-height: 150px; padding: 20px; border: 1px solid var(--line); display: flex; flex-direction: column; background: rgba(11, 28, 26, .5); }
+.teaser-branches span { color: var(--branch-accent); font: 8px monospace; letter-spacing: .14em; }
+.teaser-branches b { margin-top: auto; font: 400 27px Georgia, serif; }
+.teaser-branches small { margin-top: 6px; color: #718984; font-size: 9px; }
+
 /* Shared interior */
 .page-head { padding-top: 82px; padding-bottom: 50px; border-bottom: 1px solid var(--line); }
 .page-head-row { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(260px, .65fr); gap: 70px; align-items: end; }
@@ -319,6 +335,30 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .card-open { border-top: 1px solid var(--line); padding-top: 13px; display: flex; justify-content: space-between; color: #a8bbb7; font: 8px monospace; letter-spacing: .12em; text-transform: uppercase; }
 .empty-filter { border: 1px solid var(--line); padding: 45px; color: var(--muted); text-align: center; }
 
+/* 10 / 10 hypothesis */
+.hypothesis-board { padding-top: 52px; padding-bottom: 70px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.hypothesis-branch { border: 1px solid var(--line); background: rgba(9, 25, 23, .62); }
+.branch-head { min-height: 400px; padding: 32px; display: flex; flex-direction: column; align-items: flex-start; border-bottom: 1px solid var(--line); position: relative; overflow: hidden; }
+.branch-head::after { content: ""; position: absolute; width: 280px; height: 280px; right: -110px; top: -100px; border: 1px solid color-mix(in srgb, var(--branch-accent) 28%, transparent); border-radius: 50%; }
+.branch-code { color: var(--branch-accent); font: 9px monospace; letter-spacing: .16em; }
+.branch-symbol { margin: 44px 0 22px; color: var(--branch-accent); font: 40px Georgia, serif; }
+.branch-head h2 { margin: 0; font: 400 clamp(48px, 5vw, 72px)/1 Georgia, serif; letter-spacing: -.04em; }
+.branch-focus { margin: 9px 0 24px !important; color: var(--branch-accent) !important; font: 10px monospace !important; letter-spacing: .12em; text-transform: uppercase; }
+.branch-head > p { max-width: 460px; margin: 0; color: #819893; font-size: 13px; line-height: 1.7; }
+.branch-head .text-link { margin-top: auto; }
+.hypothesis-entities { display: grid; }
+.hypothesis-entity { min-height: 86px; padding: 14px 18px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 29px 30px minmax(0, 1fr) auto 16px; gap: 11px; align-items: center; transition: background .2s; }
+.hypothesis-entity:last-child { border-bottom: 0; }
+.hypothesis-entity:hover { background: rgba(86, 226, 204, .04); }
+.hypothesis-index { color: #5f7772; font: 8px monospace; }
+.hypothesis-glyph { color: var(--entity-accent); font: 19px Georgia, serif; }
+.hypothesis-entity b { display: block; font: 400 16px Georgia, serif; }
+.hypothesis-entity small { display: block; margin-top: 4px; color: #6f8782; font-size: 8px; }
+.hypothesis-status { color: var(--entity-accent); font: 7px monospace; letter-spacing: .08em; text-transform: uppercase; text-align: right; }
+.hypothesis-note { margin-bottom: 100px; padding-top: 34px; padding-bottom: 34px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 50px minmax(0, 760px); gap: 24px; align-items: center; }
+.hypothesis-note > span { width: 48px; height: 48px; border: 1px solid var(--line-strong); border-radius: 50%; display: grid; place-items: center; color: var(--teal); font-size: 25px; }
+.hypothesis-note p { margin: 0; color: #829994; font-size: 12px; line-height: 1.7; }
+
 /* Dossier */
 .dossier { padding-top: 60px; padding-bottom: 110px; }
 .dossier-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .7fr); gap: 70px; align-items: start; padding-bottom: 62px; border-bottom: 1px solid var(--line); }
@@ -377,6 +417,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .system-orbit { width: min(70vw, 560px); }
   .home-principle { grid-template-columns: 82px 1fr; }
   .home-principle > p { grid-column: 2; }
+  .hypothesis-teaser { grid-template-columns: 1fr; }
   .node-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .dossier-hero, .dossier-body { gap: 38px; }
 }
@@ -399,6 +440,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .home-principle { padding-top: 70px; padding-bottom: 78px; grid-template-columns: 1fr; gap: 24px; }
   .home-principle > p { grid-column: 1; }
   .principle-mark { width: 66px; height: 66px; font-size: 34px; }
+  .hypothesis-teaser { padding-top: 65px; padding-bottom: 72px; gap: 28px; }
+  .teaser-branches { grid-template-columns: 1fr 1fr; }
+  .teaser-branches > div { min-height: 130px; padding: 15px; }
   .page-head { padding-top: 60px; padding-bottom: 37px; }
   .page-head-row { grid-template-columns: 1fr; gap: 26px; }
   .page-head h1 { font-size: clamp(44px, 13vw, 68px); }
@@ -414,6 +458,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .layer-description { grid-column: 2 / -1; }
   .node-grid { margin-left: 0; grid-template-columns: 1fr; }
   .entity-card { min-height: 225px; }
+  .hypothesis-board { grid-template-columns: 1fr; padding-top: 28px; }
+  .branch-head { min-height: 350px; padding: 25px; }
+  .hypothesis-entity { grid-template-columns: 25px 24px minmax(0, 1fr) 14px; min-height: 80px; padding: 12px; }
+  .hypothesis-status { grid-column: 3; text-align: left; }
+  .hypothesis-entity > span:last-child { grid-column: 4; grid-row: 1 / span 2; }
+  .hypothesis-note { margin-bottom: 75px; grid-template-columns: 42px 1fr; }
   .dossier { padding-top: 36px; padding-bottom: 80px; }
   .dossier-hero, .dossier-body { grid-template-columns: 1fr; gap: 34px; }
   .dossier h1 { font-size: clamp(49px, 15vw, 70px); }
