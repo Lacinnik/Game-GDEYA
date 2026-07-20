@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080d0c">
+  <meta name="description" content="VoidOCR — протокол различения формы из потенции внутри субъектного контура ГДЕЯ.">
+  <title>VoidOCR — лаборатория ГДЕЯ</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+  <header>
+    <a class="brand" href="../../platform/#/hypothesis"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <span class="lab">ГДЕЯ · ЛАБОРАТОРИЯ СУБЪЕКТА</span>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">VOID OCR · RELEASE CANDIDATE 1.0</p>
+      <h1>Не называй форму<br>раньше, чем <em>различишь.</em></h1>
+      <p>Протокол фиксирует переход внимания: что стало точкой, каким было состояние до паузы, что проявилось после и насколько устойчиво различение.</p>
+    </section>
+
+    <section class="protocol" id="protocol" aria-live="polite">
+      <div class="step-rail" aria-label="Этапы протокола">
+        <span class="active" data-rail="trigger">01</span><span data-rail="pause">02</span><span data-rail="distinguish">03</span><span data-rail="result">04</span>
+      </div>
+
+      <section class="stage active" data-stage="trigger">
+        <p class="stage-code">01 · ТОЧКА ВХОДА</p>
+        <h2>Что стало ⊕?</h2>
+        <label><span>Назовите событие минимум тремя словами</span><textarea id="trigger" rows="4" placeholder="Я заметил, что…"></textarea></label>
+        <p class="validation" id="trigger-validation">0 слов · нужно не менее 3</p>
+        <button class="primary" id="begin" disabled>Войти в паузу <span>→</span></button>
+      </section>
+
+      <section class="stage pause-stage" data-stage="pause" aria-hidden="true">
+        <p class="stage-code">02 · ПУСТОТА</p>
+        <div class="void-orbit"><span id="countdown">4</span></div>
+        <h2>Ничего не добавляйте.</h2>
+        <p>Четыре секунды без выбора. Форма получает возможность проявиться без принуждения.</p>
+      </section>
+
+      <section class="stage" data-stage="distinguish" aria-hidden="true">
+        <p class="stage-code">03 · РАЗЛИЧЕНИЕ</p>
+        <h2>Зафиксируйте изменение</h2>
+        <div class="choice-block" data-choice="pre"><h3>До паузы</h3><div class="choices" id="pre"></div></div>
+        <div class="choice-block" data-choice="post"><h3>После паузы</h3><div class="choices" id="post"></div></div>
+        <div class="choice-block" data-choice="delta"><h3>Тип Δ</h3><div class="choices delta" id="delta"></div></div>
+        <div class="choice-block" data-choice="stability"><h3>Устойчивость · 0–3</h3><div class="choices stability" id="stability"></div></div>
+        <button class="primary" id="commit" disabled>Сохранить след <span>→</span></button>
+      </section>
+
+      <section class="stage" data-stage="result" aria-hidden="true">
+        <p class="stage-code">04 · ВЕРДИКТ</p>
+        <div class="verdict" id="verdict">ALLOW</div>
+        <h2 id="result-title">Допуск получен.</h2>
+        <p id="result-copy"></p>
+        <dl class="trace" id="trace"></dl>
+        <div class="actions"><button class="primary" id="reset">Новый цикл</button><button id="export">Экспорт JSON</button></div>
+      </section>
+    </section>
+
+    <section class="boundary"><span>ГРАНИЦА</span><p>VoidOCR не диагностирует человека и не устанавливает истину. Он сохраняет предъявленный пользователем след внимания локально в этом браузере.</p></section>
+  </main>
+  <script src="./app.js" defer></script>
+</body>
+</html>
