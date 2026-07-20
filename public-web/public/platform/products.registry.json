@@ -1,0 +1,136 @@
+{
+  "schema_version": "2.0",
+  "updated_at": "2026-07-20",
+  "platform": {
+    "name": "Архитектоника",
+    "tagline": "Не каталог. Среда запуска.",
+    "principle": "Одна задача не обязана оставаться в одной геометрии."
+  },
+  "layers": [
+    {"id": 0, "name": "Оболочка", "short": "Единый вход", "description": "Навигация, запуск и связность всей экосистемы."},
+    {"id": 1, "name": "Ядра", "short": "Основания", "description": "Дисциплина и система, задающие общий язык и инварианты."},
+    {"id": 2, "name": "Пространства", "short": "Действие", "description": "Самостоятельные среды, в которые входит пользователь."},
+    {"id": 3, "name": "Движки", "short": "Преобразование", "description": "Встроенные механизмы, исполняющие переходы внутри пространств."},
+    {"id": 4, "name": "Артефакты", "short": "Передача", "description": "Корпуса, алфавиты и формы, удерживающие знание."},
+    {"id": 5, "name": "Инфраструктура", "short": "Развёртывание", "description": "Контейнеры и прикладные контуры для автономной работы."}
+  ],
+  "task_vectors": [
+    {"id": "practice", "number": "01", "title": "Пройти практику", "prompt": "Мне нужно превратить намерение или групповое напряжение в действие.", "product_ids": ["gdeya", "reson"]},
+    {"id": "distinguish", "number": "02", "title": "Различить состояние", "prompt": "Мне нужно увидеть форму, плотность и ось происходящего.", "product_ids": ["voidocr", "axis-interface"]},
+    {"id": "transition", "number": "03", "title": "Собрать переход", "prompt": "Мне нужно настроить восприятие и материализовать следующий ход.", "product_ids": ["module", "az-buki", "seven-transmissions"]},
+    {"id": "study", "number": "04", "title": "Изучить дисциплину", "prompt": "Мне нужен язык, аксиоматика и корпус Архитектоники.", "product_ids": ["tzar", "architectonics", "alphabet-singularity"]},
+    {"id": "deploy", "number": "05", "title": "Развернуть инфраструктуру", "prompt": "Мне нужен автономный, локальный или корпоративный контур.", "product_ids": ["saver", "offline-translator", "private-corporate-contour"]}
+  ],
+  "entities": [
+    {
+      "id": "product-platform", "order": 1, "name": "Платформа продуктов", "code": "PLATFORM", "glyph": "⊕", "layer": 0, "kind": "shell", "status": "live", "status_label": "в сети", "accent": "#56e2cc",
+      "subtitle": "Единая точка входа", "description": "Живая карта экосистемы: помогает войти по задаче, увидеть связи и запустить готовый контур.", "function": "Удерживает реестр продуктов и отделяет готовность, встроенность и частные контуры друг от друга.",
+      "parent_ids": [], "depends_on": ["architectonics"], "entrypoints": [{"label": "Открыть платформу", "url": "#/home", "external": false}], "audience": ["участник", "автор", "архитектор"], "geometry": "оболочка", "version": "2.0", "tags": ["навигация", "реестр", "запуск"], "tasks": []
+    },
+    {
+      "id": "architectonics", "order": 2, "name": "Архитектоника", "code": "ARCH", "glyph": "А", "layer": 1, "kind": "core", "status": "live", "status_label": "корпус открыт", "accent": "#56e2cc",
+      "subtitle": "Система различения и сборки", "description": "Общее основание экосистемы: способ видеть сущности, отношения, границы и переходы как единую архитектуру.", "function": "Задаёт ось, относительно которой продукты остаются самостоятельными, но не распадаются на случайный набор.",
+      "parent_ids": [], "depends_on": [], "entrypoints": [{"label": "Открыть корпус", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["автор", "исследователь", "архитектор"], "geometry": "ось", "version": "корпус", "tags": ["метод", "система", "онтология"], "tasks": ["study"]
+    },
+    {
+      "id": "tzar", "order": 3, "name": "ТзАр", "alt_name": "Тензорная Архитектоника", "code": "TZAR", "glyph": "τ", "layer": 1, "kind": "core", "status": "live", "status_label": "ядро открыто", "accent": "#8aa7ff",
+      "subtitle": "Тензорное ядро дисциплины", "description": "Математическое и аксиоматическое ядро, в котором отношения, напряжения и переходы получают строгий язык.", "function": "Хранит декларации, инварианты и контракты авторских движков.",
+      "parent_ids": ["architectonics"], "depends_on": ["architectonics"], "entrypoints": [{"label": "Открыть ядро", "url": "https://github.com/Lacinnik/-tensor-architectonics", "external": true}], "audience": ["исследователь", "разработчик", "архитектор"], "geometry": "тензор", "version": "ядро", "tags": ["аксиоматика", "математика", "инварианты"], "tasks": ["study"]
+    },
+    {
+      "id": "gdeya", "order": 4, "name": "ГДЕЯ", "code": "GDEYA", "glyph": "⊕", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#56e2cc",
+      "subtitle": "Стратегическая практика становления", "description": "Живой цикл, в котором намерение проходит плиты Ресурса, Власти, Отношений и Результата.", "function": "Переводит личную задачу из формулировки в проверяемое движение через голосовой и игровой контур.",
+      "parent_ids": ["architectonics"], "depends_on": ["subject-core", "skellu"], "entrypoints": [{"label": "Запустить ГДЕЯ", "url": "https://lacinnik.github.io/Game-GDEYA/", "external": true}], "audience": ["участник", "практик"], "geometry": "четыре плиты", "version": "live", "tags": ["iPhone", "голос", "практика"], "tasks": ["practice"]
+    },
+    {
+      "id": "reson", "order": 5, "name": "РЕЗОН", "code": "RESON", "glyph": "≈", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#d9b86c",
+      "subtitle": "Групповая Т-игра", "description": "Полевая практика согласования: голоса поля, тело, коды ядра и переход от суперпозиции к совместному действию.", "function": "Помогает группе различить общее напряжение и собрать сообразный ход без потери отдельных голосов.",
+      "parent_ids": ["architectonics"], "depends_on": ["collective-meta-core", "seven-transmissions"], "entrypoints": [{"label": "Запустить РЕЗОН", "url": "https://lacinnik.github.io/reason-/", "external": true}], "audience": ["группа 3–6", "ведущий"], "geometry": "поле", "version": "live", "tags": ["группа", "поле", "2 часа"], "tasks": ["practice"]
+    },
+    {
+      "id": "module", "order": 6, "name": "МОДУЛЬ", "code": "MODULE", "glyph": "∂", "layer": 2, "kind": "space", "status": "prototype", "status_label": "формируется", "accent": "#bf8cff",
+      "subtitle": "Живая материализация", "description": "Собираемый контур из 49 Азов, 24 Буки и 7 Передач для настройки восприятия и материализации перехода.", "function": "Связывает корпус символов с конкретной задачей и превращает чтение в последовательность действия.",
+      "parent_ids": ["architectonics"], "depends_on": ["alphabet-singularity", "az-buki", "seven-transmissions", "transition-spells"], "entrypoints": [{"label": "Открыть материалы", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["практик", "исследователь"], "geometry": "49 × 24 × 7", "version": "prototype", "tags": ["Азы", "Буки", "Передачи"], "tasks": ["transition"]
+    },
+    {
+      "id": "voidocr", "order": 7, "name": "VoidOCR", "code": "VOID", "glyph": "◌", "layer": 2, "kind": "space", "status": "prototype", "status_label": "рабочий прототип", "accent": "#f58ca3",
+      "subtitle": "Пустотная OCR", "description": "Интерфейс различения формы из потенции: плотность, прерывание, схлопывание и форма внимания.", "function": "Делает состояние наблюдаемым до того, как оно будет преждевременно названо или сведено к тексту.",
+      "parent_ids": ["architectonics"], "depends_on": ["axis-interface"], "entrypoints": [{"label": "Открыть исходный контур", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["исследователь", "практик"], "geometry": "пустота → форма", "version": "prototype", "tags": ["внимание", "форма", "OCR"], "tasks": ["distinguish"]
+    },
+    {
+      "id": "axis-interface", "order": 8, "name": "Axis Interface", "alt_name": "Панель Творца", "code": "AXIS", "glyph": "↕", "layer": 2, "kind": "space", "status": "prototype", "status_label": "прототип", "accent": "#75c8e8",
+      "subtitle": "Интерфейс осевого различения", "description": "Панель для удержания текущей точки, полюсов и направления перехода в одной наблюдаемой геометрии.", "function": "Даёт автору интерфейс для проверки оси до запуска более сложного движка.",
+      "parent_ids": ["architectonics"], "depends_on": ["tzar"], "entrypoints": [{"label": "Открыть репозиторий", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["автор", "архитектор"], "geometry": "ось и полюса", "version": "prototype", "tags": ["панель", "ось", "различение"], "tasks": ["distinguish"]
+    },
+    {
+      "id": "skellu", "order": 9, "name": "Скелла / Skellu", "code": "SKELLU", "glyph": "ϟ", "layer": 3, "kind": "engine", "status": "embedded", "status_label": "встроено", "accent": "#56e2cc",
+      "subtitle": "Голосовой движок различения", "description": "Встроенный механизм, который удерживает голосовой ввод как материал перехода, а не как обычную команду.", "function": "Где действует: ГДЕЯ и Meta Core. Что принимает: голос и контекст. Что выдаёт: различённый вектор ответа.",
+      "parent_ids": ["gdeya", "meta-core-v2"], "depends_on": ["subject-core"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "голос → вектор", "version": "integrated", "contract": "активирован", "tags": ["голос", "различение", "контракт"], "tasks": []
+    },
+    {
+      "id": "demons-guardians", "order": 10, "name": "Demons / Guardians", "code": "GATE", "glyph": "◇", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "прототип", "accent": "#f58ca3",
+      "subtitle": "Пороговый движок", "description": "Механизм проверки перехода через пороги LOVE и MEASURE: пропустить, удержать или вернуть на пересборку.", "function": "Где действует: Meta Core. Что принимает: предложение перехода. Что выдаёт: решение порога и причину.",
+      "parent_ids": ["meta-core-v2"], "depends_on": ["tzar"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "порог", "version": "prototype", "contract": "проверяется", "tags": ["LOVE", "MEASURE", "gate"], "tasks": []
+    },
+    {
+      "id": "meta-core-v2", "order": 11, "name": "Meta Core v2", "code": "META", "glyph": "μ", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "требует сборки", "accent": "#8aa7ff",
+      "subtitle": "Оркестратор перехода", "description": "Контур оркестрации NEG → GOV → META → DEMONS, соединяющий оценку, управление и пороговую проверку.", "function": "Где действует: авторские пространства. Что принимает: состояние и задачу. Что выдаёт: последовательность проверенного перехода.",
+      "parent_ids": ["architectonics"], "depends_on": ["skellu", "demons-guardians", "tzar"], "entrypoints": [], "audience": ["разработчик", "архитектор"], "geometry": "каскад", "version": "v2", "contract": "неполная сборка", "tags": ["NEG", "GOV", "META"], "tasks": []
+    },
+    {
+      "id": "collective-meta-core", "order": 12, "name": "Collective Meta Core", "code": "COLLECTIVE", "glyph": "∞", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "прототип", "accent": "#d9b86c",
+      "subtitle": "Коллективный движок доверия", "description": "TypeScript-контур для группового согласования, где метрики и доверие ограничивают переход поля.", "function": "Где действует: РЕЗОН. Что принимает: голоса участников и состояние поля. Что выдаёт: допустимый коллективный ход.",
+      "parent_ids": ["reson"], "depends_on": ["meta-core-v2"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "коллективное поле", "version": "prototype", "contract": "формируется", "tags": ["доверие", "метрики", "группа"], "tasks": []
+    },
+    {
+      "id": "tzar-qengine", "order": 13, "name": "TZAR-QENGINE", "code": "QENGINE", "glyph": "Q", "layer": 3, "kind": "engine", "status": "author-review", "status_label": "авторская проверка", "accent": "#ffad66",
+      "subtitle": "Квантовый движок Архитектоники", "description": "Развивающийся контур для работы с множеством потенциальных состояний и условиями их перехода.", "function": "Где действует: исследовательский контур. Что принимает: пространство возможностей. Что выдаёт: проверяемую конфигурацию перехода.",
+      "parent_ids": ["tzar"], "depends_on": ["meta-core-v2"], "entrypoints": [], "audience": ["автор", "исследователь"], "geometry": "суперпозиция", "version": "developing", "contract": "на авторской проверке", "tags": ["Q", "состояния", "переход"], "tasks": []
+    },
+    {
+      "id": "subject-core", "order": 14, "name": "Subject Core", "code": "SUBJECT", "glyph": "•", "layer": 3, "kind": "engine", "status": "embedded", "status_label": "встроено", "accent": "#56e2cc",
+      "subtitle": "Ядро субъектности", "description": "Минимальный контур, удерживающий автора действия, его намерение и ответственность за переход.", "function": "Где действует: ГДЕЯ и голосовые контуры. Что принимает: намерение субъекта. Что выдаёт: ось, относительно которой проверяется ход.",
+      "parent_ids": ["gdeya"], "depends_on": ["architectonics"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "точка субъекта", "version": "embedded", "contract": "действует", "tags": ["субъект", "намерение", "ось"], "tasks": []
+    },
+    {
+      "id": "alphabet-singularity", "order": 15, "name": "Алфавит Сингулярности", "code": "ALPHABET", "glyph": "Ѧ", "layer": 4, "kind": "corpus", "status": "live", "status_label": "корпус открыт", "accent": "#bf8cff",
+      "subtitle": "49 Азов", "description": "Авторский корпус из 49 Азов и визуальных знаков, задающих различимые состояния и способы перехода.", "function": "Служит первичным словарём МОДУЛЯ и артефактной памятью Архитектоники.",
+      "parent_ids": ["module", "architectonics"], "depends_on": ["architectonics"], "entrypoints": [{"label": "Открыть корпус", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["читатель", "практик", "исследователь"], "geometry": "49 знаков", "version": "corpus", "tags": ["49 Азов", "SVG", "алфавит"], "tasks": ["study"]
+    },
+    {
+      "id": "az-buki", "order": 16, "name": "Аз × Буки", "code": "AZBUKI", "glyph": "×", "layer": 4, "kind": "artifact", "status": "embedded", "status_label": "рабочий модуль", "accent": "#bf8cff",
+      "subtitle": "Комбинаторный модуль", "description": "Связка Азов и Буки, превращающая единичный знак в направленное сочетание для работы с задачей.", "function": "Даёт МОДУЛЮ комбинаторную ткань и связывает внутреннее различение с внешним действием.",
+      "parent_ids": ["module"], "depends_on": ["alphabet-singularity"], "entrypoints": [{"label": "Открыть материалы", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["практик", "автор"], "geometry": "49 × 24", "version": "embedded", "tags": ["Азы", "Буки", "комбинаторика"], "tasks": ["transition"]
+    },
+    {
+      "id": "seven-transmissions", "order": 17, "name": "7 Передач", "code": "7T", "glyph": "Ⅶ", "layer": 4, "kind": "artifact", "status": "embedded", "status_label": "рабочий корпус", "accent": "#d9b86c",
+      "subtitle": "Семь режимов перехода", "description": "Набор из семи Передач, существующий как встроенный модуль и как самостоятельная колода для практики.", "function": "Структурирует темп и режим перехода в МОДУЛЕ и групповом поле РЕЗОНА.",
+      "parent_ids": ["module", "reson"], "depends_on": ["alphabet-singularity"], "entrypoints": [{"label": "Открыть материалы", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["практик", "ведущий"], "geometry": "семь режимов", "version": "embedded + deck", "tags": ["7", "переход", "колода"], "tasks": ["transition"]
+    },
+    {
+      "id": "transition-spells", "order": 18, "name": "Заклинания перехода", "code": "SPELLS", "glyph": "⌁", "layer": 4, "kind": "artifact", "status": "planned", "status_label": "формируется", "accent": "#f58ca3",
+      "subtitle": "Речевые формы перехода", "description": "Формирующийся корпус точных речевых конструкций, предназначенных не для описания, а для изменения режима действия.", "function": "Соединяет символический материал МОДУЛЯ с исполнимой формой обращения и ответа.",
+      "parent_ids": ["module"], "depends_on": ["az-buki", "seven-transmissions"], "entrypoints": [], "audience": ["автор", "практик"], "geometry": "речь → переход", "version": "forming", "tags": ["речь", "формула", "переход"], "tasks": []
+    },
+    {
+      "id": "saver", "order": 19, "name": "Saver", "alt_name": "Сейвер", "code": "SAVER", "glyph": "□", "layer": 5, "kind": "infrastructure", "status": "planned", "status_label": "архитектура формируется", "accent": "#77b9d6",
+      "subtitle": "Переносимый загрузчик ядер", "description": "Минимальный устойчивый контейнер, который хранит и запускает онтологические ядра, не смешиваясь с их внутренней логикой.", "function": "Обеспечивает локальность, переносимость и защиту авторских контуров.",
+      "parent_ids": ["architectonics"], "depends_on": ["tzar"], "entrypoints": [], "audience": ["автор", "разработчик", "организация"], "geometry": "контейнер", "version": "architecture", "tags": ["локально", "контейнер", "защита"], "tasks": ["deploy"]
+    },
+    {
+      "id": "offline-translator", "order": 20, "name": "Offline EN–RU Translator", "code": "TRANSLATOR", "glyph": "⇄", "layer": 5, "kind": "applied", "status": "prototype", "status_label": "HTML-прототип", "accent": "#75c8e8",
+      "subtitle": "Автономный переводческий контур", "description": "Локальный интерфейс англо-русского перевода для работы без передачи материала во внешний сервис.", "function": "Показывает прикладной принцип автономности: задача остаётся внутри пользовательского контура.",
+      "parent_ids": ["saver"], "depends_on": ["saver"], "entrypoints": [], "audience": ["пользователь", "организация"], "geometry": "локальный узел", "version": "HTML prototype", "tags": ["EN–RU", "offline", "privacy"], "tasks": ["deploy"]
+    },
+    {
+      "id": "private-corporate-contour", "order": 21, "name": "Закрытый корпоративный контур", "code": "PRIVATE", "glyph": "⬡", "layer": 5, "kind": "infrastructure", "status": "private", "status_label": "частный контур", "accent": "#a99ce8",
+      "subtitle": "Сведения закрыты", "description": "Сущность отмечена в общей карте без раскрытия её устройства, участников и внутренних связей.", "function": "Публичный реестр подтверждает наличие контура, но не публикует его архитектуру.",
+      "parent_ids": [], "depends_on": [], "entrypoints": [], "audience": ["закрытая группа"], "geometry": "сведения закрыты", "version": "private", "tags": ["частный контур"], "tasks": ["deploy"]
+    },
+    {
+      "id": "private-research-contour", "order": 22, "name": "Закрытый исследовательский контур", "code": "RESEARCH", "glyph": "№", "layer": 5, "kind": "applied", "status": "private", "status_label": "частный контур", "accent": "#d9b86c",
+      "subtitle": "Сведения закрыты", "description": "Исследовательская сущность отмечена в карте без публикации предмета, методики и внутренних зависимостей.", "function": "Публичный реестр удерживает место контура, сохраняя закрытой его содержательную архитектуру.",
+      "parent_ids": [], "depends_on": [], "entrypoints": [], "audience": ["закрытая группа"], "geometry": "сведения закрыты", "version": "private", "tags": ["частный контур"], "tasks": []
+    }
+  ]
+}
