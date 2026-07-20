@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090c0c">
+  <meta name="description" content="МОДУЛЬ — рабочая сборка 49 Азов, 24 Буки и 7 Передач внутри лаборатории ГДЕЯ.">
+  <title>МОДУЛЬ · ГДЕЯ</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+  <header>
+    <a class="brand" href="../../platform/#/hypothesis"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <span class="lab">ГДЕЯ · ЛАБОРАТОРИЯ СУБЪЕКТА</span>
+  </header>
+  <main>
+    <section class="hero">
+      <div><p class="eyebrow">MODULE · RELEASE CANDIDATE 1.0</p><h1>Соберите переход<br>как <em>формулу.</em></h1></div>
+      <div class="hero-copy"><p>Выберите внутреннюю частоту, внешнюю форму и режим проведения. МОДУЛЬ соберёт локальный паспорт следующего хода.</p><div class="counts"><span><b>49</b> Азов</span><span><b>24</b> Буки</span><span><b>7</b> Передач</span></div><small>В журнале: <b id="journal-count">0</b></small></div>
+    </section>
+
+    <section class="workbench" aria-live="polite">
+      <nav class="steps" aria-label="Этапы сборки">
+        <button class="active" data-go="axis"><i>01</i><span>Ось</span></button>
+        <button data-go="alphabet"><i>02</i><span>Алфавит</span></button>
+        <button data-go="formula"><i>03</i><span>Аз × Буки</span></button>
+        <button data-go="passport"><i>04</i><span>Паспорт</span></button>
+      </nav>
+
+      <section class="stage active" data-stage="axis">
+        <p class="code">01 · ОСЬ СУБЪЕКТА</p><h2>Что должно стать действием?</h2>
+        <div class="field-pair">
+          <label><span>Намерение · минимум 3 слова</span><textarea id="intent" rows="4" placeholder="Я хочу провести…"></textarea></label>
+          <label><span>Инвариант · что нельзя потерять</span><textarea id="invariant" rows="4" placeholder="В любом ходе сохраняется…"></textarea></label>
+        </div>
+        <p class="hint" id="axis-hint">Назовите намерение и сохраняемое основание.</p>
+        <button class="primary" id="to-alphabet" disabled>Открыть 49 Азов <span>→</span></button>
+      </section>
+
+      <section class="stage" data-stage="alphabet" aria-hidden="true" id="alphabet">
+        <p class="code">02 · АЛФАВИТ СИНГУЛЯРНОСТИ</p><div class="stage-head"><h2>Выберите внутреннюю частоту</h2><div class="selection" id="az-selection">Аз не выбран</div></div>
+        <div class="catalog-tools"><label><span>Поиск по 49 Азам</span><input id="az-search" type="search" placeholder="Название или номер"></label><div class="filters" id="tag-filters" aria-label="Фильтр частот"></div></div>
+        <div class="card-grid az-grid" id="az-grid"></div>
+        <p class="hint" id="az-hint">Корпус показан полностью. Выбор не назначает вам состояние — он фиксирует авторскую рабочую частоту.</p>
+        <button class="primary" id="to-formula" disabled>Перейти к Аз × Буки <span>→</span></button>
+      </section>
+
+      <section class="stage" data-stage="formula" aria-hidden="true" id="az-buki">
+        <p class="code">03 · АЗ × БУКИ × ПЕРЕДАЧА</p><h2>Дайте частоте внешнюю форму</h2>
+        <div class="formula-preview" id="formula-preview"><span>Аз</span><i>×</i><span>Бука</span><i>→</i><span>Передача</span></div>
+        <h3>24 Буки · внешние формы</h3><div class="card-grid buka-grid" id="buka-grid"></div>
+        <h3>7 Передач · режим проведения</h3><div class="tx-grid" id="tx-grid"></div>
+        <div class="field-pair formula-fields">
+          <label><span>Индукция · что активируется внутри</span><textarea id="induction" rows="3" placeholder="Я активирую…"></textarea></label>
+          <label><span>Инверсия · что приходит из будущего</span><textarea id="inversion" rows="3" placeholder="Из будущего в ход входит…"></textarea></label>
+        </div>
+        <fieldset><legend>Проверка оси</legend><div class="axis-options"><label><input type="radio" name="axis" value="preserved"><span>Сохраняет</span></label><label><input type="radio" name="axis" value="review"><span>Нужно различить</span></label><label><input type="radio" name="axis" value="rupture"><span>Теряет основание</span></label></div></fieldset>
+        <p class="hint" id="formula-hint">Для паспорта нужны Бука, Передача, две формулировки и явная проверка оси.</p>
+        <button class="primary" id="compile" disabled>Провести формулу <span>→</span></button>
+      </section>
+
+      <section class="stage" data-stage="passport" aria-hidden="true">
+        <p class="code">04 · ПАСПОРТ МАТЕРИАЛИЗАЦИИ</p><div class="result-state" id="result-state">CONDUCT</div><h2 id="result-title">Формула собрана.</h2>
+        <div class="passport" id="passport-output"></div>
+        <div class="actions"><button class="primary" id="new-cycle">Новая сборка</button><button id="export">Экспорт JSON</button></div>
+      </section>
+    </section>
+
+    <section class="boundary"><b>ГРАНИЦА</b><p>МОДУЛЬ фиксирует авторский выбор и хранит его локально. Он не диагностирует состояние, не предсказывает результат и не доказывает сохранение инварианта — окончательное решение остаётся у субъекта.</p></section>
+  </main>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
