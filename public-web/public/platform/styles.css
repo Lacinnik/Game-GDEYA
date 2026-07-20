@@ -242,7 +242,17 @@ button, a { -webkit-tap-highlight-color: transparent; }
 /* Task entry */
 .task-list { padding-top: 34px; padding-bottom: 110px; }
 .task-row {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
   border-bottom: 1px solid var(--line);
+  border-radius: 0;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  color: inherit;
+  text-align: left;
   display: grid;
   grid-template-columns: 76px minmax(220px, .8fr) minmax(300px, 1.1fr) 36px;
   gap: 30px;

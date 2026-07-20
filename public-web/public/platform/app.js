@@ -18,7 +18,7 @@
 
   const statusGroups = {
     all: () => true,
-    launch: entity => entity.status === 'live',
+    launch: entity => entity.kind === 'space' && entity.status === 'live',
     prototype: entity => ['prototype', 'author-review', 'planned'].includes(entity.status),
     embedded: entity => entity.status === 'embedded',
     private: entity => entity.status === 'private'
@@ -177,7 +177,7 @@
         <section class="map-toolbar shell">
           <div class="filters" role="group" aria-label="Фильтр по готовности">
             <button class="filter-button" data-filter="all">Все</button>
-            <button class="filter-button" data-filter="launch">Можно открыть</button>
+            <button class="filter-button" data-filter="launch">Рабочие продукты</button>
             <button class="filter-button" data-filter="prototype">Формируются</button>
             <button class="filter-button" data-filter="embedded">Встроены</button>
             <button class="filter-button" data-filter="private">Частный контур</button>
