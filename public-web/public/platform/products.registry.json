@@ -62,7 +62,7 @@
     {
       "id": "tzar", "order": 3, "name": "ТзАр", "alt_name": "Тензорная Архитектоника", "code": "TZAR", "glyph": "τ", "layer": 1, "kind": "core", "status": "published", "status_label": "открытый корпус", "accent": "#8aa7ff",
       "subtitle": "Тензорное ядро дисциплины", "description": "Математическое и аксиоматическое ядро, в котором отношения, напряжения и переходы получают строгий язык.", "function": "Хранит декларации, инварианты и контракты авторских движков.",
-      "parent_ids": ["architectonics"], "depends_on": ["architectonics"], "entrypoints": [{"label": "Открыть ядро", "url": "https://github.com/Lacinnik/-tensor-architectonics", "external": true}], "audience": ["исследователь", "разработчик", "архитектор"], "geometry": "тензор", "version": "ядро", "tags": ["аксиоматика", "математика", "инварианты"], "tasks": ["study"]
+      "parent_ids": ["architectonics"], "depends_on": ["architectonics"], "entrypoints": [{"label": "Запустить TZAR Conductance 1.0", "url": "https://lacinnik.github.io/-tensor-architectonics/", "external": true}, {"label": "Открыть научный корпус", "url": "https://github.com/Lacinnik/-tensor-architectonics", "external": true}], "audience": ["исследователь", "разработчик", "архитектор"], "geometry": "тензор", "version": "корпус · Conductance 1.0 stable", "tags": ["85 проверок", "проводимость", "инварианты"], "tasks": ["study"]
     },
     {
       "id": "gdeya", "order": 4, "name": "ГДЕЯ", "code": "GDEYA", "glyph": "⊕", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#56e2cc",
@@ -87,12 +87,12 @@
     {
       "id": "axis-interface", "order": 8, "name": "Axis Interface", "alt_name": "Панель Творца", "code": "AXIS", "glyph": "↕", "layer": 2, "kind": "space", "status": "prototype", "status_label": "прототип", "accent": "#75c8e8",
       "subtitle": "Интерфейс осевого различения", "description": "Панель для удержания текущей точки, полюсов и направления перехода в одной наблюдаемой геометрии.", "function": "Даёт автору интерфейс для проверки оси до запуска более сложного движка.",
-      "parent_ids": ["architectonics"], "depends_on": ["tzar"], "entrypoints": [{"label": "Открыть репозиторий", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["автор", "архитектор"], "geometry": "ось и полюса", "version": "prototype", "tags": ["панель", "ось", "различение"], "tasks": ["distinguish"]
+      "parent_ids": ["architectonics"], "depends_on": ["tzar"], "entrypoints": [{"label": "Запустить опыт ОСЬ", "url": "https://lacinnik.github.io/reason-/axis-game/", "external": true}], "audience": ["автор", "архитектор"], "geometry": "ось и полюса", "version": "published experiment", "tags": ["панель", "ось", "различение"], "tasks": ["distinguish"]
     },
     {
-      "id": "skellu", "order": 9, "name": "Скелла / Skellu", "code": "SKELLU", "glyph": "ϟ", "layer": 3, "kind": "engine", "status": "embedded", "status_label": "встроено", "accent": "#56e2cc",
+      "id": "skellu", "order": 9, "name": "Скелла / Skellu", "code": "SKELLU", "glyph": "ϟ", "layer": 3, "kind": "engine", "status": "embedded", "status_label": "встроено · runtime проверен", "accent": "#56e2cc",
       "subtitle": "Голосовой движок различения", "description": "Встроенный механизм, который удерживает голосовой ввод как материал перехода, а не как обычную команду.", "function": "Где действует: ГДЕЯ и Meta Core. Что принимает: голос и контекст. Что выдаёт: различённый вектор ответа.",
-      "parent_ids": ["gdeya", "meta-core-v2"], "depends_on": ["subject-core"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "голос → вектор", "version": "integrated", "contract": "активирован", "tags": ["голос", "различение", "контракт"], "tasks": []
+      "parent_ids": ["gdeya", "meta-core-v2"], "depends_on": ["subject-core"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "голос → вектор", "version": "integrated · runtime 1.0", "contract": "технически исполним", "tags": ["голос", "10 проверок", "контракт"], "tasks": []
     },
     {
       "id": "demons-guardians", "order": 10, "name": "Demons / Guardians", "code": "GATE", "glyph": "◇", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "прототип", "accent": "#f58ca3",
@@ -100,14 +100,14 @@
       "parent_ids": ["meta-core-v2"], "depends_on": ["tzar"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "порог", "version": "prototype", "contract": "проверяется", "tags": ["LOVE", "MEASURE", "gate"], "tasks": []
     },
     {
-      "id": "meta-core-v2", "order": 11, "name": "Meta Core v2", "code": "META", "glyph": "μ", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "требует сборки", "accent": "#8aa7ff",
+      "id": "meta-core-v2", "order": 11, "name": "Meta Core v2", "code": "META", "glyph": "μ", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "runtime проверен", "accent": "#8aa7ff",
       "subtitle": "Оркестратор перехода", "description": "Контур оркестрации NEG → GOV → META → DEMONS, соединяющий оценку, управление и пороговую проверку.", "function": "Где действует: авторские пространства. Что принимает: состояние и задачу. Что выдаёт: последовательность проверенного перехода.",
-      "parent_ids": ["architectonics"], "depends_on": ["skellu", "demons-guardians", "tzar"], "entrypoints": [], "audience": ["разработчик", "архитектор"], "geometry": "каскад", "version": "v2", "contract": "неполная сборка", "tags": ["NEG", "GOV", "META"], "tasks": []
+      "parent_ids": ["architectonics"], "depends_on": ["skellu", "demons-guardians", "tzar"], "entrypoints": [], "audience": ["разработчик", "архитектор"], "geometry": "каскад", "version": "v2 · runtime 1.0", "contract": "технически исполним · ждёт интеграции", "tags": ["NEG", "GOV", "10 проверок"], "tasks": []
     },
     {
-      "id": "collective-meta-core", "order": 12, "name": "Collective Meta Core", "code": "COLLECTIVE", "glyph": "∞", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "прототип", "accent": "#d9b86c",
-      "subtitle": "Коллективный движок доверия", "description": "TypeScript-контур для группового согласования, где метрики и доверие ограничивают переход поля.", "function": "Где действует: РЕЗОН. Что принимает: голоса участников и состояние поля. Что выдаёт: допустимый коллективный ход.",
-      "parent_ids": ["reson"], "depends_on": ["meta-core-v2"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "коллективное поле", "version": "prototype", "contract": "формируется", "tags": ["доверие", "метрики", "группа"], "tasks": []
+      "id": "collective-meta-core", "order": 12, "name": "Collective Meta Core", "code": "COLLECTIVE", "glyph": "∞", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "release candidate", "accent": "#d9b86c",
+      "subtitle": "Коллективный движок доверия", "description": "Исполнимый контур группового согласования: отдельно проверяет предъявленность связей и проводимость общего объекта.", "function": "Где действует: РЕЗОН. Что принимает: 2–6 голосов, явные связи и α/Q/T. Что выдаёт: ALLOW или HOLD с названными воротами решения.",
+      "parent_ids": ["reson"], "depends_on": ["meta-core-v2"], "entrypoints": [{"label": "Запустить Field Check RC", "url": "https://lacinnik.github.io/reason-/field-check/", "external": true}], "audience": ["группа", "ведущий"], "geometry": "коллективное поле", "version": "1.0.0-rc.1", "contract": "технически исполним · 4 проверки", "tags": ["trust gate", "metrics gate", "local-first"], "tasks": []
     },
     {
       "id": "tzar-qengine", "order": 13, "name": "TZAR-QENGINE", "code": "QENGINE", "glyph": "Q", "layer": 3, "kind": "engine", "status": "author-review", "status_label": "авторская проверка", "accent": "#ffad66",
@@ -115,9 +115,9 @@
       "parent_ids": ["tzar"], "depends_on": ["meta-core-v2"], "entrypoints": [], "audience": ["автор", "исследователь"], "geometry": "суперпозиция", "version": "developing", "contract": "на авторской проверке", "tags": ["Q", "состояния", "переход"], "tasks": []
     },
     {
-      "id": "subject-core", "order": 14, "name": "Subject Core", "code": "SUBJECT", "glyph": "•", "layer": 3, "kind": "engine", "status": "embedded", "status_label": "встроено", "accent": "#56e2cc",
+      "id": "subject-core", "order": 14, "name": "Subject Core", "code": "SUBJECT", "glyph": "•", "layer": 3, "kind": "engine", "status": "embedded", "status_label": "встроено · runtime проверен", "accent": "#56e2cc",
       "subtitle": "Ядро субъектности", "description": "Минимальный контур, удерживающий автора действия, его намерение и ответственность за переход.", "function": "Где действует: ГДЕЯ и голосовые контуры. Что принимает: намерение субъекта. Что выдаёт: ось, относительно которой проверяется ход.",
-      "parent_ids": ["gdeya"], "depends_on": ["architectonics"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "точка субъекта", "version": "embedded", "contract": "действует", "tags": ["субъект", "намерение", "ось"], "tasks": []
+      "parent_ids": ["gdeya"], "depends_on": ["architectonics"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "точка субъекта", "version": "embedded · runtime 1.0", "contract": "действует · журнал переходов проверен", "tags": ["субъект", "10 проверок", "ось"], "tasks": []
     },
     {
       "id": "alphabet-singularity", "order": 15, "name": "Алфавит Сингулярности", "code": "ALPHABET", "glyph": "Ѧ", "layer": 4, "kind": "corpus", "status": "published", "status_label": "открытый корпус", "accent": "#bf8cff",
@@ -145,9 +145,9 @@
       "parent_ids": ["architectonics"], "depends_on": ["tzar"], "entrypoints": [], "audience": ["автор", "разработчик", "организация"], "geometry": "контейнер", "version": "architecture", "tags": ["локально", "контейнер", "защита"], "tasks": ["deploy"]
     },
     {
-      "id": "offline-translator", "order": 20, "name": "Offline EN–RU Translator", "code": "TRANSLATOR", "glyph": "⇄", "layer": 5, "kind": "applied", "status": "prototype", "status_label": "HTML-прототип", "accent": "#75c8e8",
-      "subtitle": "Автономный переводческий контур", "description": "Локальный интерфейс англо-русского перевода для работы без передачи материала во внешний сервис.", "function": "Показывает прикладной принцип автономности: задача остаётся внутри пользовательского контура.",
-      "parent_ids": ["saver"], "depends_on": ["saver"], "entrypoints": [], "audience": ["пользователь", "организация"], "geometry": "локальный узел", "version": "HTML prototype", "tags": ["EN–RU", "offline", "privacy"], "tasks": ["deploy"]
+      "id": "offline-translator", "order": 20, "name": "Offline EN–RU Translator", "code": "TRANSLATOR", "glyph": "⇄", "layer": 5, "kind": "applied", "status": "embedded", "status_label": "stable · внутри РЕЗОН", "accent": "#75c8e8",
+      "subtitle": "Автономный переводческий контур", "description": "Локальный двунаправленный переводчик с памятью, словарём, сегментацией и глубокой обратной проверкой.", "function": "Работает как прикладной автономный контур РЕЗОН: текст и утверждённая память остаются в браузере пользователя.",
+      "parent_ids": ["reson"], "depends_on": [], "entrypoints": [{"label": "Запустить переводчик 2.0", "url": "https://lacinnik.github.io/reason-/", "external": true}], "audience": ["пользователь", "организация"], "geometry": "локальный узел", "version": "2.0.0 stable", "tags": ["28 проверок", "offline", "privacy"], "tasks": ["deploy"]
     },
     {
       "id": "private-corporate-contour", "order": 21, "name": "Закрытый корпоративный контур", "code": "PRIVATE", "glyph": "⬡", "layer": 5, "kind": "infrastructure", "status": "private", "status_label": "частный контур", "accent": "#a99ce8",
