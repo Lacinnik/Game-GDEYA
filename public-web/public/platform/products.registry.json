@@ -80,9 +80,9 @@
       "parent_ids": ["architectonics"], "depends_on": ["alphabet-singularity", "az-buki", "seven-transmissions", "transition-spells"], "entrypoints": [{"label": "Открыть материалы", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["практик", "исследователь"], "geometry": "49 × 24 × 7", "version": "prototype", "tags": ["Азы", "Буки", "Передачи"], "tasks": ["transition"]
     },
     {
-      "id": "voidocr", "order": 7, "name": "VoidOCR", "code": "VOID", "glyph": "◌", "layer": 2, "kind": "space", "status": "prototype", "status_label": "рабочий прототип", "accent": "#f58ca3",
-      "subtitle": "Пустотная OCR", "description": "Интерфейс различения формы из потенции: плотность, прерывание, схлопывание и форма внимания.", "function": "Делает состояние наблюдаемым до того, как оно будет преждевременно названо или сведено к тексту.",
-      "parent_ids": ["architectonics"], "depends_on": ["axis-interface"], "entrypoints": [{"label": "Открыть исходный контур", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["исследователь", "практик"], "geometry": "пустота → форма", "version": "prototype", "tags": ["внимание", "форма", "OCR"], "tasks": ["distinguish"]
+      "id": "voidocr", "order": 7, "name": "VoidOCR", "code": "VOID", "glyph": "◌", "layer": 2, "kind": "space", "status": "prototype", "status_label": "release candidate", "accent": "#f58ca3",
+      "subtitle": "Пустотная OCR", "description": "Локальный протокол различения формы из потенции: обязательная пауза, состояние до и после, тип Δ и устойчивость следа.", "function": "Делает состояние наблюдаемым до того, как оно будет преждевременно названо или сведено к тексту. След хранится локально и экспортируется в JSON.",
+      "parent_ids": ["architectonics"], "depends_on": ["axis-interface"], "entrypoints": [{"label": "Запустить VoidOCR RC", "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/", "external": true}], "audience": ["исследователь", "практик"], "geometry": "пустота → форма", "version": "1.0.0-rc.1", "tags": ["внимание", "форма", "local-first"], "tasks": ["distinguish"]
     },
     {
       "id": "axis-interface", "order": 8, "name": "Axis Interface", "alt_name": "Панель Творца", "code": "AXIS", "glyph": "↕", "layer": 2, "kind": "space", "status": "prototype", "status_label": "прототип", "accent": "#75c8e8",
