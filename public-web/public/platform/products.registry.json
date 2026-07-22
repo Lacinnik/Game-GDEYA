@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-07-20",
+  "updated_at": "2026-07-22",
   "platform": {
     "name": "Архитектоника",
     "tagline": "Не каталог. Среда запуска.",
@@ -67,12 +67,12 @@
     {
       "id": "gdeya", "order": 4, "name": "ГДЕЯ", "code": "GDEYA", "glyph": "⊕", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#56e2cc",
       "subtitle": "Стратегическая практика становления", "description": "Живой цикл, в котором намерение проходит плиты Ресурса, Власти, Отношений и Результата.", "function": "Переводит личную задачу из формулировки в проверяемое движение через голосовой и игровой контур.",
-      "parent_ids": ["architectonics"], "depends_on": ["subject-core", "skellu"], "entrypoints": [{"label": "Запустить ГДЕЯ", "url": "https://lacinnik.github.io/Game-GDEYA/", "external": true}, {"label": "Открыть МОДУЛЬ 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/", "external": true}], "audience": ["участник", "практик"], "geometry": "четыре плиты", "version": "live · MODULE 1.0 stable", "tags": ["iPhone", "голос", "практика"], "tasks": ["practice"]
+      "parent_ids": ["architectonics"], "depends_on": ["subject-core", "skellu"], "entrypoints": [{"label": "Запустить ГДЕЯ", "url": "https://lacinnik.github.io/Game-GDEYA/", "external": true}, {"label": "Открыть МОДУЛЬ 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/", "external": true}, {"label": "Открыть VoidOCR 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/", "external": true}], "audience": ["участник", "практик"], "geometry": "четыре плиты", "version": "live · MODULE 1.0 · VoidOCR 1.0 stable", "tags": ["iPhone", "голос", "VoidOCR"], "tasks": ["practice"]
     },
     {
       "id": "reson", "order": 5, "name": "РЕЗОН", "code": "RESON", "glyph": "≈", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#d9b86c",
       "subtitle": "Лаборатория коллективного поля", "description": "Рабочая вершина коллективной вертикали. Объединяет стабильный автономный переводческий контур, проверку поля и самостоятельную колоду 7 Передач.", "function": "Даёт коллективным инструментам общий адрес, сохраняет отдельные голоса и различает готовые выпуски от проверяемых гипотез.",
-      "parent_ids": ["architectonics"], "depends_on": ["collective-meta-core", "seven-transmissions"], "entrypoints": [{"label": "Запустить Translator 2.0", "url": "https://lacinnik.github.io/reason-/", "external": true}, {"label": "Запустить Field Check RC", "url": "https://lacinnik.github.io/reason-/field-check/", "external": true}, {"label": "Открыть 7 Передач 1.0", "url": "https://lacinnik.github.io/reason-/transmissions/", "external": true}], "audience": ["группа", "ведущий", "организация"], "geometry": "коллективное поле", "version": "live laboratory · 7T 1.0 stable", "tags": ["Field Check", "7 Передач", "группа"], "tasks": ["practice"]
+      "parent_ids": ["architectonics"], "depends_on": ["collective-meta-core", "seven-transmissions"], "entrypoints": [{"label": "Запустить Translator 2.0", "url": "https://lacinnik.github.io/reason-/", "external": true}, {"label": "Запустить Field Check 1.0", "url": "https://lacinnik.github.io/reason-/field-check/", "external": true}, {"label": "Открыть 7 Передач 1.0", "url": "https://lacinnik.github.io/reason-/transmissions/", "external": true}], "audience": ["группа", "ведущий", "организация"], "geometry": "коллективное поле", "version": "live laboratory · Field Check 1.0 · 7T 1.0 stable", "tags": ["Field Check", "7 Передач", "группа"], "tasks": ["practice"]
     },
     {
       "id": "module", "order": 6, "name": "МОДУЛЬ", "code": "MODULE", "glyph": "∂", "layer": 2, "kind": "space", "status": "live", "status_label": "stable · можно запустить", "accent": "#bf8cff",
@@ -80,9 +80,9 @@
       "parent_ids": ["architectonics"], "depends_on": ["alphabet-singularity", "az-buki", "seven-transmissions", "transition-spells"], "entrypoints": [{"label": "Запустить МОДУЛЬ 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/", "external": true}, {"label": "Открыть исходный корпус", "url": "https://github.com/Lacinnik/architectonica-az-buki", "external": true}], "audience": ["практик", "исследователь"], "geometry": "49 × 24 × 7", "version": "1.0.0 stable", "contract": "принято автором · 4 шага · локальный паспорт · 4 проверки", "tags": ["49 Азов", "24 Буки", "7 Передач"], "tasks": ["transition"]
     },
     {
-      "id": "voidocr", "order": 7, "name": "VoidOCR", "code": "VOID", "glyph": "◌", "layer": 2, "kind": "space", "status": "prototype", "status_label": "release candidate", "accent": "#f58ca3",
+      "id": "voidocr", "order": 7, "name": "VoidOCR", "code": "VOID", "glyph": "◌", "layer": 2, "kind": "space", "status": "live", "status_label": "stable · можно запустить", "accent": "#f58ca3",
       "subtitle": "Пустотная OCR", "description": "Локальный протокол различения формы из потенции: обязательная пауза, состояние до и после, тип Δ и устойчивость следа.", "function": "Делает состояние наблюдаемым до того, как оно будет преждевременно названо или сведено к тексту. След хранится локально и экспортируется в JSON.",
-      "parent_ids": ["architectonics"], "depends_on": ["axis-interface"], "entrypoints": [{"label": "Запустить VoidOCR RC", "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/", "external": true}], "audience": ["исследователь", "практик"], "geometry": "пустота → форма", "version": "1.0.0-rc.1", "tags": ["внимание", "форма", "local-first"], "tasks": ["distinguish"]
+      "parent_ids": ["architectonics"], "depends_on": ["axis-interface"], "entrypoints": [{"label": "Запустить VoidOCR 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/", "external": true}], "audience": ["исследователь", "практик"], "geometry": "пустота → форма", "version": "1.0.0 stable", "tags": ["внимание", "форма", "local-first", "offline"], "tasks": ["distinguish"]
     },
     {
       "id": "axis-interface", "order": 8, "name": "Axis Interface", "alt_name": "Панель Творца", "code": "AXIS", "glyph": "↕", "layer": 2, "kind": "space", "status": "prototype", "status_label": "прототип", "accent": "#75c8e8",
@@ -105,9 +105,9 @@
       "parent_ids": ["architectonics"], "depends_on": ["skellu", "demons-guardians", "tzar"], "entrypoints": [], "audience": ["разработчик", "архитектор"], "geometry": "каскад", "version": "v2 · runtime 1.0", "contract": "технически исполним · ждёт интеграции", "tags": ["NEG", "GOV", "10 проверок"], "tasks": []
     },
     {
-      "id": "collective-meta-core", "order": 12, "name": "Collective Meta Core", "code": "COLLECTIVE", "glyph": "∞", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "release candidate", "accent": "#d9b86c",
+      "id": "collective-meta-core", "order": 12, "name": "Collective Meta Core", "code": "COLLECTIVE", "glyph": "∞", "layer": 3, "kind": "engine", "status": "published", "status_label": "stable release", "accent": "#d9b86c",
       "subtitle": "Коллективный движок доверия", "description": "Исполнимый контур группового согласования: отдельно проверяет предъявленность связей и проводимость общего объекта.", "function": "Где действует: РЕЗОН. Что принимает: 2–6 голосов, явные связи и α/Q/T. Что выдаёт: ALLOW или HOLD с названными воротами решения.",
-      "parent_ids": ["reson"], "depends_on": ["meta-core-v2"], "entrypoints": [{"label": "Запустить Field Check RC", "url": "https://lacinnik.github.io/reason-/field-check/", "external": true}], "audience": ["группа", "ведущий"], "geometry": "коллективное поле", "version": "1.0.0-rc.1", "contract": "технически исполним · 4 проверки", "tags": ["trust gate", "metrics gate", "local-first"], "tasks": []
+      "parent_ids": ["reson"], "depends_on": ["meta-core-v2"], "entrypoints": [{"label": "Запустить Field Check 1.0", "url": "https://lacinnik.github.io/reason-/field-check/", "external": true}], "audience": ["группа", "ведущий"], "geometry": "коллективное поле", "version": "1.0.0 stable", "contract": "stable · trust + metrics + local evidence + offline", "tags": ["trust gate", "metrics gate", "local-first", "offline"], "tasks": []
     },
     {
       "id": "tzar-qengine", "order": 13, "name": "TZAR-QENGINE", "code": "QENGINE", "glyph": "Q", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "candidate · author-reviewed", "accent": "#ffad66",

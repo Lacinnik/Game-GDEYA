@@ -19,8 +19,14 @@ test("Platform 2.0 registers 22 unique entities across two complete 10/10 labora
 test("published verticals expose their accepted versions and public entrypoints", () => {
   assert.equal(byId.get("product-platform").version, "2.0");
   assert.equal(byId.get("module").version, "1.0.0 stable");
+  assert.equal(byId.get("voidocr").version, "1.0.0 stable");
+  assert.equal(byId.get("voidocr").status, "live");
+  assert.equal(byId.get("collective-meta-core").version, "1.0.0 stable");
+  assert.equal(byId.get("collective-meta-core").status, "published");
   assert.equal(byId.get("seven-transmissions").version, "1.0.0 stable");
   assert.match(byId.get("module").entrypoints[0].url, /\/labs\/module\/$/u);
+  assert.match(byId.get("voidocr").entrypoints[0].url, /\/labs\/voidocr\/$/u);
+  assert.match(byId.get("collective-meta-core").entrypoints[0].url, /\/field-check\/$/u);
   assert.match(byId.get("seven-transmissions").entrypoints[0].url, /\/transmissions\/$/u);
 });
 

@@ -10,7 +10,7 @@
 
 - **Platform 2.0:** `https://lacinnik.github.io/Game-GDEYA/platform/` — единый реестр 22 сущностей и переходы между лабораториями ГДЕЯ и РЕЗОН.
 - **MODULE 1.0 stable:** `https://lacinnik.github.io/Game-GDEYA/labs/module/` — исполнимый контур `49 Азов × 24 Буки × 7 Передач` с локальным паспортом.
-- **VoidOCR 1.0 release candidate:** `https://lacinnik.github.io/Game-GDEYA/labs/voidocr/` — локальный четырёхэтапный протокол различения.
+- **VoidOCR 1.0 stable:** `https://lacinnik.github.io/Game-GDEYA/labs/voidocr/` — локальный четырёхэтапный протокол различения с JSON-экспортом и подготовленным офлайн-контуром.
 
 Реестр является источником статусов для лаунчера. Статусы дисциплинарного корпуса ТзАр сверяются с `contour/manifest.json` репозитория `Lacinnik/-tensor-architectonics`; QENGINE публикуется только как `candidate · author-reviewed`, не как канон.
 
@@ -67,7 +67,9 @@ npm run dev
 npm test
 ```
 
-Команда собирает проект, валидирует артефакт и запускает 10 автоматических проверок игры, Platform 2.0, MODULE и VoidOCR. Публикация Pages дополнительно требует успешного lint и публичной Vite-сборки.
+Команда собирает проект, валидирует артефакт и запускает 11 автоматических проверок игры, Platform 2.0, MODULE, VoidOCR и его офлайн-оболочки. Публикация Pages дополнительно требует успешного lint и публичной Vite-сборки.
+
+Сквозная матрица повышения VoidOCR и Collective Field Check до stable зафиксирована в [`docs/PLATFORM_2_0_STABLE_ACCEPTANCE_2026-07-22.md`](docs/PLATFORM_2_0_STABLE_ACCEPTANCE_2026-07-22.md).
 
 ## Основные файлы
 
