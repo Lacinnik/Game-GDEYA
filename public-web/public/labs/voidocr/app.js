@@ -113,15 +113,24 @@
     showStage("trigger");
   }
 
-  function exportTrace() {
-    if (!state.trace) return;
-    const blob = new Blob([JSON.stringify(state.trace, null, 2)], { type: "application/json" });
+  function downloadJson(filename, value) {
+    const blob = new Blob([JSON.stringify(value, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `voidocr-${state.trace.id}.json`;
+    link.download = filename;
+    link.hidden = true;
+    document.body.append(link);
     link.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => {
+      link.remove();
+      URL.revokeObjectURL(url);
+    }, 1000);
+  }
+
+  function exportTrace() {
+    if (!state.trace) return;
+    downloadJson(`voidocr-${state.trace.id}.json`, state.trace);
   }
 
   renderChoices("#pre", BEFORE, "pre");
@@ -137,4 +146,5 @@
   $("#commit").addEventListener("click", commit);
   $("#reset").addEventListener("click", reset);
   $("#export").addEventListener("click", exportTrace);
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js").catch(() => {});
 })();

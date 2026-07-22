@@ -10,7 +10,7 @@ test("VoidOCR release contains its complete local runtime", async () => {
     readFile(new URL("styles.css", root), "utf8"),
     readFile(new URL("app.js", root), "utf8"),
   ]);
-  assert.match(html, /VOID OCR · RELEASE CANDIDATE 1\.0/);
+  assert.match(html, /VOID OCR · STABLE 1\.0/);
   assert.match(html, /data-stage="trigger"/);
   assert.match(html, /data-stage="pause"/);
   assert.match(html, /data-stage="distinguish"/);
@@ -18,6 +18,9 @@ test("VoidOCR release contains its complete local runtime", async () => {
   assert.match(js, /architectonica\.voidocr-trace\/1\.0\.0/);
   assert.match(js, /localStorage\.setItem/);
   assert.match(js, /stability >= 2 \? "ALLOW" : "DENY"/);
+  assert.match(js, /document\.body\.append\(link\)/);
+  assert.match(js, /setTimeout\(\(\) =>/);
+  assert.match(js, /serviceWorker\.register\("\.\.\/\.\.\/sw\.js"\)/);
   assert.match(css, /-webkit-appearance:none/);
 });
 
