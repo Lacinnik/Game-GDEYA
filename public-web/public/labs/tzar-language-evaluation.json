@@ -1,6 +1,6 @@
 {
   "schema": "tzar.language-evaluation/0.1.0",
-  "model": "TZAR-LANGUAGE-001@0.1.0-candidate",
+  "model": "TZAR-LANGUAGE-001@0.2.0-candidate",
   "status": "working-author-review-set",
   "boundary": "Expected selections are regression criteria, not empirical validation.",
   "cases": [

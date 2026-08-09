@@ -1,3 +1,5 @@
+import { compileTzarLanguage } from "../tzar-language-001.mjs";
+
 (() => {
   const BEFORE = ["рассеянность", "напряжение", "неопределённость", "перегруз", "остановка", "фоновый шум"];
   const AFTER = ["ясность", "тишина", "устойчивость", "собранность", "направленность", "простота"];
@@ -75,7 +77,7 @@
 
   function commit() {
     const trace = {
-      schema: "architectonica.voidocr-trace/1.0.0",
+      schema: "architectonica.voidocr-trace/1.1.0",
       id: globalThis.crypto?.randomUUID?.() || `void-${Date.now()}`,
       ts: new Date().toISOString(),
       laboratory: "gdeya",
@@ -87,6 +89,22 @@
       stability: state.stability,
       decision: state.stability >= 2 ? "ALLOW" : "DENY",
     };
+    trace.language = compileTzarLanguage({
+      object: trace.trigger,
+      subjectTrace: `${trace.pre_state} → ${trace.post_state}; Δ ${trace.delta_type}`,
+      innerImage: `${trace.post_state}; устойчивость ${trace.stability} / 3`,
+      coreNeed: "различить проявившуюся форму без преждевременного называния",
+      supra: "сохранить предъявленный след внимания",
+      nextExperiment: trace.decision === "ALLOW" ? "передать след следующему субъектному шагу" : "вернуться в паузу без усиления результата",
+      riemann: "фактический возврат после следующего внешнего действия",
+      observedQ: null,
+    }, {
+      profile: "voidocr",
+      voice: "subject",
+      targetRelation: "сделать форму наблюдаемой до преждевременного называния",
+      context: `VoidOCR · ${trace.quadrant} · устойчивость ${trace.stability} / 3`,
+      subjectConfirmed: true,
+    });
     state.trace = trace;
     saveTrace(trace);
     renderResult(trace);
@@ -99,7 +117,7 @@
     $("#verdict").classList.toggle("deny", !allow);
     $("#result-title").textContent = allow ? "Допуск получен." : "Действие пока не допускается.";
     $("#result-copy").textContent = allow ? "Различение удержалось после паузы. След можно передать следующему шагу субъектного контура." : "Различение пока не удерживает форму. Вернитесь в паузу без попытки усилить результат.";
-    const rows = [["Точка", trace.trigger], ["До → после", `${trace.pre_state} → ${trace.post_state}`], ["Δ", `${trace.delta_type} · ${trace.quadrant}`], ["Устойчивость", `${trace.stability} / 3`], ["Хранение", "локально в этом браузере"]];
+    const rows = [["Слово Субъекта", trace.language.layers.publicStatement], ["Сингулярная формула", trace.language.formula], ["Точка", trace.trigger], ["До → после", `${trace.pre_state} → ${trace.post_state}`], ["Δ", `${trace.delta_type} · ${trace.quadrant}`], ["Устойчивость", `${trace.stability} / 3`], ["Q · возврат", "null · ещё не наблюдался"], ["Хранение", "локально в этом браузере"]];
     $("#trace").innerHTML = rows.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join("");
   }
 

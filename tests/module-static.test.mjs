@@ -20,6 +20,13 @@ test("MODULE validates explicit user-authored inputs", () => {
 test("MODULE produces a deterministic local passport", () => {
   const passport = buildPassport(complete, {az:AZ,buki:BUKI,transmissions:TRANSMISSIONS}, {now:()=>"2026-07-20T00:00:00.000Z",uuid:()=>"test-module"});
   assert.equal(passport.schema, MODULE_SCHEMA); assert.equal(passport.id, "test-module"); assert.equal(passport.outcome, "conduct"); assert.match(passport.formula.notation, /Азъ × ⊕/); assert.equal(passport.storage, "local-browser-only");
+  assert.equal(passport.language.modelId, "TZAR-LANGUAGE-001");
+  assert.equal(passport.language.profile, "module");
+  assert.equal(passport.language.tensor.O, complete.intent);
+  assert.equal(passport.language.tensor.Q, null);
+  assert.equal(passport.language.selection.az.id, complete.azId);
+  assert.equal(passport.language.selection.buka.id, complete.bukaId);
+  assert.equal(passport.language.selection.transmission.id, complete.txId);
 });
 
 test("MODULE release has no external runtime dependency", async () => {

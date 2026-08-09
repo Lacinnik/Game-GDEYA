@@ -383,6 +383,18 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .contract-cell { min-height: 126px; border: 1px solid var(--line); padding: 18px; }
 .contract-cell span { color: #657d78; font: 8px monospace; letter-spacing: .12em; text-transform: uppercase; }
 .contract-cell p { margin: 25px 0 0; color: var(--soft); font-size: 12px; line-height: 1.55; }
+.language-profile { margin-top: 48px; border: 1px solid color-mix(in srgb, var(--entity-accent) 42%, var(--line)); background: linear-gradient(145deg, rgba(12, 34, 31, .92), rgba(7, 20, 19, .88)); padding: 24px; }
+.language-profile header { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.language-profile header span { color: var(--entity-accent); font: 8px monospace; letter-spacing: .13em; text-transform: uppercase; }
+.language-profile h3 { margin: 8px 0 0; font: 400 27px Georgia, serif; }
+.language-profile header b { color: var(--entity-accent); font: 8px monospace; letter-spacing: .1em; text-transform: uppercase; text-align: right; }
+.language-profile dl { margin: 0; }
+.language-profile dl div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 18px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.language-profile dt { color: #66807a; font: 8px monospace; letter-spacing: .1em; text-transform: uppercase; }
+.language-profile dd { margin: 0; color: #a7b9b5; font-size: 11px; line-height: 1.55; }
+.language-formula { margin: 20px 0 8px !important; color: var(--entity-accent) !important; font: 10px/1.65 monospace !important; }
+.language-profile > small { color: #677f7a; font-size: 9px; line-height: 1.55; }
+.language-profile.missing { border-color: #b78456; }
 .relation-block { border-top: 1px solid var(--line); padding: 22px 0; }
 .relation-block:first-child { border-top: 0; padding-top: 0; }
 .relation-block h3 { margin: 0 0 14px; color: #6d8580; font: 9px monospace; letter-spacing: .13em; text-transform: uppercase; }
@@ -469,6 +481,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
   .dossier h1 { font-size: clamp(49px, 15vw, 70px); }
   .dossier-lead { font-size: 15px; }
   .engine-contract { grid-template-columns: 1fr; }
+  .language-profile header, .language-profile dl div { grid-template-columns: 1fr; flex-direction: column; gap: 8px; }
+  .language-profile header b { text-align: left; }
   .site-footer { padding: 40px 20px; align-items: flex-start; flex-direction: column; }
   .modal { padding: 34px 24px 26px; }
 }

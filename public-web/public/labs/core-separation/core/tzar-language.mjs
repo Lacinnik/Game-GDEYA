@@ -42,6 +42,7 @@ export function compileSeparationLanguage({
   const bias = profileBias(subjectTrace);
   const generic = compileTzarLanguage({
     object,
+    subjectTrace,
     innerImage: image,
     position: "субъект собственного действия",
     euclid: context.name,
@@ -56,6 +57,10 @@ export function compileSeparationLanguage({
     observedQ: q,
   }, {
     profile: "SEP-7x7",
+    voice: "subject",
+    targetRelation: TARGET_RELATION,
+    context: `SEP-7×7 · ${context.name}`,
+    subjectConfirmed,
     azTexts: [[subjectTrace, 5], [TARGET_RELATION, 4], [interception.law, 2], [interception.stateName, 1]],
     bukaTexts: [[criterionText, 5], [subjectTrace, 3], [interception.stateName, 2], [context.name, 1]],
     txTexts: [[subjectTrace, 6], [criterionText, 3], [interception.law, 2]],

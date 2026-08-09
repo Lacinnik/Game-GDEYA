@@ -1,4 +1,6 @@
-export const MODULE_SCHEMA = "architectonica.module-passport/1.0.0";
+import { compileTzarLanguage } from "../tzar-language-001.mjs";
+
+export const MODULE_SCHEMA = "architectonica.module-passport/1.1.0";
 
 export function wordCount(value) {
   return String(value || "").trim().split(/\s+/u).filter(Boolean).length;
@@ -30,6 +32,25 @@ export function buildPassport(draft, catalog, environment = {}) {
   const now = environment.now || (() => new Date().toISOString());
   const uuid = environment.uuid || (() => globalThis.crypto?.randomUUID?.() || "module-" + Date.now());
   const outcome = draft.axis === "preserved" ? "conduct" : draft.axis === "review" ? "review" : "hold";
+  const language = compileTzarLanguage({
+    object: draft.intent,
+    subjectTrace: draft.induction,
+    innerImage: draft.inversion,
+    coreNeed: draft.intent,
+    supra: draft.invariant,
+    nextExperiment: transmission.action,
+    riemann: "фактическое появление выбранной формы в заявленном контексте",
+    observedQ: null,
+  }, {
+    profile: "module",
+    voice: "subject",
+    targetRelation: "материализовать следующий ход, сохраняя предъявленный инвариант",
+    context: "МОДУЛЬ · 49 Азов × 24 Буки × 7 Передач",
+    subjectConfirmed: true,
+    azBias: { [az.id]: 1000 },
+    bukaBias: { [buka.id]: 1000 },
+    txBias: { [transmission.id]: 1000 },
+  });
   return {
     schema: MODULE_SCHEMA,
     id: uuid(),
@@ -49,8 +70,9 @@ export function buildPassport(draft, catalog, environment = {}) {
     axisVerdict: draft.axis,
     outcome,
     nextAction: transmission.action,
+    language,
     evidence: ["user-declared-intent", "user-selected-az", "user-selected-buka", "user-selected-transmission", "user-declared-axis"],
-    boundary: "The passport records an authored choice; it does not diagnose, predict, authorize, or prove an invariant.",
+    boundary: "The passport records an authored choice; the public statement and symbolic formula remain separate, Q=null until observed return, and the model does not diagnose, predict, authorize, or prove an invariant.",
     storage: "local-browser-only",
   };
 }

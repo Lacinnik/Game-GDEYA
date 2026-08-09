@@ -73,7 +73,7 @@ function renderPassport(passport) {
   const labels = { conduct:"CONDUCT", review:"REVIEW", hold:"HOLD" };
   $("#result-state").textContent = labels[passport.outcome]; $("#result-state").dataset.outcome = passport.outcome;
   $("#result-title").textContent = passport.outcome === "conduct" ? "Формула сохраняет заявленную ось." : passport.outcome === "review" ? "Формула просит дополнительного различения." : "Проведение остановлено заявленным разрывом.";
-  const rows = [["Формула",passport.formula.notation],["Намерение",passport.intent],["Инвариант",passport.invariant],["Индукция",passport.induction],["Инверсия",passport.inversion],["Следующий ход",passport.nextAction],["Хранение","локально в этом браузере"]];
+  const rows = [["Слово Субъекта",passport.language.layers.publicStatement],["Истинный запрос · кандидат",passport.language.layers.trueRequest],["Сингулярная формула",passport.language.formula],["Намерение",passport.intent],["Инвариант",passport.invariant],["Индукция",passport.induction],["Инверсия",passport.inversion],["Следующий ход",passport.nextAction],["Q · возврат","null · ещё не наблюдался"],["Хранение","локально в этом браузере"]];
   $("#passport-output").innerHTML = rows.map(([key,value]) => '<div><dt>' + key + '</dt><dd>' + escapeHtml(value) + '</dd></div>').join("");
 }
 function exportPassport() {
