@@ -1,10 +1,10 @@
 import { CONTEXTS, LAWS, NODES, RESPONSES, SKELLU_PROMPTS, STATES } from "./catalog.mjs";
-import { STORAGE_KEY, createPassport, detectInvariant, integrateReturn, safeJournal, validateEpisode, validateOplus } from "./runtime.mjs";
+import { STORAGE_KEY, compileSeparationLanguage, createPassport, detectInvariant, integrateReturn, languageFromPassport, safeJournal, validateEpisode, validateOplus } from "./runtime.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/gu, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character]);
-const state = { contextId: "", episode: "", index: 0, answers: {}, passport: null };
+const state = { contextId: "", episode: "", index: 0, answers: {}, interception: null, passport: null };
 
 function readJournal() {
   try { return safeJournal(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")); } catch { return []; }
@@ -49,31 +49,52 @@ function renderNode() {
 }
 
 function answerState(lawId) { return RESPONSES.find((response) => response.code === state.answers[lawId]); }
-function renderInterception() {
+function interceptionForAnswers() {
   const ranked = LAWS.map((law) => ({ law, response: answerState(law.id) })).sort((a, b) => a.response.state - b.response.state);
   const lowest = ranked[0];
-  $("#interception").innerHTML = `<b>Узел перехвата · ${lowest.law.id} ${escapeHtml(lowest.law.name)}</b><br>${STATES[lowest.response.state].name} · ${escapeHtml(STATES[lowest.response.state].description)}<br><small>Это рабочая гипотеза выбранного эпизода, не оценка личности.</small>`;
+  return { lawId: lowest.law.id, law: lowest.law.name, state: lowest.response.state, stateName: STATES[lowest.response.state].name, stateDescription: STATES[lowest.response.state].description };
+}
+function renderInterception() {
+  state.interception = interceptionForAnswers();
+  $("#interception").innerHTML = `<b>Узел перехвата · ${state.interception.lawId} ${escapeHtml(state.interception.law)}</b><br>${state.interception.stateName} · ${escapeHtml(state.interception.stateDescription)}<br><small>Это рабочая гипотеза выбранного эпизода, не оценка личности.</small>`;
+  renderLanguagePreview(true);
+}
+function languageDraft(subjectConfirmed = false) {
+  const context = CONTEXTS.find((item) => item.id === state.contextId);
+  return compileSeparationLanguage({ context, episode: state.episode, interception: state.interception || interceptionForAnswers(), action: $("#action").value, criterion: $("#criterion").value, subjectConfirmed });
+}
+function renderLanguage(prefix, language) {
+  $(`#${prefix}-statement`).textContent = language.layers.publicStatement;
+  $(`#${prefix}-formula`).textContent = language.formula;
+  $(`#${prefix}-selection`).textContent = `${language.selection.az.id} · ${language.selection.az.title}  ×  ${language.selection.buka.id} · ${language.selection.buka.symbol} ${language.selection.buka.title}  →  ${language.selection.transmission.id} · ${language.selection.transmission.symbol} ${language.selection.transmission.title}`;
+}
+function renderLanguagePreview(resetConfirmation = false) {
+  if (resetConfirmation) $("#language-confirmed").checked = false;
+  renderLanguage("language-preview", languageDraft($("#language-confirmed").checked));
 }
 function validateGate() {
-  const draft = { action: $("#action").value, criterion: $("#criterion").value, owned: $("#owned").checked, consentFree: $("#consent-free").checked };
+  const draft = { action: $("#action").value, criterion: $("#criterion").value, owned: $("#owned").checked, consentFree: $("#consent-free").checked, languageConfirmed: $("#language-confirmed").checked };
   const errors = validateOplus(draft);
   $("#conduct").disabled = errors.length > 0;
-  const labels = { ACTION_INCOMPLETE: "сформулируй действие", ACTION_NOT_SINGLE: "оставь один шаг", CRITERION_INCOMPLETE: "добавь критерий", ACTION_NOT_OWNED: "подтверди свою исполнимость", ACTION_REQUIRES_CONSENT: "отдели шаг от согласия Другого" };
+  const labels = { ACTION_INCOMPLETE: "сформулируй действие", ACTION_NOT_SINGLE: "оставь один шаг", CRITERION_INCOMPLETE: "добавь критерий", ACTION_NOT_OWNED: "подтверди свою исполнимость", ACTION_REQUIRES_CONSENT: "отдели шаг от согласия Другого", LANGUAGE_UNCONFIRMED: "подтверди Слово Субъекта" };
   $("#gate-hint").textContent = errors.length ? `Gate закрыт: ${errors.map((error) => labels[error]).join(" · ")}.` : "Gate открыт · шаг принадлежит субъекту и допускает наблюдаемый возврат.";
 }
 
 function compile() {
-  state.passport = createPassport({ contextId: state.contextId, episode: state.episode, answers: state.answers, action: $("#action").value, criterion: $("#criterion").value });
+  state.passport = createPassport({ contextId: state.contextId, episode: state.episode, answers: state.answers, action: $("#action").value, criterion: $("#criterion").value, languageConfirmed: $("#language-confirmed").checked });
   upsertPassport(state.passport); renderMap(); route("map");
 }
 function passportRows(passport) {
-  return [["Контур", passport.context.name], ["O · эпизод", passport.object], ["S · след действия", passport.subjectTrace], ["R_g · цель", passport.targetRelation], ["Узел перехвата", `${passport.interception.lawId} · ${passport.interception.law} · ${passport.interception.stateName}`], ["Один ⊕-шаг", passport.oplus.action], ["Критерий", passport.oplus.criterion], ["Q · фактический возврат", passport.q == null ? "null · ещё не наблюдался" : String(passport.q)], ["Доказательность", passport.evidenceStatus]];
+  return [["Контур", passport.context.name], ["O · эпизод", passport.object], ["S · след действия", passport.subjectTrace], ["I · отражение", passport.language?.coordinates?.I || passport.reflectedImage], ["R_g · цель", passport.targetRelation], ["Узел перехвата", `${passport.interception.lawId} · ${passport.interception.law} · ${passport.interception.stateName}`], ["Один ⊕-шаг", passport.oplus.action], ["Критерий", passport.oplus.criterion], ["Q · фактический возврат", passport.q == null ? "null · ещё не наблюдался" : String(passport.q)], ["Доказательность", passport.evidenceStatus]];
 }
 function renderMap() {
   const journal = readJournal();
   const latest = state.passport || journal[0];
   if (!latest) return route("episode");
   state.passport = latest;
+  const language = latest.language || languageFromPassport(latest, false);
+  renderLanguage("language-result", language);
+  $("#language-result-status").textContent = language.boundary.subjectConfirmed ? "ПОДТВЕРЖДЕНО СУБЪЕКТОМ" : "LEGACY · ТРЕБУЕТ ПОДТВЕРЖДЕНИЯ";
   $("#passport").innerHTML = passportRows(latest).map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
   const latestByNode = new Map();
   for (const passport of [...journal].reverse()) for (const answer of passport.answers) latestByNode.set(answer.nodeId, answer);
@@ -96,8 +117,9 @@ function integrate() {
   upsertPassport(state.passport); renderMap(); route("map");
 }
 function resetCycle() {
-  Object.assign(state, { contextId: "", episode: "", index: 0, answers: {}, passport: null });
+  Object.assign(state, { contextId: "", episode: "", index: 0, answers: {}, interception: null, passport: null });
   $("#episode").value = ""; $("#action").value = ""; $("#criterion").value = ""; $("#owned").checked = false; $("#consent-free").checked = false;
+  $("#language-confirmed").checked = false;
   renderContexts(); validateEpisodeScreen(); route("episode");
 }
 function exportJournal() {
@@ -112,8 +134,9 @@ $("#episode").addEventListener("input", validateEpisodeScreen);
 $("#start").addEventListener("click", () => { state.index = 0; renderNode(); route("distinguish"); });
 $("#previous").addEventListener("click", () => { if (state.index > 0) { state.index -= 1; renderNode(); } });
 $("#next").addEventListener("click", () => { if (state.index < 6) { state.index += 1; renderNode(); } else { renderInterception(); validateGate(); route("oplus"); } });
-["#action", "#criterion"].forEach((selector) => $(selector).addEventListener("input", validateGate));
+["#action", "#criterion"].forEach((selector) => $(selector).addEventListener("input", () => { renderLanguagePreview(true); validateGate(); }));
 ["#owned", "#consent-free"].forEach((selector) => $(selector).addEventListener("change", validateGate));
+$("#language-confirmed").addEventListener("change", () => { renderLanguagePreview(false); validateGate(); });
 $("#conduct").addEventListener("click", compile);
 $("#go-return").addEventListener("click", () => { renderReturn(); route("return"); });
 $("#new-context").addEventListener("click", resetCycle);
