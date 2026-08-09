@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-07-22",
+  "updated_at": "2026-08-09",
   "platform": {
     "name": "Архитектоника",
     "tagline": "Не каталог. Среда запуска.",
@@ -67,7 +67,7 @@
     {
       "id": "gdeya", "order": 4, "name": "ГДЕЯ", "code": "GDEYA", "glyph": "⊕", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#56e2cc",
       "subtitle": "Стратегическая практика становления", "description": "Живой цикл, в котором намерение проходит плиты Ресурса, Власти, Отношений и Результата.", "function": "Переводит личную задачу из формулировки в проверяемое движение через голосовой и игровой контур.",
-      "parent_ids": ["architectonics"], "depends_on": ["subject-core", "skellu"], "entrypoints": [{"label": "Запустить ГДЕЯ", "url": "https://lacinnik.github.io/Game-GDEYA/", "external": true}, {"label": "Открыть МОДУЛЬ 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/", "external": true}, {"label": "Открыть VoidOCR 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/", "external": true}], "audience": ["участник", "практик"], "geometry": "четыре плиты", "version": "live · MODULE 1.0 · VoidOCR 1.0 stable", "tags": ["iPhone", "голос", "VoidOCR"], "tasks": ["practice"]
+      "parent_ids": ["architectonics"], "depends_on": ["subject-core", "skellu"], "entrypoints": [{"label": "Запустить ГДЕЯ", "url": "https://lacinnik.github.io/Game-GDEYA/", "external": true}, {"label": "Открыть SEP-7×7", "url": "https://lacinnik.github.io/Game-GDEYA/labs/core-separation/", "external": true}, {"label": "Открыть МОДУЛЬ 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/", "external": true}, {"label": "Открыть VoidOCR 1.0", "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/", "external": true}], "audience": ["участник", "практик"], "geometry": "четыре плиты", "version": "live · SEP-7×7 v0.1 · MODULE 1.0 · VoidOCR 1.0 stable", "tags": ["iPhone", "голос", "SEP-7×7", "VoidOCR"], "tasks": ["practice"]
     },
     {
       "id": "reson", "order": 5, "name": "РЕЗОН", "code": "RESON", "glyph": "≈", "layer": 2, "kind": "space", "status": "live", "status_label": "можно запустить", "accent": "#d9b86c",

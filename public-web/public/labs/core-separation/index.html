@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#07110f" />
+  <meta name="description" content="ГДЕЯ · SEP-7×7 — локальная карта источника действия: 7 законов сохранения Ядра × 7 жизненных контуров." />
+  <link rel="manifest" href="./manifest.json" />
+  <title>ГДЕЯ · SEP-7×7</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="field" aria-hidden="true"></div>
+  <header>
+    <a class="brand" href="../../"><span>⊕</span><b>ГДЕЯ</b></a>
+    <p>SEP-7×7 · КАРТА СОХРАНЕНИЯ ЯДРА</p>
+    <a class="platform-link" href="../../platform/">Платформа ↗</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">ВСТРОЕННЫЙ ПРИКЛАДНОЙ РЕЖИМ ГДЕЯ</p>
+        <h1>Где находится<br /><em>источник действия?</em></h1>
+      </div>
+      <div class="hero-copy">
+        <p>Не тест на «зрелость» и не диагноз. Один конкретный эпизод проходит через семь законов сохранения Ядра. Результат — карта, один ⊕-шаг и наблюдаемый возврат.</p>
+        <div class="formula"><b>7</b><span>законов</span><i>×</i><b>7</b><span>контуров</span><i>=</i><b>49</b><span>координат</span></div>
+      </div>
+    </section>
+
+    <nav class="phase-nav" aria-label="Фазы протокола">
+      <button data-route="episode" class="active"><i>01</i><span>Эпизод</span></button>
+      <button data-route="distinguish"><i>02</i><span>Различение</span></button>
+      <button data-route="oplus"><i>03</i><span>⊕-шаг</span></button>
+      <button data-route="map"><i>04</i><span>Карта</span></button>
+      <button data-route="return"><i>05</i><span>Возврат</span></button>
+    </nav>
+
+    <section class="workbench">
+      <section class="panel active" data-panel="episode">
+        <p class="code">01 · EPISODE</p>
+        <h2>Где сейчас находится напряжение?</h2>
+        <p class="lead">Выбери один жизненный контур и опиши один эпизод. Не всю историю и не характеристику Другого.</p>
+        <div id="contexts" class="context-grid"></div>
+        <label class="text-field"><span>Что конкретно происходит?</span><textarea id="episode" rows="5" placeholder="Один наблюдаемый эпизод: решение, реакция Другого и то, что происходит с твоим действием."></textarea></label>
+        <p class="hint" id="episode-hint">Нужны выбранный контур и минимум пять слов.</p>
+        <button class="primary" id="start" disabled>Начать различение <span>→</span></button>
+      </section>
+
+      <section class="panel" data-panel="distinguish" aria-hidden="true">
+        <div class="panel-head"><div><p class="code">02 · DISTINGUISH</p><h2 id="node-title">Семь узлов</h2></div><p id="node-count" class="counter">1 / 7</p></div>
+        <div class="node-meta"><span id="node-id">SEP(L1,C1)</span><b id="node-operator">Кто принимает решение?</b></div>
+        <h3 id="node-question"></h3>
+        <div id="responses" class="response-list"></div>
+        <aside class="skellu"><b>СКЕЛЛУ · ОПЕРАТОР РАЗЛИЧЕНИЯ</b><p id="skellu-prompt">Назови не намерение, а то, что фактически происходит с действием.</p></aside>
+        <div class="actions"><button id="previous">← Назад</button><button class="primary" id="next" disabled>Следующий узел <span>→</span></button></div>
+      </section>
+
+      <section class="panel" data-panel="oplus" aria-hidden="true">
+        <p class="code">03 · OPLUS GATE</p>
+        <h2>Один ⊕-шаг</h2>
+        <div id="interception" class="interception"></div>
+        <label class="text-field"><span>Действие, которое можешь совершить ты</span><textarea id="action" rows="3" placeholder="Одно внешне наблюдаемое действие — без ожидания, что Другой сначала изменится."></textarea></label>
+        <label class="text-field"><span>Критерий завершения</span><textarea id="criterion" rows="3" placeholder="Как будет видно, что действие проведено после реакции Другого?"></textarea></label>
+        <label class="check"><input id="owned" type="checkbox" /><span>Шаг исполним мной и находится в моей власти.</span></label>
+        <label class="check"><input id="consent-free" type="checkbox" /><span>Шаг не требует согласия или изменения состояния Другого.</span></label>
+        <p class="hint" id="gate-hint">Gate закрыт, пока действие не принадлежит субъекту.</p>
+        <button class="primary" id="conduct" disabled>CONDUCT <span>→</span></button>
+      </section>
+
+      <section class="panel" data-panel="map" aria-hidden="true">
+        <div class="panel-head"><div><p class="code">04 · PASSPORT + MAP</p><h2>Карта Ядра</h2></div><b class="verdict" id="verdict">CONDUCT</b></div>
+        <div id="passport" class="passport"></div>
+        <div id="matrix" class="matrix" aria-label="Карта 7 на 7"></div>
+        <div id="invariant" class="invariant"></div>
+        <div class="actions wrap"><button class="primary" id="go-return">Зафиксировать возврат <span>→</span></button><button id="new-context">Открыть другой контур</button><button id="export">Экспорт JSON</button><label class="import">Импорт JSON<input id="import" type="file" accept="application/json" /></label><button class="danger" id="destroy">Уничтожить локальную карту</button></div>
+      </section>
+
+      <section class="panel" data-panel="return" aria-hidden="true">
+        <p class="code">05 · RETURN → INTEGRATE</p>
+        <h2>Что изменилось после действия?</h2>
+        <p class="lead">До фактического возврата качество отклика <code>Q</code> остаётся <code>null</code>. Здесь фиксируется наблюдение, а не желаемый результат.</p>
+        <div id="return-target" class="interception"></div>
+        <label class="check"><input id="other-reacted" type="checkbox" /><span>Другой отреагировал.</span></label>
+        <fieldset><legend>Сохранилось ли действие после реакции?</legend><label><input type="radio" name="preserved" value="true" /><span>Да, действие сохранено</span></label><label><input type="radio" name="preserved" value="false" /><span>Нет, действие отменено или перехвачено</span></label></fieldset>
+        <label class="check"><input id="relation-preserved" type="checkbox" /><span>Связь сохранилась без сдачи действия.</span></label>
+        <label class="text-field"><span>Какая новая форма возникла?</span><textarea id="new-form" rows="3" placeholder="Наблюдаемый результат или «форма не возникла»."></textarea></label>
+        <label class="text-field"><span>Что произошло с напряжением?</span><textarea id="tension" rows="3" placeholder="Факт, который можно отличить от интерпретации."></textarea></label>
+        <button class="primary" id="integrate" disabled>INTEGRATE <span>→</span></button>
+      </section>
+    </section>
+
+    <section class="boundary">
+      <b>ГРАНИЦА ИНТЕРПРЕТАЦИИ</b>
+      <p><code>O</code> — конкретный эпизод; <code>S</code> — проведённое действие; <code>I</code> — карта его отражения; <code>R_g</code> — сохранение источника действия в Ядре; <code>C</code> — жизненный контур; <code>Q</code> — только фактический возврат. Состояние узла не является оценкой личности, диагнозом или вероятностью.</p>
+    </section>
+  </main>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>

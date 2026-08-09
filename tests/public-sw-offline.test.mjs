@@ -71,7 +71,7 @@ function createWorkerHarness(source, workerUrl) {
   };
 }
 
-test("public Service Worker restores Platform 2.0 and VoidOCR while offline", async () => {
+test("public Service Worker restores Platform 2.0, VoidOCR and SEP-7×7 while offline", async () => {
   const source = await readFile(new URL("../public-web/public/sw.js", import.meta.url), "utf8");
   const worker = createWorkerHarness(source, "https://example.test/Game-GDEYA/sw.js");
   await worker.install();
@@ -83,4 +83,8 @@ test("public Service Worker restores Platform 2.0 and VoidOCR while offline", as
   const platformResponse = await worker.navigate("./platform/?offline=1");
   assert.equal(platformResponse.status, 200);
   assert.match(await platformResponse.text(), /platform\/index\.html$/u);
+
+  const sepResponse = await worker.navigate("./labs/core-separation/?offline=1");
+  assert.equal(sepResponse.status, 200);
+  assert.match(await sepResponse.text(), /labs\/core-separation\/index\.html$/u);
 });

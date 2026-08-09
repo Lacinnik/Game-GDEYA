@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'platform-2.0-stable-1';
+const CACHE_REVISION = 'platform-2.0-sep-7x7-1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -12,6 +12,14 @@ const SHELL = [
   './labs/voidocr/index.html',
   './labs/voidocr/styles.css',
   './labs/voidocr/app.js',
+  './labs/core-separation/',
+  './labs/core-separation/index.html',
+  './labs/core-separation/styles.css',
+  './labs/core-separation/catalog.mjs',
+  './labs/core-separation/runtime.mjs',
+  './labs/core-separation/app.mjs',
+  './labs/core-separation/manifest.json',
+  './labs/core-separation/sw.js',
 ];
 
 self.addEventListener('install', (event) => {
@@ -36,6 +44,7 @@ self.addEventListener('activate', (event) => {
 
 function navigationFallback(request) {
   const { pathname } = new URL(request.url);
+  if (/\/labs\/core-separation(?:\/|$)/u.test(pathname)) return caches.match('./labs/core-separation/index.html');
   if (/\/labs\/voidocr(?:\/|$)/u.test(pathname)) return caches.match('./labs/voidocr/index.html');
   if (/\/platform(?:\/|$)/u.test(pathname)) return caches.match('./platform/index.html');
   return undefined;
