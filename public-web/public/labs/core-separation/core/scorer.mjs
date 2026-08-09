@@ -5,7 +5,7 @@ export function responseState(code) { return RESPONSES.find((response) => respon
 export function scoreContour(answers) {
   const scored = LAWS.map((law) => ({ lawId: law.id, law: law.name, state: responseState(answers[law.id]) }));
   if (scored.some((item) => item.state == null)) throw new Error("ANSWERS_INCOMPLETE");
-  return scored.map((item) => ({ ...item, stateName: STATES[item.state].name }));
+  return scored.map((item) => ({ ...item, stateName: STATES[item.state].name, stateDescription: STATES[item.state].description }));
 }
 
 export function interceptionOf(scored) { return [...scored].sort((a, b) => a.state - b.state || a.lawId.localeCompare(b.lawId))[0] ?? null; }

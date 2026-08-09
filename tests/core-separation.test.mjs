@@ -6,8 +6,10 @@ import { createPassport, detectInvariant, integrateReturn, validateOplus } from 
 import { canTransition, transition } from "../public-web/public/labs/core-separation/core/state-machine.mjs";
 import { responseState, scoreContour } from "../public-web/public/labs/core-separation/core/scorer.mjs";
 import { safeJournal } from "../public-web/public/labs/core-separation/core/storage.mjs";
+import { compileTzarLanguage, LANGUAGE_AZ, LANGUAGE_BUKI, LANGUAGE_TRANSMISSIONS, MODEL_ID } from "../public-web/public/labs/tzar-language-001.mjs";
 
 const answers = Object.fromEntries(LAWS.map((law, index) => [law.id, RESPONSES[index].code]));
+const languageEvaluation = JSON.parse(await readFile(new URL("../public-web/public/labs/tzar-language-evaluation.json", import.meta.url), "utf8"));
 
 test("SEP-7×7 exposes 49 unique law-context coordinates", () => {
   assert.equal(LAWS.length, 7); assert.equal(CONTEXTS.length, 7); assert.equal(NODES.length, 49);
@@ -21,15 +23,40 @@ test("counterdependence remains distinction, never autonomy", () => {
 });
 
 test("⊕ gate requires one subject-owned consent-free action", () => {
-  assert.deepEqual(validateOplus({ action: "Сообщить решение без доказательства", criterion: "Решение действует после ответа", owned: true, consentFree: true }), []);
+  assert.deepEqual(validateOplus({ action: "Сообщить решение без доказательства", criterion: "Решение действует после ответа", owned: true, consentFree: true, languageConfirmed: true }), []);
   assert.ok(validateOplus({ action: "Попросить его сначала измениться", criterion: "Он согласится", owned: false, consentFree: false }).length >= 3);
+  assert.ok(validateOplus({ action: "Сообщить решение без доказательства", criterion: "Решение действует после ответа", owned: true, consentFree: true, languageConfirmed: false }).includes("LANGUAGE_UNCONFIRMED"));
+});
+
+test("TZAR-LANGUAGE-001 exposes the complete singular corpus", () => {
+  assert.equal(MODEL_ID, "TZAR-LANGUAGE-001");
+  assert.equal(LANGUAGE_AZ.length, 49);
+  assert.equal(LANGUAGE_BUKI.length, 24);
+  assert.equal(LANGUAGE_TRANSMISSIONS.length, 7);
+});
+
+test("TZAR-LANGUAGE-001 keeps the same control selections as the Ego profile", () => {
+  for (const fixture of languageEvaluation.cases) {
+    const result = compileTzarLanguage(fixture.input);
+    assert.equal(result.selection.az.id, fixture.expected.az, `${fixture.id}: Аз`);
+    assert.equal(result.selection.buka.id, fixture.expected.buka, `${fixture.id}: Бука`);
+    assert.equal(result.selection.transmission.id, fixture.expected.transmission, `${fixture.id}: Передача`);
+  }
 });
 
 test("Q remains null until an observed return", () => {
-  const passport = createPassport({ contextId: "C1", episode: "Я отменяю решение после реакции родителя", answers, action: "Сообщить принятое решение спокойно", criterion: "Решение действует после ответа", now: "2026-08-09T10:00:00.000Z" });
+  const passport = createPassport({ contextId: "C1", episode: "Я отменяю решение после реакции родителя", answers, action: "Сообщить принятое решение спокойно", criterion: "Решение действует после ответа", languageConfirmed: true, now: "2026-08-09T10:00:00.000Z" });
   assert.equal(passport.q, null); assert.equal(passport.evidenceStatus, "hypothesis");
+  assert.equal(passport.language.modelId, "TZAR-LANGUAGE-001");
+  assert.equal(passport.language.formula, "Слово × Σ Сумма резонансов → ⌒ Мост");
+  assert.equal(passport.language.boundary.subjectConfirmed, true);
+  assert.equal(passport.language.coordinates.Q, null);
+  assert.match(passport.language.layers.publicStatement, /Мой субъектный след S/u);
   const integrated = integrateReturn(passport, { otherReacted: true, actionPreserved: true, relationPreserved: true, newForm: "Разговор завершён", tension: "Напряжение снизилось" }, "2026-08-10T10:00:00.000Z");
   assert.equal(integrated.q, 1); assert.equal(integrated.evidenceStatus, "observed");
+  assert.equal(integrated.language.coordinates.Q, 1);
+  assert.match(integrated.language.layers.publicStatement, /Возврат наблюдён/u);
+  assert.match(integrated.language.layers.publicStatement, /Новая форма — «Разговор завершён»/u);
 });
 
 test("an invariant needs the same interception across three distinct contexts", () => {
@@ -42,6 +69,7 @@ test("static shell is local-first and names the interpretation boundary", async 
   const root = new URL("../public-web/public/labs/core-separation/", import.meta.url);
   const [html, app] = await Promise.all([readFile(new URL("index.html", root), "utf8"), readFile(new URL("app.mjs", root), "utf8")]);
   assert.match(html, /ГРАНИЦА ИНТЕРПРЕТАЦИИ/u); assert.match(html, /SEP-7×7/u); assert.match(html, /Q<\/code> остаётся <code>null/u);
+  assert.match(html, /TZAR-LANGUAGE-001/u); assert.match(html, /language-confirmed/u);
   assert.doesNotMatch(app, /fetch\(|XMLHttpRequest|analytics|gtag/iu);
 });
 
@@ -74,4 +102,5 @@ test("manifest and local Service Worker expose an offline standalone shell", asy
   assert.equal(manifest.display, "standalone");
   assert.match(worker, /data\/nodes\.ru\.json/u);
   assert.match(worker, /core\/passport\.mjs/u);
+  assert.match(worker, /tzar-language-001\.mjs/u);
 });

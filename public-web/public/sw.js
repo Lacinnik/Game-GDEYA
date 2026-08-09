@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'platform-2.0-sep-7x7-1';
+const CACHE_REVISION = 'platform-2.0-sep-7x7-language-1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -15,9 +15,13 @@ const SHELL = [
   './labs/core-separation/',
   './labs/core-separation/index.html',
   './labs/core-separation/styles.css',
+  './labs/core-separation/language.css',
   './labs/core-separation/catalog.mjs',
   './labs/core-separation/runtime.mjs',
   './labs/core-separation/app.mjs',
+  './labs/core-separation/core/tzar-language.mjs',
+  './labs/tzar-language-001.mjs',
+  './labs/module/catalog.mjs',
   './labs/core-separation/manifest.json',
   './labs/core-separation/sw.js',
 ];

@@ -8,6 +8,7 @@
   <link rel="manifest" href="./manifest.json" />
   <title>ГДЕЯ · SEP-7×7</title>
   <link rel="stylesheet" href="./styles.css" />
+  <link rel="stylesheet" href="./language.css" />
 </head>
 <body>
   <div class="field" aria-hidden="true"></div>
@@ -63,14 +64,29 @@
         <div id="interception" class="interception"></div>
         <label class="text-field"><span>Действие, которое можешь совершить ты</span><textarea id="action" rows="3" placeholder="Одно внешне наблюдаемое действие — без ожидания, что Другой сначала изменится."></textarea></label>
         <label class="text-field"><span>Критерий завершения</span><textarea id="criterion" rows="3" placeholder="Как будет видно, что действие проведено после реакции Другого?"></textarea></label>
+        <article class="language-card language-preview">
+          <div class="language-head"><span>СЛОВО СУБЪЕКТА</span><small>TZAR-LANGUAGE-001 · SEP PROFILE</small></div>
+          <blockquote id="language-preview-statement">Заполни действие и критерий — авторский языковой контур соберёт человеческое высказывание отдельно от формулы.</blockquote>
+          <div class="language-formula"><span>СИНГУЛЯРНАЯ ФОРМУЛА</span><b id="language-preview-formula">—</b></div>
+          <p class="language-selection" id="language-preview-selection">49 Азов × 24 Буки × 7 Передач</p>
+          <small class="language-boundary">Символы объясняют происхождение формы и не заменяют человеческий результат. Выбор корпуса остаётся кандидатом до твоего подтверждения.</small>
+        </article>
         <label class="check"><input id="owned" type="checkbox" /><span>Шаг исполним мной и находится в моей власти.</span></label>
         <label class="check"><input id="consent-free" type="checkbox" /><span>Шаг не требует согласия или изменения состояния Другого.</span></label>
+        <label class="check"><input id="language-confirmed" type="checkbox" /><span>Слово Субъекта сохраняет мой эпизод, действие и основание; формула может войти в паспорт.</span></label>
         <p class="hint" id="gate-hint">Gate закрыт, пока действие не принадлежит субъекту.</p>
         <button class="primary" id="conduct" disabled>CONDUCT <span>→</span></button>
       </section>
 
       <section class="panel" data-panel="map" aria-hidden="true">
         <div class="panel-head"><div><p class="code">04 · PASSPORT + MAP</p><h2>Карта Ядра</h2></div><b class="verdict" id="verdict">CONDUCT</b></div>
+        <article class="language-card language-result">
+          <div class="language-head"><span>СЛОВО СУБЪЕКТА</span><small id="language-result-status">TZAR-LANGUAGE-001</small></div>
+          <blockquote id="language-result-statement"></blockquote>
+          <div class="language-formula"><span>СИНГУЛЯРНАЯ ФОРМУЛА</span><b id="language-result-formula"></b></div>
+          <p class="language-selection" id="language-result-selection"></p>
+          <small class="language-boundary">Человеческое высказывание, сингулярная формула и технический паспорт отображаются раздельно.</small>
+        </article>
         <div id="passport" class="passport"></div>
         <div id="matrix" class="matrix" aria-label="Карта 7 на 7"></div>
         <div id="invariant" class="invariant"></div>

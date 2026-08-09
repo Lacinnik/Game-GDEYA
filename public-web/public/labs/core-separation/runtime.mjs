@@ -3,6 +3,7 @@ export { createPassport, integrateReturn } from "./core/passport.mjs";
 export { detectInvariant } from "./core/invariant-engine.mjs";
 export { validateOplus } from "./core/oplus-gate.mjs";
 export { STORAGE_KEY, safeJournal } from "./core/storage.mjs";
+export { compileSeparationLanguage, languageFromPassport } from "./core/tzar-language.mjs";
 
 const clean = (value) => String(value ?? "").trim().replace(/\s+/gu, " ");
 const words = (value) => clean(value).split(" ").filter(Boolean);
