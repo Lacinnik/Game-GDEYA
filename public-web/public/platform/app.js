@@ -3,6 +3,8 @@
   const overlay = document.querySelector('#install');
   let registry;
   let byId;
+  let languageRegistry;
+  let languageById;
   let activeFilter = 'all';
 
   const kindLabels = {
@@ -298,6 +300,36 @@
       </div>`;
   }
 
+  function languageProfileCard(entity) {
+    const profile = languageById?.get(entity.id);
+    if (!profile) return `<section class="language-profile missing"><span>TZAR-LANGUAGE-001</span><p>Профиль не найден · HOLD-PROFILE</p></section>`;
+    const executionLabels = {
+      "runtime-active": "исполняется",
+      "embedded-runtime": "исполняется внутри продукта",
+      "candidate-runtime": "кандидат runtime",
+      "embedded-corpus": "корпус встроен",
+      "profile-contract": "контракт профиля",
+      "prototype-profile": "профиль прототипа",
+      "planned-profile": "профиль будущего контура",
+      "private-profile-only": "публична только граница"
+    };
+    const rows = [
+      ["O · вход объекта", profile.object_input],
+      ["S · субъектный след", profile.subject_trace],
+      ["I · отражённый образ", profile.reflected_image],
+      ["R_g · целевое отношение", profile.target_relation],
+      ["C · контекст", profile.context],
+      ["Q · возврат", "null до фактического наблюдаемого возврата"]
+    ];
+    return `
+      <section class="language-profile">
+        <header><div><span>TZAR-LANGUAGE-001 · ${escapeHtml(profile.voice)}</span><h3>Языковой профиль продукта</h3></div><b>${escapeHtml(executionLabels[profile.execution] || profile.execution)}</b></header>
+        <dl>${rows.map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl>
+        <p class="language-formula">49 Азов × 24 Буки × 7 Передач → публичное высказывание ⊕ символьный паспорт</p>
+        <small>${escapeHtml(languageRegistry.model.technical_boundary)}</small>
+      </section>`;
+  }
+
   function renderDossier(id) {
     const entity = byId.get(id);
     if (!entity) {
@@ -330,6 +362,7 @@
               <div><dt>Слой</dt><dd>${escapeHtml(layer.name)} · ${escapeHtml(layer.short)}</dd></div>
               <div><dt>Геометрия</dt><dd>${escapeHtml(entity.geometry)}</dd></div>
               <div><dt>Версия</dt><dd>${escapeHtml(entity.version)}</dd></div>
+              <div><dt>Языковая модель</dt><dd>${escapeHtml(languageRegistry.model.id)} · ${escapeHtml(languageRegistry.model.version)}</dd></div>
               <div><dt>Для кого</dt><dd>${escapeHtml(entity.audience.join(', '))}</dd></div>
               ${laboratory ? `<div><dt>Полигон</dt><dd>${escapeHtml(laboratory.name)} · ${escapeHtml(laboratory.focus)}</dd></div>` : ''}
             </dl>
@@ -343,6 +376,7 @@
               <p>${escapeHtml(functionText)}</p>
               ${engineContract(entity)}
             </div>
+            ${languageProfileCard(entity)}
             <div class="dossier-section">
               <span class="section-label">Метки контура</span>
               <div class="dossier-tags" style="margin-top:16px">${entity.tags.map(tag => `<span>${escapeHtml(tag)}</span>`).join('')}</div>
@@ -382,10 +416,16 @@
   async function init() {
     setupInstallDialog();
     try {
-      const response = await fetch('./products.registry.json', { cache: 'no-cache' });
-      if (!response.ok) throw new Error(`Registry request failed: ${response.status}`);
-      registry = await response.json();
+      const [registryResponse, languageResponse] = await Promise.all([
+        fetch('./products.registry.json', { cache: 'no-cache' }),
+        fetch('./tzar-language.profiles.json', { cache: 'no-cache' })
+      ]);
+      if (!registryResponse.ok) throw new Error(`Registry request failed: ${registryResponse.status}`);
+      if (!languageResponse.ok) throw new Error(`Language profile request failed: ${languageResponse.status}`);
+      registry = await registryResponse.json();
+      languageRegistry = await languageResponse.json();
       byId = new Map(registry.entities.map(entity => [entity.id, entity]));
+      languageById = new Map(languageRegistry.profiles.map(profile => [profile.id, profile]));
       window.addEventListener('hashchange', route);
       route();
     } catch (error) {

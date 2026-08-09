@@ -4,7 +4,9 @@ import { readFile } from "node:fs/promises";
 
 const root = new URL("../public-web/public/platform/", import.meta.url);
 const registry = JSON.parse(await readFile(new URL("products.registry.json", root), "utf8"));
+const languageRegistry = JSON.parse(await readFile(new URL("tzar-language.profiles.json", root), "utf8"));
 const byId = new Map(registry.entities.map((entity) => [entity.id, entity]));
+const languageById = new Map(languageRegistry.profiles.map((profile) => [profile.id, profile]));
 
 test("Platform 2.0 registers 22 unique entities across two complete 10/10 laboratories", () => {
   assert.equal(registry.schema_version, "2.0");
@@ -14,6 +16,20 @@ test("Platform 2.0 registers 22 unique entities across two complete 10/10 labora
   for (const branch of registry.hypothesis.branches) {
     for (const id of branch.entity_ids) assert.ok(byId.has(id), `${branch.id} references missing entity ${id}`);
   }
+});
+
+test("TZAR-LANGUAGE-001 assigns one evidence-bounded profile to all 22 entities", () => {
+  assert.equal(languageRegistry.model.id, "TZAR-LANGUAGE-001");
+  assert.equal(languageRegistry.model.version, "0.2.0-candidate");
+  assert.equal(languageRegistry.profiles.length, registry.entities.length);
+  assert.equal(languageById.size, registry.entities.length);
+  for (const entity of registry.entities) {
+    const profile = languageById.get(entity.id);
+    assert.ok(profile, `missing language profile for ${entity.id}`);
+    assert.equal(profile.q_policy, "null-until-observed-return");
+    assert.ok(profile.object_input && profile.subject_trace && profile.reflected_image && profile.target_relation && profile.context);
+  }
+  assert.match(languageRegistry.model.technical_boundary, /не обученная большая нейросеть/u);
 });
 
 test("published verticals expose their accepted versions and public entrypoints", () => {

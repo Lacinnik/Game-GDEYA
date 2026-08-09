@@ -6,7 +6,7 @@ import { createPassport, detectInvariant, integrateReturn, validateOplus } from 
 import { canTransition, transition } from "../public-web/public/labs/core-separation/core/state-machine.mjs";
 import { responseState, scoreContour } from "../public-web/public/labs/core-separation/core/scorer.mjs";
 import { safeJournal } from "../public-web/public/labs/core-separation/core/storage.mjs";
-import { compileTzarLanguage, LANGUAGE_AZ, LANGUAGE_BUKI, LANGUAGE_TRANSMISSIONS, MODEL_ID } from "../public-web/public/labs/tzar-language-001.mjs";
+import { compileProductLanguage, compileTzarLanguage, LANGUAGE_AZ, LANGUAGE_BUKI, LANGUAGE_TRANSMISSIONS, MODEL_ID, MODEL_VERSION } from "../public-web/public/labs/tzar-language-001.mjs";
 
 const answers = Object.fromEntries(LAWS.map((law, index) => [law.id, RESPONSES[index].code]));
 const languageEvaluation = JSON.parse(await readFile(new URL("../public-web/public/labs/tzar-language-evaluation.json", import.meta.url), "utf8"));
@@ -30,9 +30,19 @@ test("⊕ gate requires one subject-owned consent-free action", () => {
 
 test("TZAR-LANGUAGE-001 exposes the complete singular corpus", () => {
   assert.equal(MODEL_ID, "TZAR-LANGUAGE-001");
+  assert.equal(MODEL_VERSION, "0.2.0-candidate");
   assert.equal(LANGUAGE_AZ.length, 49);
   assert.equal(LANGUAGE_BUKI.length, 24);
   assert.equal(LANGUAGE_TRANSMISSIONS.length, 7);
+});
+
+test("product profiles fail closed without O and accept only observed binary Q", () => {
+  const profile = { id:"test-product", voice:"subject", object_input:"эпизод", target_relation:"проверить ход", context:"тест" };
+  assert.equal(compileProductLanguage(profile).status, "HOLD-INPUT");
+  const candidate = compileProductLanguage(profile, { O:"Наблюдаемый эпизод", S:"Совершить один ход", I:"Рабочий образ", subjectConfirmed:true });
+  assert.equal(candidate.tensor.Q, null);
+  assert.equal(candidate.boundary.subjectConfirmed, true);
+  assert.throws(() => compileProductLanguage(profile, { O:"Эпизод", S:"Ход", I:"Образ", Q:.75 }), /Q_MUST_BE_OBSERVED_BINARY/u);
 });
 
 test("TZAR-LANGUAGE-001 keeps the same control selections as the Ego profile", () => {
