@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { createDictationGuard } from "./dictation-guard.mjs";
 import { createGameTrace } from "./game-trace.mjs";
@@ -120,7 +120,7 @@ export default function Home(){
  const dictationLabels:Record<DictationTarget,string>={intent:"НАЗВАТЬ НАМЕРЕНИЕ",invariant:"НАЗВАТЬ ИНВАРИАНТ",state:"НАЗВАТЬ СОСТОЯНИЕ",reflection:"ОТВЕТИТЬ СЛОЮ",induction:"НАЗВАТЬ ИНДУКЦИЮ",inversion:"НАЗВАТЬ ИНВЕРСИЮ"};
  const dictationValue=dictationTarget==="intent"?intent:dictationTarget==="invariant"?invariant:dictationTarget==="state"?JSON.stringify([stateInput,draft.states]):dictationTarget==="reflection"?draft.reflection:dictationTarget==="induction"?draft.induction:draft.inversion;
  const dictationContext=JSON.stringify([screen,turn,stage,dictationTarget,dictationValue]);
- const dictationContextRef=useRef(dictationContext);dictationContextRef.current=dictationContext;
+ const dictationContextRef=useRef(dictationContext);
  const dictationGuardRef=useRef(createDictationGuard());
  const dictationLabel=dictationTarget?dictationLabels[dictationTarget]:"";
  useEffect(()=>{const w=window as VoiceWindow;const synth=window.speechSynthesis;const updateSupport=()=>{setVoiceReady(Boolean(synth&&"SpeechSynthesisUtterance" in window));setRecognitionReady(Boolean(w.SpeechRecognition||w.webkitSpeechRecognition))};const supportTimer=window.setTimeout(updateSupport,0);const loadVoices=()=>{voicesRef.current=synth?.getVoices()??[]};loadVoices();synth?.addEventListener?.("voiceschanged",loadVoices);return()=>{window.clearTimeout(supportTimer);speechRunRef.current+=1;synth?.cancel();recognitionRunRef.current+=1;recognitionRef.current?.abort?.();recognitionRef.current=null;synth?.removeEventListener?.("voiceschanged",loadVoices)}},[]);
@@ -130,7 +130,15 @@ export default function Home(){
  useEffect(()=>{if(!voiceEnabled||!voiceReady||lastNarrationRef.current===narration)return;speak(narration)},[narration,voiceEnabled,voiceReady,speak]);
  function toggleVoice(){if(!voiceReady){setVoiceNotice("На этом устройстве голосовое воспроизведение недоступно.");return}if(voiceEnabled){cancelSpeech();setVoiceEnabled(false)}else{setVoiceNotice("");setVoiceEnabled(true);speak(narration)}}
  function closeSkellu(){stopListening();cancelSpeech();setVoiceEnabled(false);setSkelluOpen(false)}
- useEffect(()=>{stopListening();},[dictationContext]);
+ useLayoutEffect(()=>{
+  dictationContextRef.current=dictationContext;
+  dictationGuardRef.current.cancel();
+  const recognition=recognitionRef.current;
+  const cancelledRun=++recognitionRunRef.current;recognitionRef.current=null;
+  try{if(recognition?.abort)recognition.abort();else recognition?.stop?.()}catch{}
+  const timer=window.setTimeout(()=>{if(recognitionRunRef.current===cancelledRun)setListening(false)},0);
+  return()=>window.clearTimeout(timer);
+ },[dictationContext]);
  useEffect(()=>{const hide=()=>{if(document.hidden){stopListening();cancelSpeech();setVoiceEnabled(false)}};document.addEventListener("visibilitychange",hide);return()=>document.removeEventListener("visibilitychange",hide)},[]);
  function focusDictationField(){const field=dictationTarget==="intent"?intentRef.current:dictationTarget==="invariant"?invariantRef.current:dictationTarget==="state"?stateInputRef.current:dictationTarget==="reflection"?reflectionRef.current:dictationTarget==="induction"?inductionRef.current:inversionRef.current;field?.focus();setVoiceNotice("Поле выбрано. Введи текст или самостоятельно включи диктовку клавиатуры, если она доступна.")}
  function listenContext(){if(!dictationTarget)return;if(recognitionRef.current){stopListening(true);return}const w=window as VoiceWindow,Ctor=w.SpeechRecognition||w.webkitSpeechRecognition;if(!Ctor){focusDictationField();return}cancelSpeech();const run=++recognitionRunRef.current;const target=dictationTarget;const token=dictationGuardRef.current.begin(dictationContextRef.current);const recognition=new Ctor();recognitionRef.current=recognition;recognition.lang="ru-RU";recognition.interimResults=false;recognition.maxAlternatives=1;recognition.continuous=false;recognition.onresult=event=>{if(recognitionRunRef.current!==run)return;const text=dictationGuardRef.current.accept(token,dictationContextRef.current,event.results[event.resultIndex??0]?.[0]?.transcript);if(!text)return;stopListening();if(target==="intent")setIntent(text);else if(target==="invariant")setInvariant(text);else if(target==="state")setDraft(d=>d.states.length<card!.arabic?{...d,states:[...d.states,text]}:d);else if(target==="reflection")setDraft(d=>({...d,reflection:text}));else if(target==="induction")setDraft(d=>({...d,induction:text}));else setDraft(d=>({...d,inversion:text}));setVoiceNotice("")};recognition.onerror=event=>{if(recognitionRunRef.current!==run)return;stopListening();const denied=event.error==="not-allowed"||event.error==="service-not-allowed";setVoiceNotice(denied?"Доступ к микрофону не предоставлен. Продолжи через диктовку клавиатуры.":event.error==="aborted"?"":"Не расслышала. Нажми ещё раз и произнеси одну короткую мысль.")};recognition.onend=()=>{if(recognitionRunRef.current!==run)return;dictationGuardRef.current.cancel();recognitionRef.current=null;setListening(false)};setListening(true);setVoiceNotice("Слушаю…");try{recognition.start()}catch{stopListening();setVoiceNotice("Не удалось запустить микрофон. Продолжи через диктовку клавиатуры.")}}
