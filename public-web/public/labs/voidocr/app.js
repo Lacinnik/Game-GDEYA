@@ -1,4 +1,5 @@
 import { compileTzarLanguage } from "../tzar-language-001.mjs";
+import { persistTrace } from "./storage.mjs";
 
 (() => {
   const BEFORE = ["рассеянность", "напряжение", "неопределённость", "перегруз", "остановка", "фоновый шум"];
@@ -9,7 +10,6 @@ import { compileTzarLanguage } from "../tzar-language-001.mjs";
     { id: "distance_collapse", label: "Схлопывание", quadrant: "relations" },
     { id: "auto_form", label: "Самоформа", quadrant: "result" },
   ];
-  const STORAGE_KEY = "architectonica.voidocr.traces.v1";
   const state = { trigger: "", pre: null, post: null, delta: null, stability: null, trace: null };
 
   const $ = selector => document.querySelector(selector);
@@ -49,17 +49,6 @@ import { compileTzarLanguage } from "../tzar-language-001.mjs";
     $("#commit").disabled = !(state.pre && state.post && state.delta && state.stability !== null);
   }
 
-  function readTraces() {
-    try {
-      const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      return Array.isArray(parsed) ? parsed : [];
-    } catch { return []; }
-  }
-
-  function saveTrace(trace) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify([trace, ...readTraces()].slice(0, 100)));
-  }
-
   function beginPause() {
     state.trigger = $("#trigger").value.trim();
     showStage("pause");
@@ -76,6 +65,7 @@ import { compileTzarLanguage } from "../tzar-language-001.mjs";
   }
 
   function commit() {
+    if (!(state.pre && state.post && state.delta && state.stability !== null && words(state.trigger) >= 3)) return;
     const trace = {
       schema: "architectonica.voidocr-trace/1.1.0",
       id: globalThis.crypto?.randomUUID?.() || `void-${Date.now()}`,
@@ -105,8 +95,15 @@ import { compileTzarLanguage } from "../tzar-language-001.mjs";
       context: `VoidOCR · ${trace.quadrant} · устойчивость ${trace.stability} / 3`,
       subjectConfirmed: true,
     });
+    let saved;
+    try { saved = persistTrace(localStorage, trace); } catch { saved = { ok: false }; }
+    if (!saved.ok) {
+      state.trace = null;
+      $("#storage-error").textContent = "След не сохранён. Хранилище недоступно или повреждено. Допуск не выдан; введённые данные остаются на экране. Проверьте доступ к хранилищу и повторите сохранение.";
+      return;
+    }
+    $("#storage-error").textContent = "";
     state.trace = trace;
-    saveTrace(trace);
     renderResult(trace);
     showStage("result");
   }
@@ -118,7 +115,15 @@ import { compileTzarLanguage } from "../tzar-language-001.mjs";
     $("#result-title").textContent = allow ? "Допуск получен." : "Действие пока не допускается.";
     $("#result-copy").textContent = allow ? "Различение удержалось после паузы. След можно передать следующему шагу субъектного контура." : "Различение пока не удерживает форму. Вернитесь в паузу без попытки усилить результат.";
     const rows = [["Слово Субъекта", trace.language.layers.publicStatement], ["Сингулярная формула", trace.language.formula], ["Точка", trace.trigger], ["До → после", `${trace.pre_state} → ${trace.post_state}`], ["Δ", `${trace.delta_type} · ${trace.quadrant}`], ["Устойчивость", `${trace.stability} / 3`], ["Q · возврат", "null · ещё не наблюдался"], ["Хранение", "локально в этом браузере"]];
-    $("#trace").innerHTML = rows.map(([key, value]) => `<div><dt>${key}</dt><dd>${value}</dd></div>`).join("");
+    $("#trace").replaceChildren(...rows.map(([key, value]) => {
+      const row = document.createElement("div");
+      const label = document.createElement("dt");
+      const content = document.createElement("dd");
+      label.textContent = key;
+      content.textContent = value;
+      row.append(label, content);
+      return row;
+    }));
   }
 
   function reset() {

@@ -1,0 +1,56 @@
+{
+  "checked_at": "2026-09-20T17:36:44.006Z",
+  "boundary": "HTTP availability only; not functional acceptance",
+  "results": [
+    {
+      "url": "https://lacinnik.github.io/-tensor-architectonics/",
+      "status": 200,
+      "title": "TZAR Conductance"
+    },
+    {
+      "url": "https://lacinnik.github.io/Game-GDEYA/",
+      "status": 200,
+      "title": "ЯДРО СУБЪЕКТА · ЖИВОЙ ЦИКЛ"
+    },
+    {
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/core-separation/",
+      "status": 200,
+      "title": "ГДЕЯ · SEP-7×7"
+    },
+    {
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/",
+      "status": 200,
+      "title": "МОДУЛЬ · ГДЕЯ"
+    },
+    {
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/",
+      "status": 200,
+      "title": "VoidOCR — лаборатория ГДЕЯ"
+    },
+    {
+      "url": "https://lacinnik.github.io/reason-/",
+      "status": 200,
+      "title": "RTE v2 — Resonant Translation Engine"
+    },
+    {
+      "url": "https://lacinnik.github.io/reason-/field-check/",
+      "status": 200,
+      "title": "РЕЗОН · Collective Field Check"
+    },
+    {
+      "url": "https://lacinnik.github.io/reason-/transmissions/",
+      "status": 200,
+      "title": "РЕЗОН · 7 Передач"
+    },
+    {
+      "url": "https://lacinnik.github.io/reason-/axis-game/",
+      "status": 200,
+      "title": "ОСЬ · Тензорная Архитектоника"
+    },
+    {
+      "url": "https://lacinnik.github.io/-tensor-architectonics/qengine/",
+      "status": 200,
+      "title": "TZAR-QENGINE · Reference Candidate"
+    }
+  ]
+}

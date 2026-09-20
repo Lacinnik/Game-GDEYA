@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'platform-2.1-tzar-language-resonance-1';
+const CACHE_REVISION = 'platform-2.2-library-evidence-20260920';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -13,6 +13,7 @@ const SHELL = [
   './labs/voidocr/index.html',
   './labs/voidocr/styles.css',
   './labs/voidocr/app.js',
+  './labs/voidocr/storage.mjs',
   './labs/core-separation/',
   './labs/core-separation/index.html',
   './labs/core-separation/styles.css',

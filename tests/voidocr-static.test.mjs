@@ -18,7 +18,7 @@ test("VoidOCR release contains its complete local runtime", async () => {
   assert.match(js, /architectonica\.voidocr-trace\/1\.1\.0/);
   assert.match(js, /compileTzarLanguage/);
   assert.match(js, /observedQ: null/);
-  assert.match(js, /localStorage\.setItem/);
+  assert.match(js, /persistTrace\(localStorage, trace\)/);
   assert.match(js, /stability >= 2 \? "ALLOW" : "DENY"/);
   assert.match(js, /document\.body\.append\(link\)/);
   assert.match(js, /setTimeout\(\(\) =>/);

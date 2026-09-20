@@ -1,0 +1,187 @@
+{
+  "date": "2026-09-20",
+  "source_commit": "a939096",
+  "scope": "Game-GDEYA source review, local tests and public link availability; other repositories are not functionally accepted",
+  "additional_fix": {
+    "product": "TZAR-LANGUAGE-001",
+    "detail": "Отсутствующие O/S/I/R_g/C сохраняются как null; HOLD-INPUT/HOLD-DATA; Q принимает только числовые 0/1 или null. Проверено для всех 22 профилей. Модель остаётся candidate."
+  },
+  "entries": [
+    {
+      "id": "product-platform",
+      "name": "Платформа продуктов",
+      "registry_status": "в сети",
+      "registry_version": "2.0",
+      "checked": "Проверен локальный реестр 22 сущностей и распределение 10/10. Добавлены библиотека и эта ревизия.",
+      "remaining": "Проверять соответствие каждого статуса версии и фактической приёмке; текущая ревизия не повышает статусы автоматически."
+    },
+    {
+      "id": "architectonics",
+      "name": "Архитектоника",
+      "registry_status": "открытый корпус",
+      "registry_version": "корпус",
+      "checked": "Опубликован оригинал десяти книг, редакция 2.2, с оглавлением и SHA-256.",
+      "remaining": "Согласовать различие смысла множителей 32928/131712 между книгами 1 и 5 перед следующей авторской редакцией. Оригинал сохранён."
+    },
+    {
+      "id": "tzar",
+      "name": "ТзАр",
+      "registry_status": "открытый корпус",
+      "registry_version": "корпус · Conductance 1.0 stable",
+      "checked": "Ссылка на отдельный корпус есть в реестре.",
+      "remaining": "Проверить текущий корпус и Conductance в их собственном репозитории; эта ревизия не подтверждает научную эффективность."
+    },
+    {
+      "id": "gdeya",
+      "name": "ГДЕЯ",
+      "registry_status": "можно запустить",
+      "registry_version": "live · SEP-7×7 v0.2 + TZAR-LANGUAGE-001 · MODULE 1.0 · VoidOCR 1.0 stable",
+      "checked": "Исходники платформы, MODULE, VoidOCR и SEP доступны в этом репозитории.",
+      "remaining": "Отдельно проверить игровую симуляцию α/IЯ/Cm/Q/T и её обозначение пользователю; выполнить полный пользовательский цикл, включая внешний возврат."
+    },
+    {
+      "id": "reson",
+      "name": "РЕЗОН",
+      "registry_status": "можно запустить",
+      "registry_version": "live laboratory · Field Check 1.0 · 7T 1.0 stable",
+      "checked": "В реестре представлены переводчик, Field Check и 7 Передач.",
+      "remaining": "Проверить реализацию reason- и согласовать критерий завершения общей лаборатории; доступность страницы не подтверждает готовность всего продукта."
+    },
+    {
+      "id": "module",
+      "name": "МОДУЛЬ",
+      "registry_status": "stable · можно запустить",
+      "registry_version": "1.0.0 stable",
+      "checked": "Проверены полный корпус 49×24×7, валидация ввода и создание паспорта. Общий языковой модуль исправлен.",
+      "remaining": "Проверить реальное использование на iPhone и надёжность хранения/экспорта; отдельная приёмка нужна для нового stable-выпуска."
+    },
+    {
+      "id": "voidocr",
+      "name": "VoidOCR",
+      "registry_status": "stable · можно запустить",
+      "registry_version": "1.0.0 stable",
+      "checked": "Исправлены вывод пользовательского текста, отказ записи и повреждённый журнал. Ошибка сохранения блокирует выдачу допуска.",
+      "remaining": "Проверить сценарии Safari/PWA и контракт переноса ALLOW: происхождение, срок действия и подтверждение принимающим контуром. Текущий локальный след не является доверенным удостоверением."
+    },
+    {
+      "id": "axis-interface",
+      "name": "Axis Interface",
+      "registry_status": "прототип",
+      "registry_version": "published experiment",
+      "checked": "В реестре опубликованный эксперимент со ссылкой.",
+      "remaining": "Восстановить спецификацию входа, выхода и критерии приёмки по исходникам reason-. Статус prototype сохранён."
+    },
+    {
+      "id": "skellu",
+      "name": "Скелла / Skellu",
+      "registry_status": "встроено · runtime проверен",
+      "registry_version": "integrated · runtime 1.0",
+      "checked": "Встроенный голосовой контур заявлен в исходниках и README.",
+      "remaining": "Пройти микрофон, отказ разрешения, прерывание речи и системную диктовку на реальном устройстве."
+    },
+    {
+      "id": "demons-guardians",
+      "name": "Demons / Guardians",
+      "registry_status": "прототип",
+      "registry_version": "prototype",
+      "checked": "В реестре prototype; отдельной точки запуска нет.",
+      "remaining": "Нужны исходники порогов LOVE/MEASURE, контракт входа, причины отказа и сквозная проверка с Meta Core."
+    },
+    {
+      "id": "meta-core-v2",
+      "name": "Meta Core v2",
+      "registry_status": "runtime проверен",
+      "registry_version": "v2 · runtime 1.0",
+      "checked": "Реестр указывает runtime 1.0 и ожидание интеграции.",
+      "remaining": "Найти канонические реализации NEG → GOV → META → DEMONS, согласовать схему состояния, остановку и повторный запуск; проверить сквозной цикл."
+    },
+    {
+      "id": "collective-meta-core",
+      "name": "Collective Meta Core",
+      "registry_status": "stable release",
+      "registry_version": "1.0.0 stable",
+      "checked": "Реестр указывает Field Check 1.0 stable в отдельном репозитории.",
+      "remaining": "Повторно проверить голоса, связи, полномочия, сохранение и восстановление; текущий проход проверяет только публичную ссылку."
+    },
+    {
+      "id": "tzar-qengine",
+      "name": "TZAR-QENGINE",
+      "registry_status": "candidate · author-reviewed",
+      "registry_version": "runtime 0.1.0-rc.1 · corpus 0.2.0 · author-reviewed",
+      "checked": "Сохранён статус candidate · author-reviewed; локальная проверка защищает эту границу.",
+      "remaining": "Проверить шесть движков в -tensor-architectonics и закрыть их собственные критерии приёмки; не переименовывать кандидата в канон."
+    },
+    {
+      "id": "subject-core",
+      "name": "Subject Core",
+      "registry_status": "встроено · runtime проверен",
+      "registry_version": "embedded · runtime 1.0",
+      "checked": "Встроен в игру; локальные проверки SEP проходят.",
+      "remaining": "Развести версию игрового Ядра, SEP и языкового компилятора в самостоятельном паспорте совместимости."
+    },
+    {
+      "id": "alphabet-singularity",
+      "name": "Алфавит Сингулярности",
+      "registry_status": "49 / 49 · stable",
+      "registry_version": "49 / 49 · MODULE 1.0",
+      "checked": "Проверено наличие 49 уникальных Азов в MODULE.",
+      "remaining": "Сверить определения с каноническим авторским корпусом; количество элементов само по себе не подтверждает смысловую верность."
+    },
+    {
+      "id": "az-buki",
+      "name": "Аз × Буки",
+      "registry_status": "49 × 24 · stable",
+      "registry_version": "1176 сочетаний · MODULE 1.0",
+      "checked": "Проверены 49 Азов, 24 Буки, 7 Передач и создание паспорта.",
+      "remaining": "Проверить ручной выбор и происхождение автоматического предложения; не превращать символическую связку в наблюдение."
+    },
+    {
+      "id": "seven-transmissions",
+      "name": "7 Передач",
+      "registry_status": "stable release",
+      "registry_version": "1.0.0 stable",
+      "checked": "В реестре отдельная опубликованная колода.",
+      "remaining": "Функциональная приёмка требует исходников reason- и прохождения семи режимов."
+    },
+    {
+      "id": "transition-spells",
+      "name": "Заклинания перехода",
+      "registry_status": "формируется",
+      "registry_version": "forming",
+      "checked": "Статус forming; в реестре нет точки запуска и утверждённого корпуса.",
+      "remaining": "Нужен авторский корпус речевых форм, условия применения и критерий результата. Не восстанавливать канон по названиям."
+    },
+    {
+      "id": "saver",
+      "name": "Saver",
+      "registry_status": "архитектура формируется",
+      "registry_version": "architecture",
+      "checked": "Статус architecture; отдельная реализация не найдена в этом репозитории.",
+      "remaining": "Найти авторский протокол и исходники; зафиксировать границы контейнера, хранение, переносимость и восстановление до реализации."
+    },
+    {
+      "id": "offline-translator",
+      "name": "Offline EN–RU Translator",
+      "registry_status": "stable · внутри РЕЗОН",
+      "registry_version": "2.0.0 stable",
+      "checked": "Реестр ссылается на RTE 2.0 в reason-.",
+      "remaining": "Повторно проверить офлайн-цикл, качество перевода и сохранение словаря в его репозитории."
+    },
+    {
+      "id": "private-corporate-contour",
+      "name": "Закрытый корпоративный контур",
+      "registry_status": "частный контур",
+      "registry_version": "private",
+      "checked": "В публичном реестре только отметка о частном контуре.",
+      "remaining": "Содержательная ревизия требует исходников и конкретного объёма работ; закрытые сведения не публикуются."
+    },
+    {
+      "id": "private-research-contour",
+      "name": "Закрытый исследовательский контур",
+      "registry_status": "частный контур",
+      "registry_version": "private",
+      "checked": "В публичном реестре только отметка о частном контуре.",
+      "remaining": "Содержательная ревизия требует исходников и конкретного объёма работ; закрытые сведения не публикуются."
+    }
+  ]
+}
