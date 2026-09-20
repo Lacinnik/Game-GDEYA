@@ -31,5 +31,5 @@ test("MODULE produces a deterministic local passport", () => {
 
 test("MODULE release has no external runtime dependency", async () => {
   const [html, app, css] = await Promise.all([readFile(new URL("index.html",root),"utf8"),readFile(new URL("app.mjs",root),"utf8"),readFile(new URL("styles.css",root),"utf8")]);
-  assert.match(html, /49<\/b> Азов/); assert.match(html, /24<\/b> Буки/); assert.match(html, /7<\/b> Передач/); assert.doesNotMatch(html, /https?:\/\//); assert.match(app, /localStorage\.setItem/); assert.match(css, /-webkit-appearance:none/);
+  assert.match(html, /49<\/b> Азов/); assert.match(html, /24<\/b> Буки/); assert.match(html, /7<\/b> Передач/); assert.doesNotMatch(html, /https?:\/\//); assert.match(app, /persistJournal/); assert.match(css, /-webkit-appearance:none/);
 });

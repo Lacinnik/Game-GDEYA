@@ -1,3 +1,4 @@
+import { readJournal, persistJournal, downloadJson } from "../local-journal.mjs";
 import { AZ, BUKI, TAGS, TRANSMISSIONS } from "./catalog.mjs";
 import { buildPassport, validateDraft, wordCount } from "./runtime.mjs";
 
@@ -8,11 +9,18 @@ const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
 const escapeHtml = value => String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"})[character]);
 
-function readJournal() {
-  try { const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]"); return Array.isArray(value) ? value : []; } catch { return []; }
+function updateJournal() {
+  let result;
+  try { result = readJournal(localStorage, STORAGE_KEY); } catch { result = { ok: false }; }
+  $("#journal-count").textContent = result.ok ? String(result.entries.length) : "недоступен";
 }
-function savePassport(passport) { localStorage.setItem(STORAGE_KEY, JSON.stringify([passport, ...readJournal()].slice(0, 100))); updateJournal(); }
-function updateJournal() { $("#journal-count").textContent = String(readJournal().length); }
+function savePassport(passport) {
+  let result;
+  try { result = persistJournal(localStorage, STORAGE_KEY, passport); } catch { result = { ok: false }; }
+  $("#storage-error").textContent = result.ok ? "" : "Паспорт не сохранён. Проверьте доступ к хранилищу; повреждённый журнал не перезаписан.";
+  updateJournal();
+  return result.ok;
+}
 
 function setStage(name) {
   const order = ["axis", "alphabet", "formula", "passport"];
@@ -33,10 +41,11 @@ function validateAxis() {
   $("#axis-hint").textContent = wordCount(state.intent) + " слов в намерении · " + wordCount(state.invariant) + " слов в инварианте" + (ready ? " · ось предъявлена" : "");
 }
 function validateFormula() {
+  state.passport = null;
   syncText();
-  const errors = validateDraft(state, catalog).filter(code => !["INTENT_INCOMPLETE", "INVARIANT_INCOMPLETE", "AZ_REQUIRED"].includes(code));
+  const errors = validateDraft(state, catalog);
   $("#compile").disabled = errors.length > 0;
-  $("#formula-hint").textContent = errors.length ? "Не завершено: " + errors.map(code => ({BUKA_REQUIRED:"выбор Буки",TRANSMISSION_REQUIRED:"выбор Передачи",INDUCTION_INCOMPLETE:"индукция",INVERSION_INCOMPLETE:"инверсия",AXIS_REQUIRED:"проверка оси"})[code]).filter(Boolean).join(" · ") : "Формула полна · паспорт готов к сборке";
+  $("#formula-hint").textContent = errors.length ? "Не завершено: " + errors.map(code => ({INTENT_INCOMPLETE:"намерение",INVARIANT_INCOMPLETE:"инвариант",AZ_REQUIRED:"выбор Аз",BUKA_REQUIRED:"выбор Буки",TRANSMISSION_REQUIRED:"выбор Передачи",INDUCTION_INCOMPLETE:"индукция",INVERSION_INCOMPLETE:"инверсия",AXIS_REQUIRED:"проверка оси"})[code]).filter(Boolean).join(" · ") : "Формула полна · паспорт готов к сборке";
 }
 
 function renderFilters() {
@@ -48,7 +57,7 @@ function renderAz() {
   const query = state.search.toLocaleLowerCase("ru");
   const items = AZ.filter(item => (state.tag === "all" || item.tag === state.tag) && (!query || item.title.toLocaleLowerCase("ru").includes(query) || String(item.number).includes(query)));
   $("#az-grid").innerHTML = items.map(item => '<button type="button" data-az="' + item.id + '" class="catalog-card ' + (state.azId === item.id ? "selected" : "") + '"><i>' + String(item.number).padStart(2,"0") + '</i><b>' + escapeHtml(item.title) + '</b><span>' + TAGS[item.tag] + '</span></button>').join("") || '<p class="empty">Совпадений нет.</p>';
-  $$('[data-az]').forEach(button => button.addEventListener("click", () => { state.azId = button.dataset.az; renderAz(); updateFormula(); $("#to-formula").disabled = false; }));
+  $$('[data-az]').forEach(button => button.addEventListener("click", () => { state.azId = button.dataset.az; renderAz(); updateFormula(); validateFormula(); $("#to-formula").disabled = false; }));
   const selected = AZ.find(item => item.id === state.azId);
   $("#az-selection").textContent = selected ? selected.id + " · " + selected.title + " · " + TAGS[selected.tag] : "Аз не выбран";
 }
@@ -66,26 +75,30 @@ function updateFormula() {
 }
 function compile() {
   syncText();
-  state.passport = buildPassport(state, catalog);
-  savePassport(state.passport); renderPassport(state.passport); setStage("passport");
+  validateFormula();
+  if (validateDraft(state, catalog).length) return;
+  const passport = buildPassport(state, catalog);
+  if (!savePassport(passport)) return;
+  state.passport = passport; renderPassport(passport); setStage("passport");
 }
 function renderPassport(passport) {
   const labels = { conduct:"CONDUCT", review:"REVIEW", hold:"HOLD" };
   $("#result-state").textContent = labels[passport.outcome]; $("#result-state").dataset.outcome = passport.outcome;
-  $("#result-title").textContent = passport.outcome === "conduct" ? "Формула сохраняет заявленную ось." : passport.outcome === "review" ? "Формула просит дополнительного различения." : "Проведение остановлено заявленным разрывом.";
+  $("#result-title").textContent = passport.outcome === "conduct" ? "По вашей оценке, формула сохраняет ось." : passport.outcome === "review" ? "Вы отметили необходимость дополнительного различения." : "Проведение остановлено заявленным разрывом.";
   const rows = [["Слово Субъекта",passport.language.layers.publicStatement],["Истинный запрос · кандидат",passport.language.layers.trueRequest],["Сингулярная формула",passport.language.formula],["Намерение",passport.intent],["Инвариант",passport.invariant],["Индукция",passport.induction],["Инверсия",passport.inversion],["Следующий ход",passport.nextAction],["Q · возврат","null · ещё не наблюдался"],["Хранение","локально в этом браузере"]];
   $("#passport-output").innerHTML = rows.map(([key,value]) => '<div><dt>' + key + '</dt><dd>' + escapeHtml(value) + '</dd></div>').join("");
 }
 function exportPassport() {
-  if (!state.passport) return; const blob = new Blob([JSON.stringify(state.passport, null, 2)], {type:"application/json"}); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "module-" + state.passport.id + ".json"; link.click(); URL.revokeObjectURL(url);
+  if (state.passport) downloadJson("module-" + state.passport.id + ".json", state.passport);
 }
 function reset() {
   Object.assign(state, { intent:"", invariant:"", azId:"", bukaId:"", txId:"", induction:"", inversion:"", axis:"", passport:null, tag:"all", search:"" });
   $$('textarea,input[type="search"]').forEach(input => { input.value = ""; }); $$('input[type="radio"]').forEach(input => { input.checked = false; });
+  $("#to-formula").disabled = true; $("#storage-error").textContent = "";
   renderFilters(); renderAz(); renderBuki(); renderTransmissions(); updateFormula(); validateAxis(); validateFormula(); setStage("axis");
 }
 
-["#intent", "#invariant"].forEach(selector => $(selector).addEventListener("input", validateAxis));
+["#intent", "#invariant"].forEach(selector => $(selector).addEventListener("input", () => { state.passport = null; validateAxis(); validateFormula(); }));
 ["#induction", "#inversion"].forEach(selector => $(selector).addEventListener("input", validateFormula));
 $$('input[name="axis"]').forEach(input => input.addEventListener("change", () => { state.axis = input.value; validateFormula(); }));
 $("#az-search").addEventListener("input", event => { state.search = event.target.value; renderAz(); });

@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'platform-2.2-library-evidence-20260920';
+const CACHE_REVISION = 'platform-2.2-acceptance-20260920';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -23,6 +23,7 @@ const SHELL = [
   './labs/core-separation/app.mjs',
   './labs/core-separation/core/tzar-language.mjs',
   './labs/tzar-language-001.mjs',
+  './labs/local-journal.mjs',
   './labs/tzar-language-evaluation.json',
   './labs/module/',
   './labs/module/index.html',
