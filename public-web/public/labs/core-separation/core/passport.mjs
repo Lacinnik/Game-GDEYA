@@ -9,7 +9,7 @@ export function createPassport({ contextId, episode, answers, action, criterion,
   if (!context || clean(episode).split(" ").filter(Boolean).length < 5) throw new Error("EPISODE_INVALID");
   const scored = scoreContour(answers); const interception = interceptionOf(scored);
   const passport = {
-    schema: "gdeya.sep7x7.passport.v1", id: `SEP-${now.replace(/[^0-9]/gu, "").slice(0, 14)}-${contextId}`, createdAt: now,
+    schema: "gdeya.sep7x7.passport.v1", id: `SEP-${globalThis.crypto.randomUUID()}-${contextId}`, createdAt: now,
     object: clean(episode), subjectTrace: clean(action), reflectedImage: "Карта семи состояний выбранного жизненного контура",
     targetRelation: TARGET_RELATION, context: { id: context.id, name: context.name },
     answers: scored.map((item) => ({ nodeId: `SEP(${item.lawId},${contextId})`, ...item, response: answers[item.lawId] })),

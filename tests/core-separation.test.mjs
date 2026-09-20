@@ -102,7 +102,7 @@ test("scorer deterministically covers all seven states", () => {
 });
 
 test("storage rejects objects outside the SEP passport schema", () => {
-  assert.equal(safeJournal([{ schema: "other" }, { schema: "gdeya.sep7x7.passport.v1" }]).length, 1);
+  assert.throws(() => safeJournal([{ schema: "other" }, { schema: "gdeya.sep7x7.passport.v1" }]));
 });
 
 test("manifest and local Service Worker expose an offline standalone shell", async () => {

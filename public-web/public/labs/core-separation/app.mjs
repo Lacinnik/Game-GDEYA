@@ -1,16 +1,17 @@
 import { CONTEXTS, LAWS, NODES, RESPONSES, SKELLU_PROMPTS, STATES } from "./catalog.mjs";
-import { STORAGE_KEY, compileSeparationLanguage, createPassport, detectInvariant, integrateReturn, languageFromPassport, safeJournal, validateEpisode, validateOplus } from "./runtime.mjs";
+import { compileSeparationLanguage, createPassport, detectInvariant, integrateReturn, languageFromPassport, safeJournal, validateEpisode, validateOplus } from "./runtime.mjs";
+
+import { readJournal, upsertPassport, mergeJournal, destroyJournal } from "./core/storage.mjs";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/gu, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[character]);
 const state = { contextId: "", episode: "", index: 0, answers: {}, interception: null, passport: null };
 
-function readJournal() {
-  try { return safeJournal(JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")); } catch { return []; }
+function reportError(error) {
+  $("#storage-status").textContent = "Операция не завершена: " + error.message + " Сохраните исходный файл; не удаляйте прежний журнал.";
 }
-function writeJournal(journal) { localStorage.setItem(STORAGE_KEY, JSON.stringify(safeJournal(journal).slice(0, 70))); }
-function upsertPassport(passport) { writeJournal([passport, ...readJournal().filter((item) => item.id !== passport.id)]); }
+function guarded(action) { return async (...args) => { try { $("#storage-status").textContent = ""; await action(...args); } catch(error) { reportError(error); } }; }
 
 function route(name) {
   $$('[data-panel]').forEach((panel) => { const active = panel.dataset.panel === name; panel.classList.toggle("active", active); panel.setAttribute("aria-hidden", String(!active)); });
@@ -81,8 +82,8 @@ function validateGate() {
 }
 
 function compile() {
-  state.passport = createPassport({ contextId: state.contextId, episode: state.episode, answers: state.answers, action: $("#action").value, criterion: $("#criterion").value, languageConfirmed: $("#language-confirmed").checked });
-  upsertPassport(state.passport); renderMap(); route("map");
+  const passport = createPassport({ contextId: state.contextId, episode: state.episode, answers: state.answers, action: $("#action").value, criterion: $("#criterion").value, languageConfirmed: $("#language-confirmed").checked });
+  upsertPassport(passport); state.passport = passport; renderMap(); route("map");
 }
 function passportRows(passport) {
   return [["Контур", passport.context.name], ["O · эпизод", passport.object], ["S · след действия", passport.subjectTrace], ["I · отражение", passport.language?.coordinates?.I || passport.reflectedImage], ["R_g · цель", passport.targetRelation], ["Узел перехвата", `${passport.interception.lawId} · ${passport.interception.law} · ${passport.interception.stateName}`], ["Один ⊕-шаг", passport.oplus.action], ["Критерий", passport.oplus.criterion], ["Q · фактический возврат", passport.q == null ? "null · ещё не наблюдался" : String(passport.q)], ["Доказательность", passport.evidenceStatus]];
@@ -92,7 +93,7 @@ function renderMap() {
   const latest = state.passport || journal[0];
   if (!latest) return route("episode");
   state.passport = latest;
-  const language = latest.language || languageFromPassport(latest, false);
+  const language = languageFromPassport(latest);
   renderLanguage("language-result", language);
   $("#language-result-status").textContent = language.boundary.subjectConfirmed ? "ПОДТВЕРЖДЕНО СУБЪЕКТОМ" : "LEGACY · ТРЕБУЕТ ПОДТВЕРЖДЕНИЯ";
   $("#passport").innerHTML = passportRows(latest).map(([key, value]) => `<div><dt>${escapeHtml(key)}</dt><dd>${escapeHtml(value)}</dd></div>`).join("");
@@ -108,13 +109,18 @@ function renderMap() {
 
 function renderReturn() {
   if (!state.passport) return;
+  $$('input[name="preserved"]').forEach(input => { input.checked = false; });
+  ["#other-reacted", "#relation-preserved"].forEach(id => { $(id).checked = false; });
+  ["#new-form", "#tension"].forEach(id => { $(id).value = ""; });
+  validateReturn();
   $("#return-target").innerHTML = `<b>${escapeHtml(state.passport.oplus.action)}</b><br>Критерий: ${escapeHtml(state.passport.oplus.criterion)}<br>Текущий Q: ${state.passport.q == null ? "null" : state.passport.q}`;
 }
 function validateReturn() { $("#integrate").disabled = !document.querySelector('input[name="preserved"]:checked'); }
 function integrate() {
+  if (!state.passport || !document.querySelector('input[name="preserved"]:checked')) throw new Error("Возврат не заполнен.");
   const preserved = document.querySelector('input[name="preserved"]:checked').value === "true";
-  state.passport = integrateReturn(state.passport, { otherReacted: $("#other-reacted").checked, actionPreserved: preserved, relationPreserved: $("#relation-preserved").checked, newForm: $("#new-form").value, tension: $("#tension").value });
-  upsertPassport(state.passport); renderMap(); route("map");
+  const passport = integrateReturn(state.passport, { otherReacted: $("#other-reacted").checked, actionPreserved: preserved, relationPreserved: $("#relation-preserved").checked, newForm: $("#new-form").value, tension: $("#tension").value });
+  upsertPassport(passport); state.passport = passport; renderMap(); route("map");
 }
 function resetCycle() {
   Object.assign(state, { contextId: "", episode: "", index: 0, answers: {}, interception: null, passport: null });
@@ -124,10 +130,17 @@ function resetCycle() {
 }
 function exportJournal() {
   const blob = new Blob([JSON.stringify({ schema: "gdeya.sep7x7.export.v1", exportedAt: new Date().toISOString(), passports: readJournal() }, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "gdeya-sep7x7-map.json"; link.click(); URL.revokeObjectURL(url);
+  const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "gdeya-sep7x7-map.json"; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 async function importJournal(file) {
-  try { const payload = JSON.parse(await file.text()); const passports = safeJournal(payload.passports ?? payload); if (!passports.length) throw new Error("EMPTY"); writeJournal(passports); state.passport = passports[0]; renderMap(); } catch { alert("Файл не соответствует схеме SEP-7×7."); }
+  if (file.size > 5 * 1024 * 1024) throw new Error("Файл больше 5 МБ.");
+  const payload = JSON.parse(await file.text());
+  if (!Array.isArray(payload) && payload?.schema !== "gdeya.sep7x7.export.v1") throw new Error("Неизвестная схема экспорта.");
+  const passports = safeJournal(Array.isArray(payload) ? payload : payload.passports);
+  if (!passports.length) throw new Error("Пустой пакет.");
+  const journal = mergeJournal(passports);
+  state.passport = journal[0]; renderMap(); route("map");
+  $("#storage-status").textContent = "Импорт проверен и объединён с локальной картой. Импорт не удостоверяет наблюдения или личность автора.";
 }
 
 $("#episode").addEventListener("input", validateEpisodeScreen);
@@ -137,16 +150,16 @@ $("#next").addEventListener("click", () => { if (state.index < 6) { state.index 
 ["#action", "#criterion"].forEach((selector) => $(selector).addEventListener("input", () => { renderLanguagePreview(true); validateGate(); }));
 ["#owned", "#consent-free"].forEach((selector) => $(selector).addEventListener("change", validateGate));
 $("#language-confirmed").addEventListener("change", () => { renderLanguagePreview(false); validateGate(); });
-$("#conduct").addEventListener("click", compile);
+$("#conduct").addEventListener("click", guarded(compile));
 $("#go-return").addEventListener("click", () => { renderReturn(); route("return"); });
 $("#new-context").addEventListener("click", resetCycle);
-$("#export").addEventListener("click", exportJournal);
-$("#import").addEventListener("change", (event) => { if (event.target.files[0]) importJournal(event.target.files[0]); });
-$("#destroy").addEventListener("click", () => { if (confirm("Уничтожить всю локальную карту SEP-7×7 в этом браузере?")) { localStorage.removeItem(STORAGE_KEY); resetCycle(); } });
+$("#export").addEventListener("click", guarded(exportJournal));
+$("#import").addEventListener("change", guarded(async (event) => { try { if (event.target.files[0]) await importJournal(event.target.files[0]); } finally { event.target.value = ""; } }));
+$("#destroy").addEventListener("click", guarded(() => { if (confirm("Уничтожить всю локальную карту SEP-7×7 в этом браузере?")) { destroyJournal(); resetCycle(); } }));
 $$('input[name="preserved"]').forEach((input) => input.addEventListener("change", validateReturn));
-$("#integrate").addEventListener("click", integrate);
-$$('[data-route]').forEach((button) => button.addEventListener("click", () => { const target = button.dataset.route; if (target === "episode" || (target === "map" && readJournal().length) || (target === "return" && state.passport)) { if (target === "map") renderMap(); if (target === "return") renderReturn(); route(target); } }));
+$("#integrate").addEventListener("click", guarded(integrate));
+$$('[data-route]').forEach((button) => button.addEventListener("click", guarded(() => { const target = button.dataset.route; if (target === "episode" || (target === "map" && readJournal().length) || (target === "return" && state.passport)) { if (target === "map") renderMap(); if (target === "return") renderReturn(); route(target); } })));
 
 renderContexts(); validateEpisodeScreen();
-if (location.hash === "#map" && readJournal().length) { state.passport = readJournal()[0]; renderMap(); route("map"); }
+try { const journal = readJournal(); if (location.hash === "#map" && journal.length) { state.passport = journal[0]; renderMap(); route("map"); } } catch(error) { reportError(error); }
 if ("serviceWorker" in navigator) window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));

@@ -1,4 +1,4 @@
-const CACHE = "gdeya-sep7x7-v0.2.0";
+const CACHE = "gdeya-sep7x7-v0.2.0-storage-20260920";
 const ASSETS = ["./", "./index.html", "./styles.css", "./language.css", "./app.mjs", "./catalog.mjs", "./runtime.mjs", "./manifest.json", "./core/state-machine.mjs", "./core/scorer.mjs", "./core/invariant-engine.mjs", "./core/oplus-gate.mjs", "./core/storage.mjs", "./core/passport.mjs", "./core/tzar-language.mjs", "../tzar-language-001.mjs", "../module/catalog.mjs", "./data/laws.json", "./data/contexts.json", "./data/nodes.ru.json", "./data/answers.ru.json", "./data/skellu-prompts.ru.json"];
 self.addEventListener("install", (event) => event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(ASSETS)).then(() => self.skipWaiting())));
 self.addEventListener("activate", (event) => event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key.startsWith("gdeya-sep7x7-") && key !== CACHE).map((key) => caches.delete(key)))).then(() => self.clients.claim())));
