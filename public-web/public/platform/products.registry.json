@@ -100,9 +100,9 @@
       "parent_ids": ["meta-core-v2"], "depends_on": ["tzar"], "entrypoints": [], "audience": ["встроенный движок"], "geometry": "порог", "version": "prototype", "contract": "проверяется", "tags": ["LOVE", "MEASURE", "gate"], "tasks": []
     },
     {
-      "id": "meta-core-v2", "order": 11, "name": "Meta Core v2", "code": "META", "glyph": "μ", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "runtime проверен", "accent": "#8aa7ff",
+      "id": "meta-core-v2", "order": 11, "name": "Meta Core v2", "code": "META", "glyph": "μ", "layer": 3, "kind": "engine", "status": "prototype", "status_label": "интеграция · candidate", "accent": "#8aa7ff",
       "subtitle": "Оркестратор перехода", "description": "Контур оркестрации NEG → GOV → META → DEMONS, соединяющий оценку, управление и пороговую проверку.", "function": "Где действует: авторские пространства. Что принимает: состояние и задачу. Что выдаёт: последовательность проверенного перехода.",
-      "parent_ids": ["architectonics"], "depends_on": ["skellu", "demons-guardians", "tzar"], "entrypoints": [], "audience": ["разработчик", "архитектор"], "geometry": "каскад", "version": "v2 · runtime 1.0", "contract": "технически исполним · ждёт интеграции", "tags": ["NEG", "GOV", "10 проверок"], "tasks": []
+      "parent_ids": ["architectonics"], "depends_on": ["skellu", "demons-guardians", "tzar"], "entrypoints": [{"label": "Проверить передачу из VoidOCR", "url": "https://lacinnik.github.io/Game-GDEYA/labs/meta-core/", "external": true}], "audience": ["разработчик", "архитектор"], "geometry": "каскад", "version": "v2 · runtime 1.0 · integration 0.1 candidate", "contract": "VoidOCR → local draft · PASS_INTERNAL/HOLD_PROTOCOL · без исполнения", "tags": ["NEG", "GOV", "10 проверок"], "tasks": []
     },
     {
       "id": "collective-meta-core", "order": 12, "name": "Collective Meta Core", "code": "COLLECTIVE", "glyph": "∞", "layer": 3, "kind": "engine", "status": "published", "status_label": "stable release", "accent": "#d9b86c",

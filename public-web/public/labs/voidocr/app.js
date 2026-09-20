@@ -1,5 +1,6 @@
 import { compileTzarLanguage } from "../tzar-language-001.mjs";
 import { persistTrace } from "./storage.mjs";
+import { sendHandoff } from "../meta-core/handoff.mjs";
 
 (() => {
   const BEFORE = ["рассеянность", "напряжение", "неопределённость", "перегруз", "остановка", "фоновый шум"];
@@ -112,8 +113,10 @@ import { persistTrace } from "./storage.mjs";
     const allow = trace.decision === "ALLOW";
     $("#verdict").textContent = trace.decision;
     $("#verdict").classList.toggle("deny", !allow);
-    $("#result-title").textContent = allow ? "Допуск получен." : "Действие пока не допускается.";
-    $("#result-copy").textContent = allow ? "Различение удержалось после паузы. След можно передать следующему шагу субъектного контура." : "Различение пока не удерживает форму. Вернитесь в паузу без попытки усилить результат.";
+    $("#result-title").textContent = allow ? "Локальный порог по вашей оценке пройден." : "Действие пока не допускается.";
+    $("#result-copy").textContent = allow ? "След можно передать для отдельной проверки следующего шага. ALLOW от VoidOCR не подтверждает полномочия, согласие или фактический возврат." : "Различение пока не удерживает форму. Вернитесь в паузу без попытки усилить результат.";
+    $("#send-meta").disabled = !allow;
+    $("#handoff-error").textContent = "";
     const rows = [["Слово Субъекта", trace.language.layers.publicStatement], ["Сингулярная формула", trace.language.formula], ["Точка", trace.trigger], ["До → после", `${trace.pre_state} → ${trace.post_state}`], ["Δ", `${trace.delta_type} · ${trace.quadrant}`], ["Устойчивость", `${trace.stability} / 3`], ["Q · возврат", "null · ещё не наблюдался"], ["Хранение", "локально в этом браузере"]];
     $("#trace").replaceChildren(...rows.map(([key, value]) => {
       const row = document.createElement("div");
@@ -169,5 +172,14 @@ import { persistTrace } from "./storage.mjs";
   $("#commit").addEventListener("click", commit);
   $("#reset").addEventListener("click", reset);
   $("#export").addEventListener("click", exportTrace);
+  $("#send-meta").addEventListener("click", () => {
+    let result;
+    try { result = sendHandoff(sessionStorage, localStorage, state.trace); } catch { result = { ok:false }; }
+    if (!result.ok) {
+      $("#handoff-error").textContent = "Передача не сохранена: проверьте хранилище и свежесть следа (30 минут). Исходный журнал не изменён.";
+      return;
+    }
+    location.assign("../meta-core/");
+  });
   if ("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js").catch(() => {});
 })();

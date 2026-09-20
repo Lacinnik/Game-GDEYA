@@ -1,8 +1,9 @@
 {
   "date": "2026-09-20",
-  "source_commit": "06ce64a",
+  "source_commit": "43ecc88",
+  "meta_source_commit": "7fc57decef0467cfb37a6595856b0333d9582510",
   "reson_source_commit": "53b0df7",
-  "scope": "Game-GDEYA and reason- source review, 80 automated tests, MODULE/TX5/Field Check browser flows; no device or empirical acceptance",
+  "scope": "Game-GDEYA and reason- source review, 96 automated tests, MODULE/TX5/Field Check and VoidOCR-to-Meta browser flows; no device or empirical acceptance",
   "additional_fix": {
     "product": "TZAR-LANGUAGE-001",
     "detail": "Отсутствующие O/S/I/R_g/C сохраняются как null; HOLD-INPUT/HOLD-DATA; Q принимает только числовые 0/1 или null. Проверено для всех 22 профилей. Модель остаётся candidate."
@@ -61,8 +62,8 @@
       "name": "VoidOCR",
       "registry_status": "stable · можно запустить",
       "registry_version": "1.0.0 stable",
-      "checked": "Исправлены вывод пользовательского текста, отказ записи и повреждённый журнал. Ошибка сохранения блокирует выдачу допуска.",
-      "remaining": "Проверить сценарии Safari/PWA и контракт переноса ALLOW: происхождение, срок действия и подтверждение принимающим контуром. Текущий локальный след не является доверенным удостоверением."
+      "checked": "Безопасный вывод текста и проверка сохранения дополнены отправкой в Meta Core в той же вкладке. Объект переносится дословно, без URL-данных; получатель проверяет схему, назначение, источник, срок 30 минут и локальную квитанцию.",
+      "remaining": "Реальный Safari/PWA ещё требует приёмки. Локальные записи не подписаны и не удостоверяют личность; внешние права и согласие не переносятся."
     },
     {
       "id": "axis-interface",
@@ -85,16 +86,16 @@
       "name": "Demons / Guardians",
       "registry_status": "прототип",
       "registry_version": "prototype",
-      "checked": "В реестре prototype; отдельной точки запуска нет.",
-      "remaining": "Нужны исходники порогов LOVE/MEASURE, контракт входа, причины отказа и сквозная проверка с Meta Core."
+      "checked": "Исходные LOVE/MEASURE подключены внутри Meta Core без изменения порогов. Адаптер блокирует неизвестные фазы/плиты и пустые либо недопустимые метрики; фактический Q запрашивается отдельно от устойчивости VoidOCR.",
+      "remaining": "Авторская/эмпирическая проверка смысла и порогов не выполнена. Защитный адаптер не меняет исходные runtime-файлы в отдельном репозитории."
     },
     {
       "id": "meta-core-v2",
       "name": "Meta Core v2",
-      "registry_status": "runtime проверен",
-      "registry_version": "v2 · runtime 1.0",
-      "checked": "Реестр указывает runtime 1.0 и ожидание интеграции.",
-      "remaining": "Найти канонические реализации NEG → GOV → META → DEMONS, согласовать схему состояния, остановку и повторный запуск; проверить сквозной цикл."
+      "registry_status": "интеграция · candidate",
+      "registry_version": "v2 · runtime 1.0 · integration 0.1 candidate",
+      "checked": "Найден исходный runtime architectonica-az-buki@7fc57de. Полный граф импортов перенесён побайтово с MIT и SHA-256. Подключён VoidOCR → Meta Core через защитный адаптер 0.1 candidate: собственные проверки получателя, явный Q и квитанция без исполнения. Пройдены 15 тестов интеграции и новый тест согласованного онлайн/офлайн-кеша и браузерный цикл HOLD → синтетический PASS → STOP → сохранение/экспорт/перезагрузка.",
+      "remaining": "Не реализованы серверная идентификация, проверка полномочий, межустройственный обмен и исполнение действий. Локальный PASS_INTERNAL не равен внешнему разрешению или эмпирической валидации."
     },
     {
       "id": "collective-meta-core",

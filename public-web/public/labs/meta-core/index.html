@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080f15"><title>Meta Core · проверка перехода · ТЕЗАР</title><link rel="stylesheet" href="./styles.css"></head>
+<body>
+<header><a href="../../platform/#/product/meta-core-v2">⊕ ТЕЗАР · ГДЕЯ</a><a href="../voidocr/">Вернуться в VoidOCR</a></header>
+<main>
+  <p class="eyebrow">META CORE · INTEGRATION 0.1 · CANDIDATE</p>
+  <h1>Передать след.<br><em>Проверить следующий шаг.</em></h1>
+  <p class="lead">ALLOW от VoidOCR — не разрешение Meta Core. Здесь принимающий контур проверяет черновик заново: NEG → GOV → META → DEMONS.</p>
+  <section aria-labelledby="source-title"><p class="eyebrow">01 · ИСТОЧНИК</p><h2 id="source-title">Локальное свидетельство</h2>
+    <p id="source-status" role="status">Проверяем передачу…</p><dl id="source"></dl>
+    <p class="note">Передача хранится только в этой вкладке; текст не попадает в URL. Срок — 30 минут от создания следа. Это техническая политика свежести, не авторский канон. Сверка с локальным журналом не доказывает авторство: записи не подписаны.</p>
+  </section>
+  <form id="draft" hidden>
+    <section><p class="eyebrow">02 · ПРИНИМАЮЩИЙ КОНТУР</p><h2>Задача и границы</h2>
+      <label>Владелец черновика<input id="owner" maxlength="200" placeholder="Имя или явное обозначение роли"></label>
+      <label>Следующий локальный, обратимый шаг<textarea id="action" rows="3" maxlength="12000"></textarea></label>
+      <label>Сохраняемый инвариант<textarea id="invariant" rows="2" maxlength="12000"></textarea></label>
+      <div class="columns">
+        <label>Контекст<select id="context"><option value="">Выберите явно</option><option value="personal">Личный</option><option value="org">Организация</option><option value="public">Публичный · закрыт</option><option value="unknown">Неизвестный · закрыт</option></select></label>
+        <label>Воздействие<select id="impact"><option value="">Выберите явно</option><option value="draft">Черновик без исполнения</option><option value="local">Локальное обратимое</option><option value="shared">Совместное · закрыто</option><option value="public">Публичное · закрыто</option><option value="irreversible">Необратимое · закрыто</option></select></label>
+        <label>Фаза<select id="phase"><option value="">Выберите явно</option><option value="love">LOVE</option><option value="measure">MEASURE</option><option value="materialize">MATERIALIZE</option></select></label>
+        <label>Заявленный риск<select id="risk"><option value="">Выберите явно</option><option value="low">Низкий</option><option value="medium">Средний</option><option value="high">Высокий</option><option value="critical">Критический · стоп</option></select></label>
+      </div>
+      <label class="check"><input id="stop" type="checkbox">Стоп: этот переход не должен продолжаться</label>
+      <label class="check"><input id="responsible" type="checkbox">Для организационного контекста: ответственная сторона явно названа</label>
+      <label class="check"><input id="confirmed" type="checkbox">Я проверил исходный след и принимаю его только как основание для проверки этого локального черновика</label>
+    </section>
+    <section><p class="eyebrow">03 · СВИДЕТЕЛЬСТВА</p><h2>Не заполнять неизвестное догадкой</h2>
+      <p class="note">Устойчивость из VoidOCR не становится Q. Для проверки ворот нужен отдельно наблюдавшийся возврат по этому же объекту. Если его ещё нет — оставьте поля пустыми: результат будет HOLD_PROTOCOL.</p>
+      <label>Q · сообщаемый фактический возврат<select id="observed-q"><option value="">Не наблюдался · null</option><option value="0">0 · отрицательный возврат</option><option value="1">1 · положительный возврат</option></select></label>
+      <label>Что именно наблюдалось, после какого действия и когда<textarea id="observation" rows="3" maxlength="12000"></textarea></label>
+      <p class="note">Следующие оценки — явный ввод оператора в шкале 0–1, а не измерения программы. Основание каждой оценки укажите ниже.</p>
+      <div class="columns metrics">
+        <label>α<input id="alpha" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
+        <label>IЯ<input id="IY" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
+        <label>Cm<input id="Cm" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
+        <label>T<input id="T" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
+      </div>
+      <label>Основания оценок α, IЯ, Cm, T<textarea id="metric-basis" rows="3" maxlength="12000"></textarea></label>
+      <button class="primary" type="submit">Проверить черновик →</button>
+    </section>
+  </form>
+  <section id="result" hidden aria-live="polite"><p class="eyebrow">04 · РЕЗУЛЬТАТ ПРОВЕРКИ</p><h2 id="verdict"></h2><p id="reason"></p><ol id="checks"></ol><p id="save-status">Предварительная проверка · не сохранена.</p>
+    <div class="actions"><button id="save" class="primary" type="button">Зафиксировать результат и закрыть передачу</button><button id="export" type="button" disabled>Экспорт квитанции JSON</button></div>
+  </section>
+  <p id="error" role="alert"></p>
+  <section><p class="eyebrow">ЖУРНАЛ ЭТОГО БРАУЗЕРА</p><h2>Сохранённые квитанции</h2><p id="journal-status"></p><div id="journal"></div></section>
+  <section class="boundary"><h2>Граница результата</h2><p>PASS_INTERNAL означает только прохождение локальных технических проверок на введённых данных. Ни действие, ни публикация, ни вызов внешнего сервиса не исполняются. Согласие людей, полномочия и научная эффективность не установлены. Q записывается как сообщённый пользователем возврат, без независимого подтверждения.</p><p>Пороги исходного runtime сохранены. <a href="./CONTRACT.md">Контракт и ограничения</a> · <a href="./vendor/provenance.json">Происхождение исходников</a>.</p></section>
+</main><script type="module" src="./app.mjs"></script>
+</body></html>

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import vm from "node:vm";
 import { readFile } from "node:fs/promises";
 
-function createWorkerHarness(source, workerUrl) {
+function createWorkerHarness(source, workerUrl, fetchResource = async () => { throw new Error("offline"); }) {
   const listeners = new Map();
   const stores = new Map();
   const normalize = input => new URL(typeof input === "string" ? input : input.url, workerUrl).href;
@@ -46,7 +46,7 @@ function createWorkerHarness(source, workerUrl) {
   vm.runInNewContext(source, {
     self,
     caches: cacheStorage,
-    fetch: async () => { throw new Error("offline"); },
+    fetch: fetchResource,
     URL,
     Response,
     console,
@@ -58,9 +58,9 @@ function createWorkerHarness(source, workerUrl) {
       listeners.get("install")({ waitUntil(value) { completion = Promise.resolve(value); } });
       await completion;
     },
-    async navigate(path) {
+    async navigate(path, mode = "navigate") {
       let response;
-      const request = { method: "GET", mode: "navigate", url: new URL(path, workerUrl).href };
+      const request = { method: "GET", mode, url: new URL(path, workerUrl).href };
       listeners.get("fetch")({
         request,
         respondWith(value) { response = Promise.resolve(value); },
@@ -70,6 +70,20 @@ function createWorkerHarness(source, workerUrl) {
     },
   };
 }
+
+test("Service Worker refreshes code online and retains the same version offline", async () => {
+  const source = await readFile(new URL("../public-web/public/sw.js", import.meta.url), "utf8");
+  let online = true;
+  const worker = createWorkerHarness(source, "https://example.test/Game-GDEYA/sw.js", async () => {
+    if (!online) throw new Error("offline");
+    return new Response("current-module-version");
+  });
+  await worker.install();
+  const path = "./labs/meta-core/handoff.mjs";
+  assert.equal(await (await worker.navigate(path, "cors")).text(), "current-module-version");
+  online = false;
+  assert.equal(await (await worker.navigate(path, "cors")).text(), "current-module-version");
+});
 
 test("public Service Worker restores Platform 2.1, MODULE, VoidOCR and SEP-7×7 while offline", async () => {
   const source = await readFile(new URL("../public-web/public/sw.js", import.meta.url), "utf8");
@@ -91,4 +105,7 @@ test("public Service Worker restores Platform 2.1, MODULE, VoidOCR and SEP-7×7 
   const moduleResponse = await worker.navigate("./labs/module/?offline=1");
   assert.equal(moduleResponse.status, 200);
   assert.match(await moduleResponse.text(), /labs\/module\/index\.html$/u);
+  const metaResponse = await worker.navigate("./labs/meta-core/?offline=1");
+  assert.equal(metaResponse.status, 200);
+  assert.match(await metaResponse.text(), /labs\/meta-core\/index\.html$/u);
 });

@@ -34,6 +34,9 @@ test("TZAR-LANGUAGE-001 assigns one evidence-bounded profile to all 22 entities"
 
 test("published verticals expose their accepted versions and public entrypoints", () => {
   assert.equal(byId.get("product-platform").version, "2.0");
+  assert.equal(byId.get("meta-core-v2").status, "prototype");
+  assert.match(byId.get("meta-core-v2").version, /integration 0\.1 candidate/u);
+  assert.match(byId.get("meta-core-v2").entrypoints[0].url, /\/labs\/meta-core\/$/u);
   assert.equal(byId.get("module").version, "1.0.0 stable");
   assert.equal(byId.get("voidocr").version, "1.0.0 stable");
   assert.equal(byId.get("voidocr").status, "live");
