@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'module-journal-20260922-r3';
+const CACHE_REVISION = 'voidocr-observation-20260922-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -12,7 +12,8 @@ const SHELL = [
   './labs/voidocr/',
   './labs/voidocr/index.html',
   './labs/voidocr/styles.css',
-  './labs/voidocr/app.js',
+  './labs/voidocr/app.js?v=voidocr-observation-20260922-r1',
+  './labs/voidocr/observation.mjs?v=voidocr-observation-20260922-r1',
   './labs/voidocr/storage.mjs',
   './labs/core-separation/',
   './labs/core-separation/index.html',

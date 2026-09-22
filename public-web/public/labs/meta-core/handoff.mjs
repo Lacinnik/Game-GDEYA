@@ -1,3 +1,4 @@
+import { OBSERVATION_STATES } from "../voidocr/observation.mjs?v=voidocr-observation-20260922-r1";
 // Local workflow transport, NOT authentication, delegation or an access token.
 export const HANDOFF_KEY = "architectonica.voidocr.meta-handoff.v1";
 export const RECEIPTS_KEY = "architectonica.meta-receipts.v1";
@@ -5,15 +6,13 @@ export const SOURCE_KEY = "architectonica.voidocr.traces.v1";
 export const TTL_MS = 30 * 60 * 1000; // Technical draft freshness policy, not authorial canon.
 const SCHEMA = "architectonica.local-handoff/1.0.0";
 const pairs = { density_shift:"resource", impulse_break:"power", distance_collapse:"relations", auto_form:"result" };
-const pre = ["рассеянность","напряжение","неопределённость","перегруз","остановка","фоновый шум"];
-const post = ["ясность","тишина","устойчивость","собранность","направленность","простота"];
 const text = (value, max = 12000) => typeof value === "string" && value.trim().length > 0 && value.length <= max;
 const fail = reason => ({ ok:false, reason });
 
 export function traceSnapshot(trace) {
   if (!trace || trace.schema !== "architectonica.voidocr-trace/1.1.0" || trace.laboratory !== "gdeya"
     || !text(trace.id,200) || !text(trace.trigger) || trace.trigger.trim().split(/\s+/u).length < 3
-    || !pre.includes(trace.pre_state) || !post.includes(trace.post_state)
+    || !OBSERVATION_STATES.includes(trace.pre_state) || !OBSERVATION_STATES.includes(trace.post_state)
     || !Object.hasOwn(pairs,trace.delta_type) || pairs[trace.delta_type] !== trace.quadrant
     || !Number.isInteger(trace.stability) || trace.stability < 0 || trace.stability > 3
     || trace.decision !== (trace.stability >= 2 ? "ALLOW" : "DENY")
