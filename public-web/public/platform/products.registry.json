@@ -1,6 +1,6 @@
 {
   "schema_version": "2.0",
-  "updated_at": "2026-08-09",
+  "updated_at": "2026-09-22",
   "platform": {
     "name": "Архитектоника",
     "tagline": "Не каталог. Среда запуска.",
@@ -145,9 +145,50 @@
       "parent_ids": ["architectonics"], "depends_on": ["tzar"], "entrypoints": [], "audience": ["автор", "разработчик", "организация"], "geometry": "контейнер", "version": "architecture", "tags": ["локально", "контейнер", "защита"], "tasks": ["deploy"]
     },
     {
-      "id": "offline-translator", "order": 20, "name": "Offline EN–RU Translator", "code": "TRANSLATOR", "glyph": "⇄", "layer": 5, "kind": "applied", "status": "embedded", "status_label": "stable · внутри РЕЗОН", "accent": "#75c8e8",
-      "subtitle": "Автономный переводческий контур", "description": "Локальный двунаправленный переводчик с памятью, словарём, сегментацией и глубокой обратной проверкой.", "function": "Работает как прикладной автономный контур РЕЗОН: текст и утверждённая память остаются в браузере пользователя.",
-      "parent_ids": ["reson"], "depends_on": [], "entrypoints": [{"label": "Запустить переводчик 2.0", "url": "https://lacinnik.github.io/reason-/", "external": true}], "audience": ["пользователь", "организация"], "geometry": "локальный узел", "version": "2.0.0 stable", "tags": ["28 проверок", "offline", "privacy"], "tasks": ["deploy"]
+      "id": "offline-translator",
+      "order": 20,
+      "name": "Offline EN–RU Translator",
+      "code": "TRANSLATOR",
+      "glyph": "⇄",
+      "layer": 5,
+      "kind": "applied",
+      "status": "embedded",
+      "status_label": "опубликован · приёмка полноты не пройдена",
+      "accent": "#75c8e8",
+      "subtitle": "Автономный переводческий контур",
+      "description": "Локальный двунаправленный переводчик с памятью и словарём. Проверка 20.09.2026 выявила потерю предложений и невосстановленную служебную маску; полнота перевода не принята.",
+      "function": "Работает как прикладной автономный контур РЕЗОН: текст и утверждённая память остаются в браузере пользователя.",
+      "parent_ids": [
+        "reson"
+      ],
+      "depends_on": [],
+      "entrypoints": [
+        {
+          "label": "Открыть переводчик 2.0 — приёмка не пройдена",
+          "url": "https://lacinnik.github.io/reason-/",
+          "external": true
+        },
+        {
+          "label": "Протокол приёмки 20.09.2026",
+          "url": "https://github.com/Lacinnik/reason-/blob/6634ac4781469d9f913ebdd550c3774eba9bc2e5/NEURAL_CHECK_20260920.md",
+          "external": true
+        }
+      ],
+      "audience": [
+        "пользователь",
+        "организация"
+      ],
+      "geometry": "локальный узел",
+      "version": "2.0.0 · acceptance failed",
+      "tags": [
+        "acceptance failed",
+        "local-first",
+        "privacy"
+      ],
+      "tasks": [
+        "deploy"
+      ],
+      "contract": "Публикация доступна; нейронная приёмка полноты — FAIL; реальный offline-перезапуск требует проверки"
     },
     {
       "id": "private-corporate-contour", "order": 21, "name": "Закрытый корпоративный контур", "code": "PRIVATE", "glyph": "⬡", "layer": 5, "kind": "infrastructure", "status": "private", "status_label": "частный контур", "accent": "#a99ce8",
@@ -161,3 +202,4 @@
     }
   ]
 }
+

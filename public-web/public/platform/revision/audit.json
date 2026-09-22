@@ -1,4 +1,6 @@
 {
+  "status_updated_at": "2026-09-22",
+  "status_update_scope": "Documentation and registry reconciliation only; no new runtime or device acceptance",
   "date": "2026-09-20",
   "source_commit": "43ecc88",
   "meta_source_commit": "7fc57decef0467cfb37a6595856b0333d9582510",
@@ -119,7 +121,7 @@
       "registry_status": "встроено · runtime проверен",
       "registry_version": "embedded · runtime 1.0",
       "checked": "Встроен в игру; локальные проверки SEP проходят.",
-      "remaining": "Развести версию игрового Ядра, SEP и языкового компилятора в самостоятельном паспорте совместимости."
+      "remaining": "Паспорта реализаций закреплены в SUBJECT_CORE_COMPATIBILITY.md; проверить устройства и межкомпонентные преобразователи отдельно."
     },
     {
       "id": "alphabet-singularity",
@@ -164,10 +166,10 @@
     {
       "id": "offline-translator",
       "name": "Offline EN–RU Translator",
-      "registry_status": "stable · внутри РЕЗОН",
-      "registry_version": "2.0.0 stable",
+      "registry_status": "опубликован · приёмка полноты не пройдена",
+      "registry_version": "2.0.0 · acceptance failed",
       "checked": "В reason- проходят тесты сегментации, словаря, памяти и офлайн-маршрутизации оболочки. Общий языковой модуль сохраняет неизвестные координаты и Q без числового приведения.",
-      "remaining": "Нейронный перевод и запуск моделей в авиарежиме на реальном устройстве в этой ревизии не проверены; качество перевода не подтверждено."
+      "remaining": "Дополнение 22.09 по NEURAL_CHECK_20260920.md (reason-@6634ac4): приёмка полноты НЕ ПРОЙДЕНА — потеря предложений и невосстановленная маска. Нужны исправление и новый протокол обоих направлений; реальный офлайн-перезапуск не проверен."
     },
     {
       "id": "private-corporate-contour",
