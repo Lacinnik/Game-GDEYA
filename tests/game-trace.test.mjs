@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { createGameTrace } from '../app/game-trace.mjs';
+import { captureAuthoredStep, createGameTrace } from '../app/game-trace.mjs';
 
 const fixture = () => ({ intent: 'Сохранить исходный замысел', invariant: 'Не подменять объект', mode: 'quick', source: ['I'], metrics: { alpha: 56, iy: 58, cm: 52, q: 54, t: 57 }, gradient: 8, coherence: 55, log: [{ quality: 0.7, deltas: { alpha: 3, iy: 2, cm: 1, q: 4, t: 5 } }] });
 test('game trace separates simulated score from unobserved Q', () => {
@@ -33,4 +33,37 @@ test('both metric panels label the game Q as simulated and export the bounded sc
   assert.doesNotMatch(source, /<Metric label="Q"/);
   assert.match(source, /createGameTrace\(/);
   assert.match(source, /не психологическая диагностика/);
+});
+
+test('completed turn preserves the exact author inputs after the draft is reset', () => {
+  const draft = { states: ['Тело спокойно', 'Есть сомнение'], reflection: '  Слышу себя.\nНе тороплюсь.', induction: 'Внимание', inversion: 'Устойчивая форма', axis: 'partly' };
+  const authored = captureAuthoredStep(draft);
+  draft.states[0] = 'Другой узел'; draft.reflection = '';
+  assert.deepEqual(authored, { states: ['Тело спокойно', 'Есть сомнение'], reflection: '  Слышу себя.\nНе тороплюсь.', induction: 'Внимание', inversion: 'Устойчивая форма', axisSelfReport: 'partly' });
+});
+
+test('author testimony stays separate from simulated scores and unobserved Q', () => {
+  const input = fixture();
+  input.log[0].card = { id: 'R-1-I' };
+  input.log[0].authored = captureAuthoredStep({ states: ['Я здесь'], reflection: 'Тепло', induction: '', inversion: '', axis: 'yes' });
+  const trace = createGameTrace(input);
+  assert.equal(trace.authoredSteps[0].cardId, 'R-1-I');
+  assert.equal(trace.authoredSteps[0].node, 1);
+  assert.equal(trace.authoredSteps[0].record.axisSelfReport, 'yes');
+  assert.equal('authored' in trace.simulation.log[0], false);
+  assert.equal(trace.q, null);
+  assert.equal(trace.returnObservation, null);
+  assert.equal(trace.simulation.log[0].deltas.qSim, 4);
+  trace.authoredSteps[0].record.states.push('Правка экспорта');
+  assert.deepEqual(input.log[0].authored.states, ['Я здесь']);
+  assert.deepEqual(JSON.parse(JSON.stringify(createGameTrace(input))).authoredSteps, createGameTrace(input).authoredSteps);
+});
+
+test('legacy records never acquire invented player testimony', () => {
+  assert.equal(createGameTrace(fixture()).authoredSteps[0].record, null);
+});
+
+test('partial exports cannot claim that the cycle has ended', () => {
+  assert.deepEqual(createGameTrace(fixture()).progress, { status: 'partial', completedNodes: 1 });
+  assert.deepEqual(createGameTrace({ ...fixture(), completed: true }).progress, { status: 'completed', completedNodes: 1 });
 });
