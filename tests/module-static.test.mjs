@@ -52,3 +52,12 @@ test("unsupported and damaged records cannot be shown as valid MODULE passports"
     assert.equal(JSON.stringify(value), original);
   }
 });
+
+test("MODULE versioned entry and imports are precached together", async () => {
+  const [html, app, sw] = await Promise.all([readFile(new URL("index.html",root),"utf8"),readFile(new URL("app.mjs",root),"utf8"),readFile(new URL("../public-web/public/sw.js",import.meta.url),"utf8")]);
+  const version = html.match(/app\.mjs\?v=([^"\s]+)/)?.[1];
+  assert.ok(version);
+  assert.ok(html.includes(`styles.css?v=${version}`));
+  assert.ok(app.includes(`runtime.mjs?v=${version}`));
+  for (const name of ["app.mjs", "runtime.mjs", "styles.css"]) assert.ok(sw.includes(`./labs/module/${name}?v=${version}`));
+});

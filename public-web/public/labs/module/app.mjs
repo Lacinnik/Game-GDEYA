@@ -1,6 +1,6 @@
 import { readJournal, persistJournal, downloadJson } from "../local-journal.mjs";
 import { AZ, BUKI, TAGS, TRANSMISSIONS } from "./catalog.mjs";
-import { buildPassport, canOpenPassport, validateDraft, wordCount } from "./runtime.mjs";
+import { buildPassport, canOpenPassport, validateDraft, wordCount } from "./runtime.mjs?v=module-journal-20260922-r2";
 
 const STORAGE_KEY = "architectonica.module.passports.v1";
 const catalog = { az: AZ, buki: BUKI, transmissions: TRANSMISSIONS };
