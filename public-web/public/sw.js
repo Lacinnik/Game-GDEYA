@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'meta-metrics-20260922-r1';
+const CACHE_REVISION = 'sep-return-20260922-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -21,7 +21,8 @@ const SHELL = [
   './labs/core-separation/language.css',
   './labs/core-separation/catalog.mjs',
   './labs/core-separation/runtime.mjs',
-  './labs/core-separation/app.mjs',
+  './labs/core-separation/app.mjs?v=sep-return-20260922-r1',
+  './labs/core-separation/core/storage.mjs?v=sep-return-20260922-r1',
   './labs/core-separation/core/tzar-language.mjs',
   './labs/tzar-language-001.mjs',
   './labs/local-journal.mjs',
