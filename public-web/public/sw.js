@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'module-journal-20260922-r2';
+const CACHE_REVISION = 'module-journal-20260922-r3';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -44,9 +44,9 @@ const SHELL = [
   './labs/tzar-language-evaluation.json',
   './labs/module/',
   './labs/module/index.html',
-  './labs/module/styles.css',
-  './labs/module/app.mjs',
-  './labs/module/runtime.mjs',
+  './labs/module/styles.css?v=module-journal-20260922-r2',
+  './labs/module/app.mjs?v=module-journal-20260922-r2',
+  './labs/module/runtime.mjs?v=module-journal-20260922-r2',
   './labs/module/catalog.mjs',
   './labs/core-separation/manifest.json',
   './labs/core-separation/sw.js',
