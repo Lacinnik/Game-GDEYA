@@ -1,7 +1,7 @@
 import { CONTEXTS, LAWS, NODES, RESPONSES, SKELLU_PROMPTS, STATES } from "./catalog.mjs";
 import { compileSeparationLanguage, createPassport, detectInvariant, integrateReturn, languageFromPassport, safeJournal, validateEpisode, validateOplus } from "./runtime.mjs";
 
-import { readJournal, upsertPassport, mergeJournal, destroyJournal } from "./core/storage.mjs";
+import { readJournal, upsertPassport, mergeJournal, destroyJournal } from "./core/storage.mjs?v=sep-return-20260922-r1";
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => [...document.querySelectorAll(selector)];
@@ -120,7 +120,7 @@ function integrate() {
   if (!state.passport || !document.querySelector('input[name="preserved"]:checked')) throw new Error("Возврат не заполнен.");
   const preserved = document.querySelector('input[name="preserved"]:checked').value === "true";
   const passport = integrateReturn(state.passport, { otherReacted: $("#other-reacted").checked, actionPreserved: preserved, relationPreserved: $("#relation-preserved").checked, newForm: $("#new-form").value, tension: $("#tension").value });
-  upsertPassport(passport); state.passport = passport; renderMap(); route("map");
+  upsertPassport(passport, localStorage, state.passport); state.passport = passport; renderMap(); route("map");
 }
 function resetCycle() {
   Object.assign(state, { contextId: "", episode: "", index: 0, answers: {}, interception: null, passport: null });

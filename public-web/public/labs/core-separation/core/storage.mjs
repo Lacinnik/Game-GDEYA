@@ -48,9 +48,16 @@ export function writeJournal(journal, storage = localStorage) {
   storage.setItem(STORAGE_KEY, encoded);
   if (storage.getItem(STORAGE_KEY) !== encoded) throw new Error('Сохранение журнала не подтверждено.');
 }
-export function upsertPassport(passport, storage = localStorage) {
+export function upsertPassport(passport, storage = localStorage, expectedPassport) {
   validatePassport(passport);
-  writeJournal([passport, ...readJournal(storage).filter(item => item.id !== passport.id)], storage);
+  const journal = readJournal(storage);
+  if (expectedPassport !== undefined) {
+    const current = journal.find(item => item.id === passport.id);
+    if (expectedPassport?.id !== passport.id || !current || JSON.stringify(current) !== JSON.stringify(expectedPassport)) {
+      throw new Error('Паспорт изменён или удалён после открытия. Скопируйте введённый возврат, обновите страницу и откройте актуальную карту.');
+    }
+  }
+  writeJournal([passport, ...journal.filter(item => item.id !== passport.id)], storage);
 }
 export function mergeJournal(incoming, storage = localStorage) {
   safeJournal(incoming);

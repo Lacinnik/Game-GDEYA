@@ -50,3 +50,26 @@ test('capacity never silently drops the oldest passport', () => {
   const s=storage();writeJournal(Array.from({length:70},fixture),s);const before=s.getItem(STORAGE_KEY);
   assert.throws(()=>upsertPassport(fixture(),s));assert.equal(s.getItem(STORAGE_KEY),before);
 });
+
+test('stale return cannot replace a newer return or resurrect a deleted passport', () => {
+  const s=storage(), original=fixture();upsertPassport(original,s);
+  const first=integrateReturn(original,{actionPreserved:true,newForm:'Первый возврат'});
+  upsertPassport(first,s,original);
+  const stale=integrateReturn(original,{actionPreserved:false,newForm:'Устаревший возврат'});
+  const before=s.getItem(STORAGE_KEY);
+  assert.throws(()=>upsertPassport(stale,s,original),/изменён или удалён/);
+  assert.equal(s.getItem(STORAGE_KEY),before);
+  writeJournal([],s);
+  assert.throws(()=>upsertPassport(stale,s,original),/изменён или удалён/);
+  assert.deepEqual(readJournal(s),[]);
+});
+test('fresh return update preserves unrelated passports and accepts current revision', () => {
+  const s=storage(), original=fixture(), other=fixture();
+  upsertPassport(original,s);upsertPassport(other,s);
+  const first=integrateReturn(original,{actionPreserved:true});
+  upsertPassport(first,s,structuredClone(original));
+  const next=integrateReturn(first,{actionPreserved:false});
+  upsertPassport(next,s,first);
+  assert.deepEqual(readJournal(s),[next,other]);
+  assert.throws(()=>upsertPassport(next,s,other),/изменён или удалён/);
+});
