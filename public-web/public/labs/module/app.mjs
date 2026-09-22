@@ -1,6 +1,6 @@
 import { readJournal, persistJournal, downloadJson } from "../local-journal.mjs";
 import { AZ, BUKI, TAGS, TRANSMISSIONS } from "./catalog.mjs";
-import { buildPassport, validateDraft, wordCount } from "./runtime.mjs";
+import { buildPassport, canOpenPassport, validateDraft, wordCount } from "./runtime.mjs";
 
 const STORAGE_KEY = "architectonica.module.passports.v1";
 const catalog = { az: AZ, buki: BUKI, transmissions: TRANSMISSIONS };
@@ -13,6 +13,31 @@ function updateJournal() {
   let result;
   try { result = readJournal(localStorage, STORAGE_KEY); } catch { result = { ok: false }; }
   $("#journal-count").textContent = result.ok ? String(result.entries.length) : "недоступен";
+  const list = $("#journal-list"); list.replaceChildren();
+  $("#journal-message").textContent = !result.ok ? "Журнал недоступен или повреждён. Записи не изменены."
+    : result.entries.length ? "Просмотр не меняет сохранённую запись и текущий черновик."
+    : "Сохранённых паспортов пока нет. Они появятся после проведения формулы.";
+  if (!result.ok) return;
+  result.entries.forEach((entry, index) => {
+    const readable = canOpenPassport(entry);
+    const row = document.createElement("article"); row.className = "journal-entry";
+    const title = document.createElement("h3");
+    title.textContent = typeof entry?.intent === "string" ? entry.intent : "Запись " + (index + 1);
+    const meta = document.createElement("p");
+    const date = typeof entry?.createdAt === "string" ? new Date(entry.createdAt) : null;
+    meta.textContent = readable
+      ? (date && Number.isFinite(date.getTime()) ? date.toLocaleString("ru-RU", { timeZone: "Europe/Moscow" }) + " МСК · " : "") + entry.formula.notation
+      : "Формат записи не поддерживается для просмотра. Исходный JSON доступен без преобразования.";
+    const actions = document.createElement("div"); actions.className = "actions";
+    if (readable) {
+      const open = document.createElement("button"); open.type = "button"; open.textContent = "Открыть паспорт";
+      open.addEventListener("click", () => { state.passport = entry; renderPassport(entry); setStage("passport"); });
+      actions.append(open);
+    }
+    const download = document.createElement("button"); download.type = "button"; download.textContent = "Скачать JSON";
+    download.addEventListener("click", () => downloadJson("module-journal-record-" + (index + 1) + ".json", entry));
+    actions.append(download); row.append(title, meta, actions); list.append(row);
+  });
 }
 function savePassport(passport) {
   let result;
@@ -85,7 +110,7 @@ function renderPassport(passport) {
   const labels = { conduct:"CONDUCT", review:"REVIEW", hold:"HOLD" };
   $("#result-state").textContent = labels[passport.outcome]; $("#result-state").dataset.outcome = passport.outcome;
   $("#result-title").textContent = passport.outcome === "conduct" ? "По вашей оценке, формула сохраняет ось." : passport.outcome === "review" ? "Вы отметили необходимость дополнительного различения." : "Проведение остановлено заявленным разрывом.";
-  const rows = [["Слово Субъекта",passport.language.layers.publicStatement],["Истинный запрос · кандидат",passport.language.layers.trueRequest],["Сингулярная формула",passport.language.formula],["Намерение",passport.intent],["Инвариант",passport.invariant],["Индукция",passport.induction],["Инверсия",passport.inversion],["Следующий ход",passport.nextAction],["Q · возврат","null · ещё не наблюдался"],["Хранение","локально в этом браузере"]];
+  const rows = [["ID паспорта",passport.id],["Выбранная формула",passport.formula.notation],["Слово Субъекта",passport.language.layers.publicStatement],["Истинный запрос · кандидат",passport.language.layers.trueRequest],["Сингулярная формула",passport.language.formula],["Намерение",passport.intent],["Инвариант",passport.invariant],["Индукция",passport.induction],["Инверсия",passport.inversion],["Следующий ход",passport.nextAction],["Q · возврат","null · ещё не наблюдался"],["Хранение","локально в этом браузере"]];
   $("#passport-output").innerHTML = rows.map(([key,value]) => '<div><dt>' + key + '</dt><dd>' + escapeHtml(value) + '</dd></div>').join("");
 }
 function exportPassport() {
@@ -108,4 +133,5 @@ $("#compile").addEventListener("click", compile); $("#new-cycle").addEventListen
 $$('[data-go]').forEach(button => button.addEventListener("click", () => { const target = button.dataset.go; if (target === "axis" || target === "alphabet" || (target === "formula" && state.azId) || (target === "passport" && state.passport)) setStage(target); }));
 
 renderFilters(); renderAz(); renderBuki(); renderTransmissions(); updateFormula(); updateJournal(); validateAxis(); validateFormula();
+window.addEventListener("storage", event => { if (event.key === STORAGE_KEY || event.key === null) updateJournal(); });
 if (location.hash === "#alphabet") setStage("alphabet");
