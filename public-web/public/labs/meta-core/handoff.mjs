@@ -1,4 +1,4 @@
-import { OBSERVATION_STATES } from "../voidocr/observation.mjs?v=voidocr-observation-20260922-r1";
+import { OBSERVATION_STATES } from "../voidocr/observation.mjs?v=voidocr-observation-20260922-r2";
 // Local workflow transport, NOT authentication, delegation or an access token.
 export const HANDOFF_KEY = "architectonica.voidocr.meta-handoff.v1";
 export const RECEIPTS_KEY = "architectonica.meta-receipts.v1";

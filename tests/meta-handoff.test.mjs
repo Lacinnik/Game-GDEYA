@@ -133,3 +133,24 @@ test("all imported browser modules are included in offline shell",async()=>{
     assert.throws(()=>createHandoff({...source,stability:1,decision:"DENY"},{now}),/SOURCE_NOT_ALLOWED/);
   }
 });
+
+ test("declared five-point scale accepts only its values without rounding",()=>{
+  const {local,envelope,draft}=fixture();
+  for (const value of [0,0.25,0.5,0.75,1]) {
+    const report=evaluateTransition(envelope,{...draft,metrics:{...draft.metrics,alpha:value}},local,now);
+    assert.notEqual(report.gate,"demons/metrics");
+    assert.equal(report.input.metrics.alpha,value);
+  }
+  for (const key of ["alpha","IY","Cm","T"]) {
+    for (const value of [0.1,0.8,0.7499999,0.7500001]) {
+      const candidate={...draft,metrics:{...draft.metrics,[key]:value}};
+      const report=evaluateTransition(envelope,candidate,local,now);
+      assert.equal(report.status,"HOLD_PROTOCOL");
+      assert.equal(report.gate,"demons/metrics");
+      assert.equal(report.input.metrics[key],value);
+      const stopped=evaluateTransition(envelope,{...candidate,stop:true},local,now);
+      assert.equal(stopped.gate,"neg");
+      assert.equal(stopped.status,"HOLD_PROTOCOL");
+    }
+  }
+});

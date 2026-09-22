@@ -11,7 +11,7 @@
     <p id="source-status" role="status">Проверяем передачу…</p><dl id="source"></dl>
     <p class="note">Передача хранится только в этой вкладке; текст не попадает в URL. Срок — 30 минут от создания следа. Это техническая политика свежести, не авторский канон. Сверка с локальным журналом не доказывает авторство: записи не подписаны.</p>
   </section>
-  <form id="draft" hidden>
+  <form id="draft" hidden novalidate>
     <section><p class="eyebrow">02 · ПРИНИМАЮЩИЙ КОНТУР</p><h2>Задача и границы</h2>
       <label>Владелец черновика<input id="owner" maxlength="200" placeholder="Имя или явное обозначение роли"></label>
       <label>Следующий локальный, обратимый шаг<textarea id="action" rows="3" maxlength="12000"></textarea></label>
@@ -30,7 +30,7 @@
       <p class="note">Устойчивость из VoidOCR не становится Q. Для проверки ворот нужен отдельно наблюдавшийся возврат по этому же объекту. Если его ещё нет — оставьте поля пустыми: результат будет HOLD_PROTOCOL.</p>
       <label>Q · сообщаемый фактический возврат<select id="observed-q"><option value="">Не наблюдался · null</option><option value="0">0 · отрицательный возврат</option><option value="1">1 · положительный возврат</option></select></label>
       <label>Что именно наблюдалось, после какого действия и когда<textarea id="observation" rows="3" maxlength="12000"></textarea></label>
-      <p class="note">Следующие оценки — явный ввод оператора в шкале 0–1, а не измерения программы. Основание каждой оценки укажите ниже.</p>
+      <p class="note">Следующие оценки — явный ввод оператора, а не измерения программы. Допустимые значения: 0, 0.25, 0.5, 0.75 или 1. Основание каждой оценки укажите ниже.</p>
       <div class="columns metrics">
         <label>α<input id="alpha" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
         <label>IЯ<input id="IY" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
@@ -47,5 +47,5 @@
   <p id="error" role="alert"></p>
   <section><p class="eyebrow">ЖУРНАЛ ЭТОГО БРАУЗЕРА</p><h2>Сохранённые квитанции</h2><p id="journal-status"></p><div id="journal"></div></section>
   <section class="boundary"><h2>Граница результата</h2><p>PASS_INTERNAL означает только прохождение локальных технических проверок на введённых данных. Ни действие, ни публикация, ни вызов внешнего сервиса не исполняются. Согласие людей, полномочия и научная эффективность не установлены. Q записывается как сообщённый пользователем возврат, без независимого подтверждения.</p><p>Пороги исходного runtime сохранены. <a href="./CONTRACT.md">Контракт и ограничения</a> · <a href="./vendor/provenance.json">Происхождение исходников</a>.</p></section>
-</main><script type="module" src="./app.mjs"></script>
+</main><script type="module" src="./app.mjs?v=meta-metrics-20260922-r1"></script>
 </body></html>
