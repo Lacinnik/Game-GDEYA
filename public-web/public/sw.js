@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'voidocr-observation-20260922-r1';
+const CACHE_REVISION = 'meta-metrics-20260922-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -28,8 +28,8 @@ const SHELL = [
   './labs/meta-core/',
   './labs/meta-core/index.html',
   './labs/meta-core/styles.css',
-  './labs/meta-core/app.mjs',
-  './labs/meta-core/runtime.mjs',
+  './labs/meta-core/app.mjs?v=meta-metrics-20260922-r1',
+  './labs/meta-core/runtime.mjs?v=meta-metrics-20260922-r1',
   './labs/meta-core/handoff.mjs',
   './labs/meta-core/CONTRACT.md',
   './labs/meta-core/vendor/provenance.json',

@@ -1,5 +1,5 @@
 import { readHandoff, readReceipts, saveReceipt } from "./handoff.mjs";
-import { evaluateTransition } from "./runtime.mjs";
+import { evaluateTransition } from "./runtime.mjs?v=meta-metrics-20260922-r1";
 import { downloadJson } from "../local-journal.mjs";
 const $=id=>document.getElementById(id);
 const state={envelope:null,report:null,receipt:null};
@@ -23,7 +23,7 @@ const messages={
   PHASE_REQUIRED:"Фаза должна быть выбрана явно.",
   ACTION_AND_INVARIANT_REQUIRED:"Назовите действие и сохраняемый инвариант.",
   OBSERVED_RETURN_REQUIRED:"Нет отдельно сообщённого фактического возврата по объекту. Q не подставляется из VoidOCR.",
-  EXPLICIT_METRICS_AND_BASIS_REQUIRED:"Нужны все четыре оценки 0–1 и их основания.",
+  EXPLICIT_METRICS_AND_BASIS_REQUIRED:"Для каждой из четырёх оценок выберите 0, 0.25, 0.5, 0.75 или 1 и укажите основания.",
   LOCAL_CHECK_PASSED:"Локальные проверки пройдены. Никакое действие не исполнено.",
   STORAGE_UNAVAILABLE_OR_CORRUPT:"Хранилище недоступно или повреждено; записи не заменены.",
   RECEIPT_JOURNAL_FULL:"Журнал содержит 500 квитанций. Новая запись остановлена, старые сохранены.",

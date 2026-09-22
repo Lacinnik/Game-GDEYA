@@ -4,7 +4,7 @@ import { inspectHandoff } from "./handoff.mjs";
 
 export const PLATES = Object.freeze({resource:"РЕСУРС",power:"ВЛАСТЬ",relations:"ОТНОШЕНИЯ",result:"РЕЗУЛЬТАТ"});
 const validText = value => typeof value === "string" && value.trim().length >= 3 && value.length <= 12000;
-const estimate = value => typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1;
+const estimate = value => [0, 0.25, 0.5, 0.75, 1].includes(value);
 
 export function evaluateTransition(envelope, draft, sourceStorage, now = Date.now()) {
   const source=inspectHandoff(envelope,sourceStorage,now);
