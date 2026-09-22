@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { AZ, BUKI, TRANSMISSIONS } from "../public-web/public/labs/module/catalog.mjs";
-import { MODULE_SCHEMA, buildPassport, validateDraft } from "../public-web/public/labs/module/runtime.mjs";
+import { MODULE_SCHEMA, buildPassport, canOpenPassport, validateDraft } from "../public-web/public/labs/module/runtime.mjs";
 
 const root = new URL("../public-web/public/labs/module/", import.meta.url);
 const complete = { intent:"Провести идею в действие", invariant:"Сохранить авторскую ось", azId:"A1", bukaId:"B1", txId:"TX5", induction:"Активирую ясное действие", inversion:"Принимаю готовую форму", axis:"preserved" };
@@ -32,4 +32,23 @@ test("MODULE produces a deterministic local passport", () => {
 test("MODULE release has no external runtime dependency", async () => {
   const [html, app, css] = await Promise.all([readFile(new URL("index.html",root),"utf8"),readFile(new URL("app.mjs",root),"utf8"),readFile(new URL("styles.css",root),"utf8")]);
   assert.match(html, /49<\/b> Азов/); assert.match(html, /24<\/b> Буки/); assert.match(html, /7<\/b> Передач/); assert.doesNotMatch(html, /https?:\/\//); assert.match(app, /persistJournal/); assert.match(css, /-webkit-appearance:none/);
+});
+
+test("saved MODULE decisions reopen unchanged for every declared axis outcome", () => {
+  for (const axis of ["preserved", "review", "rupture"]) {
+    const original = buildPassport({...complete, axis}, {az:AZ,buki:BUKI,transmissions:TRANSMISSIONS}, {now:()=>"2026-07-20T00:00:00.000Z",uuid:()=>"original-id"});
+    const encoded = JSON.stringify(original), restored = JSON.parse(encoded);
+    assert.equal(canOpenPassport(restored), true);
+    assert.equal(JSON.stringify(restored), encoded);
+    assert.equal(restored.language.tensor.Q, null);
+  }
+});
+
+test("unsupported and damaged records cannot be shown as valid MODULE passports", () => {
+  const p = buildPassport(complete, {az:AZ,buki:BUKI,transmissions:TRANSMISSIONS});
+  for (const value of [null, 1, "text", [], {}, {...p, schema:"future"}, {...p, language:null}, {...p, intent:{}}, {...p, formula:null}, {...p, axisVerdict:"rupture"}, {...p, language:{...p.language,tensor:{Q:1}}}]) {
+    const original = JSON.stringify(value);
+    assert.equal(canOpenPassport(value), false);
+    assert.equal(JSON.stringify(value), original);
+  }
 });

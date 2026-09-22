@@ -2,6 +2,17 @@ import { compileTzarLanguage } from "../tzar-language-001.mjs";
 
 export const MODULE_SCHEMA = "architectonica.module-passport/1.1.0";
 
+/** Check the readable shape without upgrading or rebuilding a saved decision. */
+export function canOpenPassport(value) {
+  if (!value || typeof value !== "object" || value.schema !== MODULE_SCHEMA) return false;
+  if (![value.id, value.createdAt, value.intent, value.invariant, value.induction, value.inversion, value.nextAction, value.formula?.notation,
+    value.language?.layers?.publicStatement, value.language?.layers?.trueRequest, value.language?.formula].every(item => typeof item === "string")) return false;
+  const outcome = new Map([["preserved", "conduct"], ["review", "review"], ["rupture", "hold"]]).get(value.axisVerdict);
+  return Boolean(value.id && outcome && value.outcome === outcome
+    && value.language?.modelId === "TZAR-LANGUAGE-001" && value.language?.profile === "module"
+    && value.language?.tensor?.Q === null);
+}
+
 export function wordCount(value) {
   return String(value || "").trim().split(/\s+/u).filter(Boolean).length;
 }
