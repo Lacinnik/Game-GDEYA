@@ -1,4 +1,4 @@
-import { readHandoff, readReceipts, saveReceipt } from "./handoff.mjs";
+import { readHandoff, readReceipts, saveReceipt } from "./handoff.mjs?v=meta-metrics-20260922-r1";
 import { evaluateTransition } from "./runtime.mjs?v=meta-metrics-20260922-r1";
 import { downloadJson } from "../local-journal.mjs";
 const $=id=>document.getElementById(id);

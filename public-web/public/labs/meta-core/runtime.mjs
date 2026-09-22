@@ -1,6 +1,6 @@
 import { metaCanActivate } from "./vendor/meta_core_v2.js";
 import { compileTzarLanguage } from "../tzar-language-001.mjs";
-import { inspectHandoff } from "./handoff.mjs";
+import { inspectHandoff } from "./handoff.mjs?v=meta-metrics-20260922-r1";
 
 export const PLATES = Object.freeze({resource:"РЕСУРС",power:"ВЛАСТЬ",relations:"ОТНОШЕНИЯ",result:"РЕЗУЛЬТАТ"});
 const validText = value => typeof value === "string" && value.trim().length >= 3 && value.length <= 12000;

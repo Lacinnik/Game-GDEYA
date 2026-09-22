@@ -1,7 +1,7 @@
-import { OBSERVATION_STATES, DELTAS, isCompleteObservation } from "./observation.mjs?v=voidocr-observation-20260922-r1";
+import { OBSERVATION_STATES, DELTAS, isCompleteObservation } from "./observation.mjs?v=voidocr-observation-20260922-r2";
 import { compileTzarLanguage } from "../tzar-language-001.mjs";
 import { persistTrace } from "./storage.mjs";
-import { sendHandoff } from "../meta-core/handoff.mjs";
+import { sendHandoff } from "../meta-core/handoff.mjs?v=meta-metrics-20260922-r1";
 
 (() => {
   const state = { trigger: "", pre: null, post: null, delta: null, stability: null, trace: null };
