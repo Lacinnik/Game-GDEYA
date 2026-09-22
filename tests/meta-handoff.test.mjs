@@ -118,3 +118,18 @@ test("all imported browser modules are included in offline shell",async()=>{
     await access(new URL(path,root));assert.ok(sw.includes("./labs/meta-core/"+path),path);
   }
 });
+
+ test("unchanged and reverse-direction self-reports survive handoff without changing the gate",()=>{
+  for (const [pre_state,post_state] of [["напряжение","напряжение"],["ясность","напряжение"]]) {
+    const source={...trace,pre_state,post_state};
+    const local=store(),session=store();local.setItem(SOURCE_KEY,JSON.stringify([source]));
+    const sent=sendHandoff(session,local,source,{now,uuid:()=>"symmetric"});
+    assert.equal(sent.ok,true);
+    const received=readHandoff(session,local,now);
+    assert.equal(received.ok,true);
+    assert.deepEqual(received.envelope.trace,source);
+    const {draft}=fixture();
+    assert.equal(evaluateTransition(received.envelope,{...draft,observedQ:null},local,now).status,"HOLD_PROTOCOL");
+    assert.throws(()=>createHandoff({...source,stability:1,decision:"DENY"},{now}),/SOURCE_NOT_ALLOWED/);
+  }
+});

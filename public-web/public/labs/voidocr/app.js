@@ -1,16 +1,9 @@
+import { OBSERVATION_STATES, DELTAS, isCompleteObservation } from "./observation.mjs?v=voidocr-observation-20260922-r1";
 import { compileTzarLanguage } from "../tzar-language-001.mjs";
 import { persistTrace } from "./storage.mjs";
 import { sendHandoff } from "../meta-core/handoff.mjs";
 
 (() => {
-  const BEFORE = ["рассеянность", "напряжение", "неопределённость", "перегруз", "остановка", "фоновый шум"];
-  const AFTER = ["ясность", "тишина", "устойчивость", "собранность", "направленность", "простота"];
-  const DELTAS = [
-    { id: "density_shift", label: "Плотность", quadrant: "resource" },
-    { id: "impulse_break", label: "Прерывание", quadrant: "power" },
-    { id: "distance_collapse", label: "Схлопывание", quadrant: "relations" },
-    { id: "auto_form", label: "Самоформа", quadrant: "result" },
-  ];
   const state = { trigger: "", pre: null, post: null, delta: null, stability: null, trace: null };
 
   const $ = selector => document.querySelector(selector);
@@ -47,7 +40,7 @@ import { sendHandoff } from "../meta-core/handoff.mjs";
   }
 
   function validateTrace() {
-    $("#commit").disabled = !(state.pre && state.post && state.delta && state.stability !== null);
+    $("#commit").disabled = !isCompleteObservation(state);
   }
 
   function beginPause() {
@@ -66,7 +59,7 @@ import { sendHandoff } from "../meta-core/handoff.mjs";
   }
 
   function commit() {
-    if (!(state.pre && state.post && state.delta && state.stability !== null && words(state.trigger) >= 3)) return;
+    if (!(isCompleteObservation(state) && words(state.trigger) >= 3)) return;
     const trace = {
       schema: "architectonica.voidocr-trace/1.1.0",
       id: globalThis.crypto?.randomUUID?.() || `void-${Date.now()}`,
@@ -159,8 +152,8 @@ import { sendHandoff } from "../meta-core/handoff.mjs";
     downloadJson(`voidocr-${state.trace.id}.json`, state.trace);
   }
 
-  renderChoices("#pre", BEFORE, "pre");
-  renderChoices("#post", AFTER, "post");
+  renderChoices("#pre", OBSERVATION_STATES, "pre");
+  renderChoices("#post", OBSERVATION_STATES, "post");
   renderChoices("#delta", DELTAS, "delta");
   renderChoices("#stability", [0, 1, 2, 3], "stability");
   $("#trigger").addEventListener("input", event => {
