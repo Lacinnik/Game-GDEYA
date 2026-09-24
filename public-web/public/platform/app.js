@@ -56,7 +56,17 @@
     if (name === 'enter') renderEntry();
     else if (name === 'hypothesis') renderHypothesis();
     else if (name === 'map') renderMap();
-    else if (name === 'product' && parts[1]) renderDossier(decodeURIComponent(parts[1]));
+    else if (name === 'product' && parts[1]) {
+      let id;
+      try {
+        id = decodeURIComponent(parts[1]);
+      } catch {
+        // A malformed URL is a missing destination, not a registry failure.
+        id = null;
+      }
+      if (id === null) renderNotFound();
+      else renderDossier(id);
+    }
     else renderHome();
 
     window.scrollTo(0, 0);

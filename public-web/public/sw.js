@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'sep-return-20260922-r1';
+const CACHE_REVISION = 'platform-route-20260924-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -6,7 +6,7 @@ const SHELL = [
   './platform/',
   './platform/index.html',
   './platform/styles.css',
-  './platform/app.js',
+  './platform/app.js?v=platform-route-20260924-r1',
   './platform/products.registry.json',
   './platform/tzar-language.profiles.json',
   './labs/voidocr/',
