@@ -22,7 +22,8 @@
     "vendor:check": "node scripts/vendor-sync.mjs --check",
     "vendor:drift": "node scripts/vendor-sync.mjs --drift",
     "vendor:update": "node scripts/vendor-sync.mjs --update",
-    "ecosystem:status": "node scripts/ecosystem-status.mjs"
+    "ecosystem:status": "node scripts/ecosystem-status.mjs",
+    "typecheck": "tsc --noEmit -p ."
   },
   "dependencies": {
     "react": "19.2.6",

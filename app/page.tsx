@@ -94,7 +94,7 @@ const shuffle=<T,>(a:T[])=>[...a].sort(()=>Math.random()-.5);
 const blankDraft=():Draft=>({states:[],geometry:"",point:"",az:"",buka:"",tx:"",axis:"partly",reflection:"",induction:"",inversion:""});
 function makeDeck(mode:"quick"|"full"){
  return plates.flatMap(p=>{
-  const pool:Card[]=[];p.processes.forEach((proc,pi)=>["I","II","III","IV"].forEach((roman,ri)=>pool.push({id:`${p.mark}-${String(pi*4+ri+1).padStart(2,"0")}`,plate:p.id,process:proc[0] as string,arabic:pi+1,roman,tags:proc[1] as Tag[]})));
+  const pool:Card[]=[];p.processes.forEach((proc,pi)=>["I","II","III","IV"].forEach((roman,ri)=>pool.push({id:`${p.mark}-${String(pi*4+ri+1).padStart(2,"0")}`,plate:p.id,process:proc[0] as string,arabic:pi+1,roman,tags:[...proc[1]]})));
   return shuffle(pool).slice(0,mode==="quick"?1:6);
  });
 }
