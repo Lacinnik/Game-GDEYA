@@ -108,7 +108,7 @@ npm test
 - `public-web/` — независимая веб-оболочка и PWA-манифест;
 - `.github/workflows/deploy-public-site.yml` — автопубликация в GitHub Pages.
 
-Исходной архитектонической основой послужил файл [`gdeya_react_ядро_субъекта.jsx`](https://github.com/Lacinnik/architectonica-az-buki/blob/main/gdeya_react_%D1%8F%D0%B4%D1%80%D0%BE_%D1%81%D1%83%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%B0.jsx).
+Исходной архитектонической основой послужил файл [`gdeya_react_ядро_субъекта.jsx`](https://github.com/Lacinnik/architectonica-az-buki/blob/main/prototypes/gdeya_react_%D1%8F%D0%B4%D1%80%D0%BE_%D1%81%D1%83%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%B0.jsx).
 
 ## Общие модули экосистемы
 
