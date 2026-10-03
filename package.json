@@ -21,7 +21,8 @@
     "lint": "eslint .",
     "vendor:check": "node scripts/vendor-sync.mjs --check",
     "vendor:drift": "node scripts/vendor-sync.mjs --drift",
-    "vendor:update": "node scripts/vendor-sync.mjs --update"
+    "vendor:update": "node scripts/vendor-sync.mjs --update",
+    "ecosystem:status": "node scripts/ecosystem-status.mjs"
   },
   "dependencies": {
     "react": "19.2.6",

@@ -17,6 +17,8 @@
 | [reason-](https://github.com/Lacinnik/reason-) | лаборатория РЕЗОН: переводчик, Field Check, 7 Передач, игра «ОСЬ» | [открыть](https://lacinnik.github.io/reason-/) |
 | [Game-GDEYA](https://github.com/Lacinnik/Game-GDEYA) | игра «Ядро субъекта» и Platform 2.0 | [открыть](https://lacinnik.github.io/Game-GDEYA/) |
 
+Статусы продуктов этого репозитория в общем формате — в [`ecosystem.status.json`](ecosystem.status.json).
+
 ## Платформа и опубликованные вертикали
 
 - **Platform 2.0:** `https://lacinnik.github.io/Game-GDEYA/platform/` — единый реестр 22 сущностей и переходы между лабораториями ГДЕЯ и РЕЗОН.
@@ -113,7 +115,11 @@ npm run vendor:drift    # в исходных репозиториях появ�
 npm run vendor:update   # перезакрепить на свежем main и обновить копии
 ```
 
-Еженедельный workflow `vendor-drift.yml` сообщает, если копии отстали от источника.
+Еженедельный workflow `ecosystem-checks.yml` сообщает, если копии отстали от источника, и проверяет файлы статусов всех репозиториев.
+
+## Статусы продуктов
+
+В корне каждого репозитория экосистемы лежит `ecosystem.status.json`: продукты, версии, адреса и статус из общего словаря (`canonical`, `stable`, `candidate`, `prototype`, `embedded`, `not-accepted`, `planned`, `unstated`). Поле `source` указывает документ, где автор зафиксировал статус. Схему проверяет `npm run ecosystem:status` (`-- --all` — все четыре репозитория).
 
 ## Лицензия
 

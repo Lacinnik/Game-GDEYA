@@ -1,4 +1,4 @@
-name: Vendor drift
+name: Ecosystem checks
 
 on:
   schedule:
@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  drift:
+  vendor-drift:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,3 +17,12 @@ jobs:
         with:
           node-version: 22
       - run: npm run vendor:drift
+
+  status-files:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run ecosystem:status -- --all
