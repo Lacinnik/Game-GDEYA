@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'platform-route-20260924-r1';
+const CACHE_REVISION = 'vendor-sync-20261003-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [

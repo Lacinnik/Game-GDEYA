@@ -17,7 +17,8 @@ function fixture() {
 }
 test("vendor files match the exact pinned upstream bytes",async()=>{
   const manifest=JSON.parse(await readFile(new URL("vendor/provenance.json",root)));
-  assert.equal(manifest.commit,"7fc57decef0467cfb37a6595856b0333d9582510");
+  const lock=JSON.parse(await readFile(new URL("../../../../vendor.lock.json",root)));
+  assert.equal(manifest.commit,lock.sources.find(source=>source.repo==="Lacinnik/architectonica-az-buki").commit);
   for(const [path,hash] of Object.entries(manifest.files)) assert.equal(createHash("sha256").update(await readFile(new URL("vendor/"+path,root))).digest("hex"),hash,path);
 });
 test("handoff binds exact object, recipient, purpose and source journal",()=>{

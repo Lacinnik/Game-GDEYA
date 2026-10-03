@@ -18,7 +18,10 @@
     "build:public": "npm run build",
     "preview": "vite preview --config public-web/vite.config.ts",
     "test": "node --test tests/*.test.mjs",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "vendor:check": "node scripts/vendor-sync.mjs --check",
+    "vendor:drift": "node scripts/vendor-sync.mjs --drift",
+    "vendor:update": "node scripts/vendor-sync.mjs --update"
   },
   "dependencies": {
     "react": "19.2.6",

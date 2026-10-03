@@ -1,0 +1,82 @@
+{
+  "$comment": "Files copied from sibling repositories. Managed by scripts/vendor-sync.mjs; do not edit copies by hand.",
+  "sources": [
+    {
+      "repo": "Lacinnik/architectonica-az-buki",
+      "branch": "main",
+      "commit": "1650fafd199ac4e6f305a587c807d4474157004f",
+      "provenance": {
+        "path": "public-web/public/labs/meta-core/vendor/provenance.json"
+      },
+      "files": [
+        {
+          "from": "meta_core_v2.js",
+          "to": "public-web/public/labs/meta-core/vendor/meta_core_v2.js",
+          "sha256": "545cea0d834d01624a05981aa5e82bb98dca22ad3054d59dff3dac323d8a11bc"
+        },
+        {
+          "from": "skela_full_activation.js",
+          "to": "public-web/public/labs/meta-core/vendor/skela_full_activation.js",
+          "sha256": "7c6a5f01b2f7c16a2b3d5c80a63b8116d312de4103bc55db9e819cee845a5976"
+        },
+        {
+          "from": "subject_core.js",
+          "to": "public-web/public/labs/meta-core/vendor/subject_core.js",
+          "sha256": "69d07f0a3920fcf3780b8ccbb061cade8be25019971a293d2a50ddd7f91f7348"
+        },
+        {
+          "from": "gdeya_demons_v1.js",
+          "to": "public-web/public/labs/meta-core/vendor/gdeya_demons_v1.js",
+          "sha256": "58349d1a4117930c83d9eb944e50b12ce047b2d2874b2feda5ccf2370a1c9bb0"
+        },
+        {
+          "from": "gdeya_demons_v1_angelic.js",
+          "to": "public-web/public/labs/meta-core/vendor/gdeya_demons_v1_angelic.js",
+          "sha256": "734753a61841852436ef06b325f6c99e692daa98b73374d0ac8a2f1c162f678b"
+        },
+        {
+          "from": "governance_core_v1.js",
+          "to": "public-web/public/labs/meta-core/vendor/governance_core_v1.js",
+          "sha256": "d1852a48cffcc70bdbc30b2d3abc850ad11f8f6d9b141f3488af4eedb667deff"
+        },
+        {
+          "from": "negative_core_v1.js",
+          "to": "public-web/public/labs/meta-core/vendor/negative_core_v1.js",
+          "sha256": "360851767c07e53593caa3d9466da395624c488acf64f8b98ea3546268dc6932"
+        },
+        {
+          "from": "tzar_language_001.js",
+          "to": "public-web/public/labs/meta-core/vendor/tzar_language_001.js",
+          "sha256": "1e3f4614480e999cb45a9cd10badb2edda15eadd3a2fd1491c9887dc71e4a5d7"
+        },
+        {
+          "from": "LICENSE",
+          "to": "public-web/public/labs/meta-core/vendor/LICENSE",
+          "sha256": "0eef5679650996c3c2e05632d3f5c8b8c8962fa090f388ef5ce6f3187d1b5261"
+        }
+      ]
+    },
+    {
+      "repo": "Lacinnik/reason-",
+      "branch": "main",
+      "commit": "8e20c02f167bf0e4e4a94b8b431478aa22580326",
+      "files": [
+        {
+          "from": "tzar-language-001.mjs",
+          "to": "public-web/public/labs/tzar-language-001.mjs",
+          "sha256": "9d2765ba5ecf98d5371adceb9194a2ce722f24ebe0c5964594d8b096d869afd9"
+        },
+        {
+          "from": "local-journal.mjs",
+          "to": "public-web/public/labs/local-journal.mjs",
+          "sha256": "c04e46273a05bb649397051548f0f305612aefbbef17ab780e2924c7ee027a8e"
+        },
+        {
+          "from": "tzar-language.profiles.json",
+          "to": "public-web/public/platform/tzar-language.profiles.json",
+          "sha256": "bab81f997b390dfbe89b16558003b194a678ba2af0f0c2c2d07842ca349a3683"
+        }
+      ]
+    }
+  ]
+}

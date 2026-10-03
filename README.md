@@ -92,6 +92,18 @@ npm test
 
 Исходной архитектонической основой послужил файл [`gdeya_react_ядро_субъекта.jsx`](https://github.com/Lacinnik/architectonica-az-buki/blob/main/gdeya_react_%D1%8F%D0%B4%D1%80%D0%BE_%D1%81%D1%83%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%B0.jsx).
 
+## Общие модули экосистемы
+
+Файлы, пришедшие из соседних репозиториев (ядра Meta Core из `architectonica-az-buki`, языковой компилятор, журнал и профили из `reason-`), не правятся вручную. Источник, закреплённый коммит и SHA-256 каждого файла записаны в `vendor.lock.json`.
+
+```bash
+npm run vendor:check    # копии совпадают с lock-файлом (входит в npm test)
+npm run vendor:drift    # в исходных репозиториях появились изменения
+npm run vendor:update   # перезакрепить на свежем main и обновить копии
+```
+
+Еженедельный workflow `vendor-drift.yml` сообщает, если копии отстали от источника.
+
 ## Лицензия
 
 Код распространяется по лицензии [MIT](LICENSE).
