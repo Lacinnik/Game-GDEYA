@@ -1,0 +1,55 @@
+{
+  "schema": "lacinnik.ecosystem-status/1.0.0",
+  "repository": "Lacinnik/Game-GDEYA",
+  "role": "Игра «Ядро субъекта» и Platform 2.0 — точка входа экосистемы",
+  "products": [
+    {
+      "id": "platform",
+      "name": "Platform 2.0",
+      "version": "2.0",
+      "status": "stable",
+      "url": "https://lacinnik.github.io/Game-GDEYA/platform/",
+      "source": "docs/PLATFORM_2_0_STABLE_ACCEPTANCE_2026-07-22.md"
+    },
+    {
+      "id": "game",
+      "name": "ЯДРО СУБЪЕКТА · ЖИВОЙ ЦИКЛ",
+      "version": "0.1.0",
+      "status": "unstated",
+      "url": "https://lacinnik.github.io/Game-GDEYA/",
+      "source": "README.md"
+    },
+    {
+      "id": "module",
+      "name": "MODULE",
+      "version": "1.0",
+      "status": "stable",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/",
+      "source": "README.md"
+    },
+    {
+      "id": "voidocr",
+      "name": "VoidOCR",
+      "version": "1.0",
+      "status": "stable",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/voidocr/",
+      "source": "README.md"
+    },
+    {
+      "id": "meta-core-integration",
+      "name": "Meta Core · integration",
+      "version": "0.1",
+      "status": "candidate",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/meta-core/",
+      "source": "public-web/public/labs/meta-core/CONTRACT.md"
+    },
+    {
+      "id": "sep-7x7",
+      "name": "SEP-7×7",
+      "version": "0.1",
+      "status": "unstated",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/core-separation/",
+      "source": "README.md"
+    }
+  ]
+}

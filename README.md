@@ -1,10 +1,25 @@
 # ЯДРО СУБЪЕКТА · ЖИВОЙ ЦИКЛ
 
+*English summary: [README.en.md](README.en.md).*
+
 Стратегическая браузерная игра становления, собранная из архитектоники проекта «Гдея» и логики ТзАрх.
 
 **Публичный адрес после активации GitHub Pages:** `https://lacinnik.github.io/Game-GDEYA/`
 
 Игра подготовлена к публикации через GitHub Pages и после активации открывается в Safari, Chrome и других браузерах без входа в ChatGPT. На iPhone её можно добавить на экран «Домой» из меню «Поделиться» Safari.
+
+## Экосистема Архитектоники
+
+**Единая точка входа:** [Platform 2.0](https://lacinnik.github.io/Game-GDEYA/platform/) — карта всех продуктов, их статусов и связей.
+
+| Репозиторий | Роль | Публичный вход |
+|---|---|---|
+| [architectonica-az-buki](https://github.com/Lacinnik/architectonica-az-buki) | первоисточник: корпус текстов и исходные ядра (Subject Core, Meta Core) | — |
+| [-tensor-architectonics](https://github.com/Lacinnik/-tensor-architectonics) | научный канон ТзАр и TZAR Conductance | [открыть](https://lacinnik.github.io/-tensor-architectonics/) |
+| [reason-](https://github.com/Lacinnik/reason-) | лаборатория РЕЗОН: переводчик, Field Check, 7 Передач, игра «ОСЬ» | [открыть](https://lacinnik.github.io/reason-/) |
+| [Game-GDEYA](https://github.com/Lacinnik/Game-GDEYA) | игра «Ядро субъекта» и Platform 2.0 | [открыть](https://lacinnik.github.io/Game-GDEYA/) |
+
+Статусы продуктов этого репозитория в общем формате — в [`ecosystem.status.json`](ecosystem.status.json).
 
 ## Платформа и опубликованные вертикали
 
@@ -44,6 +59,7 @@
 - экспорт пройденных узлов сразу после хода, без ожидания конца цикла;
 - голосовой проводник Скеллу: озвучивание шага, повтор инструкции и контекстная диктовка;
 - адаптивный интерфейс с сенсорным управлением для iPhone.
+- пошаговое обучение одному ходу при первом входе; повторно — кнопкой «как проходит ход» на первом экране.
 
 ## Сохранение прохождения
 
@@ -79,7 +95,9 @@ npm run dev
 npm test
 ```
 
-Команда собирает проект, валидирует артефакт и запускает 11 автоматических проверок игры, Platform 2.0, MODULE, VoidOCR и его офлайн-оболочки. Публикация Pages дополнительно требует успешного lint и публичной Vite-сборки.
+Команда запускает автоматические проверки игры, Platform 2.0, MODULE, VoidOCR и его офлайн-оболочки. Публикация Pages дополнительно требует успешного `npm run lint` и сборки `npm run build` (результат — `dist-public/`).
+
+Мобильная проверка собранного сайта в Chromium и WebKit с профилем iPhone 13 (обучение, игра, платформа и лаборатории без ошибок и горизонтальной прокрутки): `npx playwright install chromium webkit && npm run test:mobile`. В CI она идёт отдельной задачей.
 
 Сквозная матрица повышения VoidOCR и Collective Field Check до stable зафиксирована в [`docs/PLATFORM_2_0_STABLE_ACCEPTANCE_2026-07-22.md`](docs/PLATFORM_2_0_STABLE_ACCEPTANCE_2026-07-22.md).
 
@@ -88,7 +106,26 @@ npm test
 - `app/page.tsx` — игровая модель и интерфейс;
 - `app/globals.css` — визуальная система и мобильная адаптация;
 - `public-web/` — независимая веб-оболочка и PWA-манифест;
-- `.github/workflows/deploy-public-site.yml` — автопубликация в GitHub Pages;
-- `.openai/hosting.json` — связь с опубликованной версией OpenAI Sites.
+- `.github/workflows/deploy-public-site.yml` — автопубликация в GitHub Pages.
 
 Исходной архитектонической основой послужил файл [`gdeya_react_ядро_субъекта.jsx`](https://github.com/Lacinnik/architectonica-az-buki/blob/main/gdeya_react_%D1%8F%D0%B4%D1%80%D0%BE_%D1%81%D1%83%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%B0.jsx).
+
+## Общие модули экосистемы
+
+Файлы, пришедшие из соседних репозиториев (ядра Meta Core из `architectonica-az-buki`, языковой компилятор, журнал и профили из `reason-`), не правятся вручную. Источник, закреплённый коммит и SHA-256 каждого файла записаны в `vendor.lock.json`.
+
+```bash
+npm run vendor:check    # копии совпадают с lock-файлом (входит в npm test)
+npm run vendor:drift    # в исходных репозиториях появились изменения
+npm run vendor:update   # перезакрепить на свежем main и обновить копии
+```
+
+Еженедельный workflow `ecosystem-checks.yml` сообщает, если копии отстали от источника, и проверяет файлы статусов всех репозиториев.
+
+## Статусы продуктов
+
+В корне каждого репозитория экосистемы лежит `ecosystem.status.json`: продукты, версии, адреса и статус из общего словаря (`canonical`, `stable`, `candidate`, `prototype`, `embedded`, `not-accepted`, `planned`, `unstated`). Поле `source` указывает документ, где автор зафиксировал статус. Схему проверяет `npm run ecosystem:status` (`-- --all` — все четыре репозитория).
+
+## Лицензия
+
+Код распространяется по лицензии [MIT](LICENSE).

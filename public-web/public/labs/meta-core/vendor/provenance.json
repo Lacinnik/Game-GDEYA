@@ -1,11 +1,11 @@
 {
   "repository": "https://github.com/Lacinnik/architectonica-az-buki",
-  "commit": "7fc57decef0467cfb37a6595856b0333d9582510",
+  "commit": "1650fafd199ac4e6f305a587c807d4474157004f",
   "policy": "Files copied verbatim. Integration safeguards live outside vendor. Runtime is not a security boundary or empirical proof.",
   "files": {
     "meta_core_v2.js": "545cea0d834d01624a05981aa5e82bb98dca22ad3054d59dff3dac323d8a11bc",
     "skela_full_activation.js": "7c6a5f01b2f7c16a2b3d5c80a63b8116d312de4103bc55db9e819cee845a5976",
-    "subject_core.js": "79fa12254228b80c4bb42643e60bce1d5cf43e5524b6c99ceaf6209aec93b7e7",
+    "subject_core.js": "69d07f0a3920fcf3780b8ccbb061cade8be25019971a293d2a50ddd7f91f7348",
     "gdeya_demons_v1.js": "58349d1a4117930c83d9eb944e50b12ce047b2d2874b2feda5ccf2370a1c9bb0",
     "gdeya_demons_v1_angelic.js": "734753a61841852436ef06b325f6c99e692daa98b73374d0ac8a2f1c162f678b",
     "governance_core_v1.js": "d1852a48cffcc70bdbc30b2d3abc850ad11f8f6d9b141f3488af4eedb667deff",
