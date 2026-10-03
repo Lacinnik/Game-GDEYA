@@ -23,7 +23,8 @@
     "vendor:drift": "node scripts/vendor-sync.mjs --drift",
     "vendor:update": "node scripts/vendor-sync.mjs --update",
     "ecosystem:status": "node scripts/ecosystem-status.mjs",
-    "typecheck": "tsc --noEmit -p ."
+    "typecheck": "tsc --noEmit -p .",
+    "test:mobile": "npm run build && node tests/e2e/mobile.mjs"
   },
   "dependencies": {
     "react": "19.2.6",
@@ -39,6 +40,7 @@
     "eslint": "9.39.4",
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "16.5.0",
+    "playwright": "1.61.1",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",
     "typescript-eslint": "8.71.0",

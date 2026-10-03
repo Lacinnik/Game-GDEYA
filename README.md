@@ -97,6 +97,8 @@ npm test
 
 Команда запускает автоматические проверки игры, Platform 2.0, MODULE, VoidOCR и его офлайн-оболочки. Публикация Pages дополнительно требует успешного `npm run lint` и сборки `npm run build` (результат — `dist-public/`).
 
+Мобильная проверка собранного сайта в Chromium и WebKit с профилем iPhone 13 (обучение, игра, платформа и лаборатории без ошибок и горизонтальной прокрутки): `npx playwright install chromium webkit && npm run test:mobile`. В CI она идёт отдельной задачей.
+
 Сквозная матрица повышения VoidOCR и Collective Field Check до stable зафиксирована в [`docs/PLATFORM_2_0_STABLE_ACCEPTANCE_2026-07-22.md`](docs/PLATFORM_2_0_STABLE_ACCEPTANCE_2026-07-22.md).
 
 ## Основные файлы
