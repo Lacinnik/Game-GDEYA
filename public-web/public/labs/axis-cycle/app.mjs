@@ -1,7 +1,8 @@
-import { createAxisHandoff, createAxisReceipt, decodeEnvelope, encodeEnvelope, fragmentValue, validateAxisHandoff, validateAxisReturn } from "./protocol.mjs?v=axis-cycle-20261020-r1";
+import { createAxisHandoff, createAxisReceipt, createExchangeRecord, decodeEnvelope, encodeEnvelope, fragmentValue, readExchangeRecords, validateAxisHandoff, validateAxisReturn } from "./protocol.mjs?v=axis-cycle-20261021-r2";
 
 const RESON_URL = "https://lacinnik.github.io/reason-/field-check/";
 const DRAFT_KEY = "architectonica.axis-cycle.draft.v1";
+const JOURNAL_KEY = "architectonica.exchange-journal.v1";
 const $ = (selector) => document.querySelector(selector);
 const state = { handoff: null, returned: null };
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/gu, (character) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" })[character]);
@@ -99,6 +100,7 @@ function renderReturn(returned) {
   $("#return-reason").textContent = returned.allow ? "Предварительный порог по предъявленным данным пройден." : `Возврат к пересборке · gate=${returned.gate}.`;
   $("#return-links").textContent = returned.links_verified ? "ПРЕДЪЯВЛЕНЫ" : "НЕПОЛНЫ";
   $("#open-tactics").href = tacticsUrl(state.handoff);
+  $("#practice-status").textContent = "Возврат принят локально. Пока не создана квитанция наблюдения, фактический результат не зарегистрирован.";
   $("[data-step-button='return']").disabled = false;
   showStage("return");
 }
@@ -147,12 +149,52 @@ $("#observation-form").addEventListener("submit", (event) => {
   $("#observation-error").textContent = "";
   try {
     const values = Object.fromEntries(new FormData(event.currentTarget).entries());
-    const receipt = createAxisReceipt(state.handoff, state.returned, values);
+    const evidence = {
+      class: values.evidence_class,
+      observer_role: values.observer_role,
+      observed_at: values.observed_at ? new Date(`${values.observed_at}T12:00:00`).toISOString() : null,
+      references: values.evidence_reference?.trim() ? [values.evidence_reference.trim()] : [],
+    };
+    const receipt = createAxisReceipt(state.handoff, state.returned, { ...values, evidence });
     $("#return-q").textContent = receipt.q === null ? "null" : receipt.q.toFixed(2);
     download(`axis-receipt-${receipt.id}.json`, receipt);
+    try {
+      const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+      const exchange = createExchangeRecord(receipt);
+      const next = [exchange, ...journal.filter((entry) => entry.id !== exchange.id)].slice(0, 100);
+      localStorage.setItem(JOURNAL_KEY, JSON.stringify(next));
+      $("#practice-status").textContent = `Квитанция добавлена в локальный журнал (${next.length}). Свидетельство: ${receipt.evidence.class}; независимая проверка не заявлена.`;
+    } catch {
+      $("#practice-status").textContent = "Квитанция скачана; локальное хранилище недоступно. Сохраните JSON у себя.";
+    }
   } catch {
-    $("#observation-error").textContent = "Чтобы указать Q, сначала опишите фактический наблюдаемый возврат. Иначе оставьте оба поля пустыми.";
+    $("#observation-error").textContent = "Чтобы указать Q, сначала опишите фактический наблюдаемый возврат. Иначе оставьте Q пустым.";
   }
+});
+
+$("#import-exchange").addEventListener("change", async (event) => {
+  const input = event.currentTarget;
+  const file = input.files?.[0];
+  if (!file) return;
+  try {
+    const imported = readExchangeRecords(JSON.parse(await file.text()));
+    const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+    const byId = new Map(journal.map((entry) => [entry.id, entry]));
+    imported.forEach((entry) => byId.set(entry.id, entry));
+    const next = [...byId.values()].slice(-100).reverse();
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(next));
+    $("#journal-status").textContent = `Импортировано записей: ${imported.length}. Проверка подписи/личности не выполнялась; verified=false.`;
+  } catch {
+    $("#journal-status").textContent = "Файл не распознан: поддерживаются паспорт, возврат, квитанция оси, конверт и экспортированный журнал.";
+  } finally { input.value = ""; }
+});
+
+$("#export-journal").addEventListener("click", () => {
+  try {
+    const entries = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+    download("architectonica-exchange-journal.json", { schema: "architectonica.exchange-journal/1.0.0", exported_at: new Date().toISOString(), entries });
+    $("#journal-status").textContent = `Экспортировано записей: ${entries.length}. Файл остаётся у вас.`;
+  } catch { $("#journal-status").textContent = "Локальный журнал пока пуст или недоступен."; }
 });
 
 restoreDraft();
