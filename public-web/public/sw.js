@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'certification-20261020-r1';
+const CACHE_REVISION = 'exchange-20261021-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -37,6 +37,8 @@ const SHELL = [
   './labs/core-separation/core/tzar-language.mjs',
   './labs/tzar-language-001.mjs',
   './labs/local-journal.mjs',
+  './labs/exchange-panel.mjs?v=exchange-20261021-r1',
+  './labs/EXCHANGE.md',
   './labs/meta-core/',
   './labs/meta-core/index.html',
   './labs/meta-core/styles.css',
@@ -125,9 +127,10 @@ const SHELL = [
   './labs/certification/CONTRACT.md',
   './labs/axis-cycle/',
   './labs/axis-cycle/index.html',
-  './labs/axis-cycle/styles.css?v=axis-cycle-20261020-r1',
-  './labs/axis-cycle/app.mjs?v=tactics-20261020-r1',
-  './labs/axis-cycle/protocol.mjs?v=axis-cycle-20261020-r1',
+  './labs/axis-cycle/styles.css?v=axis-cycle-20261021-r2',
+  './labs/axis-cycle/app.mjs?v=axis-cycle-20261021-r2',
+  './labs/axis-cycle/protocol.mjs?v=axis-cycle-20261021-r2',
+  './labs/axis-cycle/exchange.schema.json',
   './labs/axis-cycle/CONTRACT.md',
   './labs/tactics/',
   './labs/tactics/index.html',
