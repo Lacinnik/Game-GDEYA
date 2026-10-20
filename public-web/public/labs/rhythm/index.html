@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#efe9dd">
+  <meta name="description" content="Студия ритма и переходов Архитектоники: вертикаль, интервал, переключатель, цикл и семь возвращений.">
+  <title>Студия ритма · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=rhythm-20261020-r1">
+</head>
+<body>
+  <div class="pulse-field" aria-hidden="true"><i></i><i></i><i></i></div>
+  <header class="topbar">
+    <a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <nav><a href="../guide/">Проводник</a><a href="../practice/">Практика</a><a href="../axis-cycle/">Живая ось</a></nav>
+    <small>RHYTHM STUDIO · 0.1</small>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker">PAUSE IS PART OF THE FORM</p>
+        <h1>Ритм —<br><em>не давление.</em></h1>
+      </div>
+      <aside>
+        <p>Импульс становится маршрутом только после того, как у него появились граница, время и способ увидеть возврат. Здесь можно начать, замедлиться, переключиться и завершить — без автоматического обещания результата.</p>
+        <div class="signal"><span>LOCAL CLOCK</span><b>HUMAN SETS THE PACE</b><small>notification=false · diagnosis=false · Q=null</small></div>
+      </aside>
+    </section>
+
+    <section class="mode-section">
+      <header><p class="kicker">01 · CHOOSE RHYTHM</p><h2>Какой переход нужен объекту?</h2></header>
+      <div id="program-list" class="program-list" role="tablist"></div>
+    </section>
+
+    <form id="plan-form" class="workbench">
+      <section class="program-intro">
+        <p id="program-code" class="kicker"></p>
+        <h2 id="program-title"></h2>
+        <p id="program-purpose"></p>
+        <small id="program-source"></small>
+      </section>
+
+      <section class="form-section">
+        <header><span>02</span><div><p class="kicker">OBJECT BEFORE RHYTHM</p><h2>Что проходит переход?</h2></div></header>
+        <div class="fields">
+          <label><span>O · объект дословно</span><textarea name="object" maxlength="600" required placeholder="Что именно вы проводите через ритм?"></textarea></label>
+          <label><span>S · наблюдаемый след</span><textarea name="subject_manifestation" maxlength="1800" required placeholder="Что уже существует во внешнем?"></textarea></label>
+          <label><span>I · отражённый образ</span><textarea name="reflected_image" maxlength="1800" required placeholder="Как объект выглядит в вашей текущей модели?"></textarea></label>
+          <label><span>Rᵍ · отношение к цели</span><textarea name="target_relation" maxlength="1800" required placeholder="Какой конкретной цели служит этот переход?"></textarea></label>
+          <label><span>C · контекст</span><textarea name="context" maxlength="1800" required placeholder="Среда, ограничения, люди и доступное время."></textarea></label>
+          <label><span>Инвариант</span><textarea name="invariant" maxlength="1800" required placeholder="Что нельзя потерять при смене ритма?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <header><span>03</span><div><p class="kicker">PACE CONTRACT</p><h2>Время и право остановиться</h2></div></header>
+        <div class="fields">
+          <label><span>Намерение перехода</span><select name="intent" id="intent" required></select></label>
+          <label><span>Дата начала</span><input name="start_date" type="date" required></label>
+          <label><span>Временной бюджет</span><textarea name="time_budget" maxlength="600" required placeholder="Например: до 20 минут в день, без ночных действий."></textarea></label>
+          <label><span>Политика свидетельств</span><textarea name="evidence_policy" maxlength="1200" required placeholder="Какой факт или артефакт будет сохранён?"></textarea></label>
+          <label class="wide"><span>Условие остановки</span><textarea name="stop_condition" maxlength="1200" required placeholder="Когда маршрут нужно прекратить, перенести или передать человеку?"></textarea></label>
+        </div>
+        <div class="acks">
+          <label><input name="authorship_ack" type="checkbox" required><span>Я сам задаю темп, решаю, выполнять ли шаг, и могу завершить маршрут в любой момент.</span></label>
+          <label><input name="non_medical_ack" type="checkbox" required><span>Контур не оценивает здоровье, не диагностирует и не заменяет профильную помощь.</span></label>
+          <label><input name="local_schedule_ack" type="checkbox" required><span>Расписание локально: сайт не отправляет push, email или сообщения и ничего не делает без меня.</span></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <header><span>04</span><div><p class="kicker">VISIBLE BEFORE START</p><h2>Маршрут и интервалы</h2></div></header>
+        <div id="step-preview" class="step-preview"></div>
+      </section>
+
+      <div class="submit-row"><p id="plan-error" role="alert"></p><button class="primary" type="submit">Собрать ритм <span>→</span></button></div>
+    </form>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-head">
+        <div><p class="kicker">LOCAL RHYTHM PLAN</p><h2 id="dashboard-title"></h2></div>
+        <div class="progress-mark"><b id="progress-count">0 / 0</b><span>ДОКУМЕНТИРОВАНО</span><small id="done-count">выполнено 0</small></div>
+      </div>
+      <div class="progress"><i id="progress-bar"></i></div>
+      <div id="plan-summary" class="plan-summary"></div>
+      <div id="timeline" class="timeline"></div>
+
+      <form id="checkin-form" class="checkin-form">
+        <header><span>05</span><div><p class="kicker">TRACE, NOT SCORE</p><h2>Квитанция перехода</h2></div></header>
+        <div class="fields compact">
+          <label><span>Шаг</span><select name="step_id" required></select></label>
+          <label><span>Состояние шага</span><select name="completion_state" required><option value="done">Выполнен</option><option value="partial">Частично</option><option value="skipped">Пропущен</option><option value="stopped">Остановлен</option></select></label>
+          <label><span>Статус основания</span><select name="evidence_status" required><option value="observed">Наблюдение</option><option value="derived">Вывод</option><option value="hypothesis">Гипотеза</option><option value="unknown">Неизвестно</option></select></label>
+          <label><span>Наблюдаемый след</span><textarea name="observed_trace" maxlength="1800" required placeholder="Что фактически произошло — или что данных пока нет."></textarea></label>
+          <label><span>Интерпретация</span><textarea name="interpretation" maxlength="1800" required placeholder="Что вы предполагаете об этом следе?"></textarea></label>
+          <label><span>Следующий ход</span><textarea name="next_action" maxlength="1800" required placeholder="Продолжить, упростить, пропустить или остановиться?"></textarea></label>
+        </div>
+        <label class="evidence"><span>Указатель свидетельства</span><textarea name="evidence_pointer" maxlength="1200" required placeholder="Файл, ссылка, событие или «внешнего свидетельства нет»."></textarea></label>
+        <div class="submit-row"><p id="checkin-error" role="alert"></p><button class="primary" type="submit">Сохранить квитанцию <span>↓</span></button></div>
+      </form>
+
+      <div class="dashboard-actions">
+        <button id="download" class="primary">Скачать план JSON <span>↓</span></button>
+        <button id="to-guide">Передать в Проводник <span>→</span></button>
+        <button id="to-practice">Передать в Практику <span>→</span></button>
+        <button id="new-plan">Новый ритм</button>
+      </div>
+      <p class="evidence-line">activity-trace-only · automated_notification=false · medical_assessment=false · outcome_confirmed=false · Q=null</p>
+    </section>
+
+    <details class="journal"><summary>Локальные ритмы · <span id="journal-count">0</span></summary><p id="journal-message"></p><div id="journal-list"></div></details>
+    <section class="boundary"><b>СТОП‑ГРАНИЦА</b><p>При остром кризисе, угрозе безопасности, симптомах, требующих медицинской оценки, или невозможности удерживать повседневные действия маршрут нужно прекратить и обратиться к подходящему человеку или профильной помощи. Пропуск и остановка — допустимые состояния, а не проигрыш.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=rhythm-20261020-r1"></script>
+</body>
+</html>

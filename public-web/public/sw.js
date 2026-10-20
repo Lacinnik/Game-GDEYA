@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'guide-20261020-r1';
+const CACHE_REVISION = 'rhythm-20261020-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -102,6 +102,13 @@ const SHELL = [
   './labs/guide/protocol.mjs?v=guide-20261020-r1',
   './labs/guide/catalog.mjs',
   './labs/guide/CONTRACT.md',
+  './labs/rhythm/',
+  './labs/rhythm/index.html',
+  './labs/rhythm/styles.css?v=rhythm-20261020-r1',
+  './labs/rhythm/app.mjs?v=rhythm-20261020-r1',
+  './labs/rhythm/protocol.mjs?v=rhythm-20261020-r1',
+  './labs/rhythm/catalog.mjs',
+  './labs/rhythm/CONTRACT.md',
   './labs/axis-cycle/',
   './labs/axis-cycle/index.html',
   './labs/axis-cycle/styles.css?v=axis-cycle-20261020-r1',
@@ -149,6 +156,7 @@ function navigationFallback(request) {
   if (/\/labs\/practice(?:\/|$)/u.test(pathname)) return caches.match('./labs/practice/index.html');
   if (/\/labs\/facilitation(?:\/|$)/u.test(pathname)) return caches.match('./labs/facilitation/index.html');
   if (/\/labs\/guide(?:\/|$)/u.test(pathname)) return caches.match('./labs/guide/index.html');
+  if (/\/labs\/rhythm(?:\/|$)/u.test(pathname)) return caches.match('./labs/rhythm/index.html');
   if (/\/labs\/meta-core(?:\/|$)/u.test(pathname)) return caches.match('./labs/meta-core/index.html');
   if (/\/labs\/axis-cycle(?:\/|$)/u.test(pathname)) return caches.match('./labs/axis-cycle/index.html');
   if (/\/labs\/tactics(?:\/|$)/u.test(pathname)) return caches.match('./labs/tactics/index.html');
