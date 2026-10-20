@@ -74,6 +74,30 @@
       "status": "unstated",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/tactics/",
       "source": "public-web/public/labs/tactics/CONTRACT.md"
+    },
+    {
+      "id": "product-line",
+      "name": "Несущая линия цифровой Архитектоники",
+      "version": "0.1",
+      "status": "unstated",
+      "url": "https://lacinnik.github.io/Game-GDEYA/product-line/",
+      "source": "public-web/public/product-line/CONTRACT.md"
+    },
+    {
+      "id": "core-architecture-license-lab",
+      "name": "GDEYA · Core Architecture License Lab",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/core-license/",
+      "source": "public-web/public/labs/core-license/CONTRACT.md"
+    },
+    {
+      "id": "architect-creator-gate",
+      "name": "Архитектор / Творец · Request Gate",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/creator-gate/",
+      "source": "public-web/public/labs/creator-gate/CONTRACT.md"
     }
   ]
 }

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#08110f">
+  <meta name="description" content="Конструктор границ Core Architecture License: объём передачи, ответственность и пять явных шлюзов финализации.">
+  <title>Core Architecture License · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=product-line-20261020-r1">
+  <style>.module-set label{position:relative}.module-set input,.toggle input{width:1px;height:1px;pointer-events:none}</style>
+</head>
+<body>
+  <div class="mesh" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <nav aria-label="Навигация"><a href="../../ecosystem/">Экосистема</a><a href="../module/">Модуль</a><a href="../creator-gate/">Закрытый контур</a></nav>
+    <small>CORE LICENSE · LAB 0.1</small>
+  </header>
+  <main>
+    <section class="hero">
+      <div><p class="kicker">LEVEL 03 · ARCHITECTURAL PRODUCT</p><h1>Передавать форму.<br><em>Не продавать источник.</em></h1></div>
+      <div class="hero-copy"><p>Здесь организация и архитектура встречаются в точном объёме: что внедряется, для чего, кто отвечает и что остаётся за границей.</p><div class="seal"><span>НЕ ЛИЦЕНЗИЯ</span><b>ДОСЬЕ ГОТОВНОСТИ</b><small>verified=false · Q=null</small></div></div>
+    </section>
+
+    <section class="principles" aria-label="Принципы контура">
+      <article><i>01</i><b>Объём раньше условий</b><p>Сначала различаются объект, применение и ответственность.</p></article>
+      <article><i>02</i><b>Пять явных шлюзов</b><p>Канон, право, цена, доступ и результат не достраиваются системой.</p></article>
+      <article><i>03</i><b>Решение остаётся у автора</b><p>Экспорт готовит рассмотрение, но не выдаёт лицензию.</p></article>
+    </section>
+
+    <form id="license-form" class="workbench">
+      <section class="form-section">
+        <header><span>01</span><div><p class="kicker">O · R<sub>g</sub> · C</p><h2>Ось передачи</h2></div></header>
+        <div class="fields">
+          <label><span>O · объект передачи</span><textarea name="object" maxlength="600" required placeholder="Что именно предполагается передать?"></textarea></label>
+          <label><span>R<sub>g</sub> · целевое отношение</span><textarea name="target_relation" maxlength="1800" required placeholder="Какое отношение организации к архитектуре должно стать возможным?"></textarea></label>
+          <label><span>C · контекст</span><textarea name="context" maxlength="1800" required placeholder="Среда, сроки, участники и ограничения."></textarea></label>
+          <label><span>Инвариант</span><textarea name="invariant" maxlength="1800" required placeholder="Что нельзя потерять ради внедрения?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <header><span>02</span><div><p class="kicker">SCOPE · RESPONSIBILITY</p><h2>Архитектура внедрения</h2></div></header>
+        <div class="fields">
+          <label><span>Организация / контур</span><input name="organization" maxlength="500" required placeholder="Название или рабочее обозначение"></label>
+          <label><span>Ответственная сторона</span><input name="responsible_party" maxlength="600" required placeholder="Роль или явно заявленное лицо"></label>
+          <label class="wide"><span>Практическое применение</span><textarea name="application" maxlength="1800" required placeholder="Для какого процесса нужна архитектура?"></textarea></label>
+          <fieldset class="wide module-set"><legend>Включаемые модули</legend>
+            <label><input type="checkbox" name="modules" value="gdeya"><span>ГДЕЯ</span></label>
+            <label><input type="checkbox" name="modules" value="reson"><span>РЕЗОН</span></label>
+            <label><input type="checkbox" name="modules" value="tactics"><span>Тактика</span></label>
+            <label><input type="checkbox" name="modules" value="materialization"><span>Материализация</span></label>
+          </fieldset>
+          <label><span>Разрешённое применение</span><textarea name="allowed_use" maxlength="1800" required placeholder="Что входит в обсуждаемый объём?"></textarea></label>
+          <label><span>Исключённое применение</span><textarea name="excluded_use" maxlength="1800" required placeholder="Что точно остаётся за границей?"></textarea></label>
+          <label><span>Граница внедрения</span><textarea name="implementation_boundary" maxlength="1800" required placeholder="Где заканчивается роль архитектора и начинается ответственность организации?"></textarea></label>
+          <label><span>План доказательств</span><textarea name="evidence_plan" maxlength="1800" required placeholder="Какие артефакты и независимые наблюдения позволят оценить внедрение?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="form-section gate-section">
+        <header><span>03</span><div><p class="kicker">FINALIZATION GATES</p><h2>Пять решений, которые нельзя выдумать</h2></div></header>
+        <p class="section-copy">Оставьте шлюз открытым или приложите дословное решение и проверяемую ссылку на его источник. Любая отметка останется самоотчётной декларацией.</p>
+        <div class="gates">
+          <fieldset data-gate="canon"><legend>Канон <small>решает автор</small></legend><label class="toggle"><input type="checkbox" name="canon_status"><span>Есть явное решение</span></label><label><span>Формулировка</span><textarea name="canon_statement" maxlength="1600" placeholder="Дословное решение"></textarea></label><label><span>Источник</span><input name="canon_reference" maxlength="1200" placeholder="Документ, версия, дата или ссылка"></label></fieldset>
+          <fieldset data-gate="legal"><legend>Юридические заявления <small>автор + юрист</small></legend><label class="toggle"><input type="checkbox" name="legal_status"><span>Есть явное решение</span></label><label><span>Формулировка</span><textarea name="legal_statement" maxlength="1600" placeholder="Согласованная формулировка"></textarea></label><label><span>Источник</span><input name="legal_reference" maxlength="1200" placeholder="Документ и рецензент"></label></fieldset>
+          <fieldset data-gate="pricing"><legend>Цена и обмен <small>решает автор</small></legend><label class="toggle"><input type="checkbox" name="pricing_status"><span>Есть явное решение</span></label><label><span>Формулировка</span><textarea name="pricing_statement" maxlength="1600" placeholder="Утверждённая модель"></textarea></label><label><span>Источник</span><input name="pricing_reference" maxlength="1200" placeholder="Документ, версия, дата"></label></fieldset>
+          <fieldset data-gate="access"><legend>Права доступа <small>решает автор</small></legend><label class="toggle"><input type="checkbox" name="access_status"><span>Есть явное решение</span></label><label><span>Формулировка</span><textarea name="access_statement" maxlength="1600" placeholder="Кому, к чему и на какой срок"></textarea></label><label><span>Источник</span><input name="access_reference" maxlength="1200" placeholder="Матрица прав или решение"></label></fieldset>
+          <fieldset data-gate="results"><legend>Реальные результаты <small>независимое наблюдение</small></legend><label class="toggle"><input type="checkbox" name="results_status"><span>Есть явное решение</span></label><label><span>Формулировка</span><textarea name="results_statement" maxlength="1600" placeholder="Какой результат и кем наблюдался"></textarea></label><label><span>Источник</span><input name="results_reference" maxlength="1200" placeholder="Протокол, артефакт, наблюдатель"></label></fieldset>
+        </div>
+      </section>
+
+      <div class="submit-row"><p id="form-error" role="alert"></p><button class="primary" type="submit">Собрать досье готовности <span>→</span></button></div>
+    </form>
+
+    <section id="result" class="result" hidden>
+      <p class="kicker">CORE ARCHITECTURE DOSSIER</p><div class="result-head"><h2 id="result-title">Досье собрано</h2><span id="result-state"></span></div>
+      <div id="result-output" class="result-grid"></div>
+      <div class="result-actions"><button id="download" class="primary">Скачать JSON <span>↓</span></button><a href="../creator-gate/">Подготовить закрытый запрос →</a></div>
+    </section>
+    <section class="boundary"><b>ГРАНИЦА</b><p>Этот контур не является лицензией, юридической консультацией, офертой или выдачей доступа. Он делает видимыми объём и нерешённые шлюзы. `Q` остаётся `null`.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=product-line-20261020-r1"></script>
+</body>
+</html>

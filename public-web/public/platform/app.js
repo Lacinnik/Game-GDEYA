@@ -83,6 +83,7 @@
             <h1>Не каталог.<br><em>Среда запуска.</em></h1>
             <p class="home-lead">Каждый продукт — самостоятельная геометрия действия. Архитектоника удерживает связи, а путь выбирается сообразно задаче.</p>
             <div class="home-actions">
+              <a class="button primary" href="../product-line/"><span>Пройти всю несущую линию</span><span>→</span></a>
               <a class="button primary" href="../ecosystem/"><span>Открыть цифровую экосистему</span><span>→</span></a>
               <a class="button primary" href="../labs/axis-cycle/"><span>Пройти живую ось</span><span>→</span></a>
               <a class="button ghost" href="../library/architectonics-2-2/"><span>Архитектоника психики · 10 книг · 2.2</span><span>↓</span></a>

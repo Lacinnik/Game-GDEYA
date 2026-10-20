@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'materialization-20261020-r1';
+const CACHE_REVISION = 'product-line-20261020-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -6,7 +6,7 @@ const SHELL = [
   './platform/',
   './platform/index.html',
   './platform/styles.css',
-  './platform/app.js?v=ecosystem-20261020-r1',
+  './platform/app.js?v=product-line-20261020-r1',
   './platform/products.registry.json',
   './platform/tzar-language.profiles.json',
   './ecosystem/',
@@ -15,6 +15,11 @@ const SHELL = [
   './ecosystem/app.mjs?v=ecosystem-20261020-r1',
   './ecosystem/catalog.json',
   './ecosystem/CONTRACT.md',
+  './product-line/',
+  './product-line/index.html',
+  './product-line/styles.css?v=product-line-20261020-r1',
+  './product-line/app.mjs?v=product-line-20261020-r1',
+  './product-line/CONTRACT.md',
   './labs/voidocr/',
   './labs/voidocr/index.html',
   './labs/voidocr/styles.css',
@@ -57,6 +62,18 @@ const SHELL = [
   './labs/module/runtime.mjs?v=materialization-20261020-r1',
   './labs/module/catalog.mjs',
   './labs/module/CONTRACT.md',
+  './labs/core-license/',
+  './labs/core-license/index.html',
+  './labs/core-license/styles.css?v=product-line-20261020-r1',
+  './labs/core-license/app.mjs?v=product-line-20261020-r1',
+  './labs/core-license/protocol.mjs?v=product-line-20261020-r1',
+  './labs/core-license/CONTRACT.md',
+  './labs/creator-gate/',
+  './labs/creator-gate/index.html',
+  './labs/creator-gate/styles.css?v=product-line-20261020-r1',
+  './labs/creator-gate/app.mjs?v=product-line-20261020-r1',
+  './labs/creator-gate/protocol.mjs?v=product-line-20261020-r1',
+  './labs/creator-gate/CONTRACT.md',
   './labs/axis-cycle/',
   './labs/axis-cycle/index.html',
   './labs/axis-cycle/styles.css?v=axis-cycle-20261020-r1',
@@ -98,10 +115,13 @@ function navigationFallback(request) {
   if (/\/labs\/core-separation(?:\/|$)/u.test(pathname)) return caches.match('./labs/core-separation/index.html');
   if (/\/labs\/voidocr(?:\/|$)/u.test(pathname)) return caches.match('./labs/voidocr/index.html');
   if (/\/labs\/module(?:\/|$)/u.test(pathname)) return caches.match('./labs/module/index.html');
+  if (/\/labs\/core-license(?:\/|$)/u.test(pathname)) return caches.match('./labs/core-license/index.html');
+  if (/\/labs\/creator-gate(?:\/|$)/u.test(pathname)) return caches.match('./labs/creator-gate/index.html');
   if (/\/labs\/meta-core(?:\/|$)/u.test(pathname)) return caches.match('./labs/meta-core/index.html');
   if (/\/labs\/axis-cycle(?:\/|$)/u.test(pathname)) return caches.match('./labs/axis-cycle/index.html');
   if (/\/labs\/tactics(?:\/|$)/u.test(pathname)) return caches.match('./labs/tactics/index.html');
   if (/\/ecosystem(?:\/|$)/u.test(pathname)) return caches.match('./ecosystem/index.html');
+  if (/\/product-line(?:\/|$)/u.test(pathname)) return caches.match('./product-line/index.html');
   if (/\/platform(?:\/|$)/u.test(pathname)) return caches.match('./platform/index.html');
   return undefined;
 }

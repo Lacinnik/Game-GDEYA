@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -156,6 +156,35 @@ try {
     assert.match(await desktopPage.locator("#trace-receipt").innerText(), /verified=false/u);
     assert.match(await desktopPage.locator("#trace-receipt").innerText(), /Q\s+null/u);
     await assertFitsScreen(desktopPage, `${name} materialization desktop cycle`);
+
+    await desktopPage.goto(site.url("labs/core-license/"));
+    const licenseValues = {
+      object:"Архитектура решений", target_relation:"Передать ограниченный контур", context:"Пилот команды", invariant:"Сохранить ядро",
+      organization:"Тестовая организация", responsible_party:"Владелец пилота", application:"Один рабочий процесс", allowed_use:"Внутренний пилот",
+      excluded_use:"Публичная перепродажа", implementation_boundary:"Автор проектирует, команда исполняет", evidence_plan:"Артефакты и внешнее наблюдение",
+    };
+    for (const [field,value] of Object.entries(licenseValues)) await desktopPage.locator(`[name="${field}"]`).fill(value);
+    await desktopPage.getByText("ГДЕЯ", { exact:true }).click();
+    await desktopPage.getByRole("button", { name:"Собрать досье готовности →" }).click();
+    await desktopPage.waitForSelector("#result:not([hidden])");
+    assert.match(await desktopPage.locator("#result-state").innerText(), /0\/5/u);
+    assert.match(await desktopPage.locator("#result-output").innerText(), /verified=false · Q=null/u);
+    await assertFitsScreen(desktopPage, `${name} core license desktop`);
+
+    await desktopPage.goto(site.url("labs/creator-gate/"));
+    const requestValues = {
+      object:"Закрытый корпус", subject_manifestation:"Собран рабочий артефакт", reflected_image:"Вижу связь смысла и структуры", target_relation:"Запросить рассмотрение",
+      context:"Личная исследовательская работа", invariant:"Не присваивать роль", purpose:"Сверить один фрагмент", prior_trace:"Один паспорт",
+      contribution:"Подготовить отчёт", requested_material:"Один фрагмент", boundaries:"Без персональных данных", sponsor_reference:"нет",
+    };
+    for (const [field,value] of Object.entries(requestValues)) await desktopPage.locator(`[name="${field}"]`).fill(value);
+    await desktopPage.locator('[name="role"]').selectOption("research");
+    for (const label of await desktopPage.locator(".acknowledgements label").all()) await label.click();
+    await desktopPage.getByRole("button", { name:"Собрать запрос →" }).click();
+    await desktopPage.waitForSelector("#result:not([hidden])");
+    assert.match(await desktopPage.locator("#result").innerText(), /ACCESS GRANTED = FALSE/u);
+    assert.match(await desktopPage.locator("#result").innerText(), /Решение не присвоено/u);
+    await assertFitsScreen(desktopPage, `${name} creator gate desktop`);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();
