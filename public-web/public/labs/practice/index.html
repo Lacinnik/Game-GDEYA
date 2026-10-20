@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b0c10">
+  <meta name="description" content="Студия практических циклов Архитектоники: 90 минут, 5–6 сессий, 7 и 30 дней с локальными квитанциями шага.">
+  <title>Студия практических циклов · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=practice-20261020-r1">
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <nav><a href="../diagnostics/">Диагностика</a><a href="../tactics/">Тактика</a><a href="../module/">Материализация</a></nav>
+    <small>PRACTICE STUDIO · 0.1</small>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div><p class="kicker">FROM A SINGLE STEP TO A REPEATABLE CYCLE</p><h1>Не обещать изменение.<br><em>Оставлять след каждого шага.</em></h1></div>
+      <div class="hero-copy"><p>Четыре временных контура собирают авторский объект, план и локальные квитанции прохождения. Счётчик показывает только наличие записей — не качество человека и не эффективность метода.</p><div class="hero-state"><span>4 КОНТУРА · 49 ЕДИНИЦ</span><b>90 → 6 → 7 → 30</b><small>activity trace only · Q=null</small></div></div>
+    </section>
+
+    <section class="program-section">
+      <header><p class="kicker">01 · CHOOSE TIME CONTOUR</p><h2>Какой ритм удержит объект?</h2></header>
+      <div id="program-list" class="program-list" role="tablist"></div>
+    </section>
+
+    <form id="plan-form" class="workbench">
+      <section class="program-intro"><p id="program-code" class="kicker"></p><h2 id="program-title"></h2><p id="program-purpose"></p><small id="program-source"></small></section>
+      <section class="axis-section">
+        <header><span>02</span><div><p class="kicker">OBJECT–SUBJECT AXIS</p><h2>Что проводится через цикл?</h2></div></header>
+        <div class="fields">
+          <label><span>O · объект дословно</span><textarea name="object" maxlength="600" required placeholder="Что именно проводится через практику?"></textarea></label>
+          <label><span>S · наблюдаемое проявление</span><textarea name="subject_manifestation" maxlength="1800" required placeholder="Что уже сделано, сказано или зафиксировано?"></textarea></label>
+          <label><span>I · отражённый образ</span><textarea name="reflected_image" maxlength="1800" required placeholder="Как объект выглядит сейчас в речи, документе или модели?"></textarea></label>
+          <label><span>R<sub>g</sub> · целевое отношение</span><textarea name="target_relation" maxlength="1800" required placeholder="К какой конкретной цели проводится объект?"></textarea></label>
+          <label><span>C · контекст</span><textarea name="context" maxlength="1800" required placeholder="Среда, роли, ограничения и доступное время."></textarea></label>
+          <label><span>Инвариант</span><textarea name="invariant" maxlength="1800" required placeholder="Что нельзя потерять по пути?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="sequence-section">
+        <header><span>03</span><div><p class="kicker">VISIBLE SEQUENCE</p><h2>Маршрут без скрытых фаз</h2></div></header>
+        <div id="sequence-preview" class="sequence"></div>
+      </section>
+
+      <section class="contract-section">
+        <header><span>04</span><div><p class="kicker">PLAN CONTRACT</p><h2>Основание, действие, завершение</h2></div></header>
+        <div class="fields">
+          <label><span>Дата начала</span><input name="start_date" type="date" required></label>
+          <label><span>Политика свидетельств</span><textarea name="evidence_policy" maxlength="1200" required placeholder="Что принимается как след, где он хранится, кто его видит?"></textarea></label>
+          <label><span>Первое действие</span><textarea name="first_action" maxlength="1200" required placeholder="Один выполнимый шаг до 40 минут."></textarea></label>
+          <label><span>Сигнал завершения плана</span><textarea name="completion_signal" maxlength="1200" required placeholder="Какой наблюдаемый набор следов позволит закрыть проход?"></textarea></label>
+        </div>
+      </section>
+      <div class="submit-row"><p id="plan-error" role="alert"></p><button class="primary" type="submit">Собрать план цикла <span>→</span></button></div>
+    </form>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-head"><div><p class="kicker">LOCAL PRACTICE PLAN</p><h2 id="dashboard-title"></h2></div><div class="progress-mark"><b id="progress-count">0 / 0</b><span>ЕДИНИЦ СО СЛЕДОМ</span></div></div>
+      <div class="progress"><i id="progress-bar"></i></div>
+      <div id="plan-summary" class="plan-summary"></div>
+      <div id="unit-grid" class="unit-grid"></div>
+
+      <form id="receipt-form" class="receipt-form">
+        <header><span>05</span><div><p class="kicker">SELF-REPORTED RECEIPT</p><h2>Квитанция единицы</h2></div></header>
+        <div class="fields compact">
+          <label><span>Единица маршрута</span><select name="unit_id" required></select></label>
+          <label><span>Статус действия</span><select name="state" required><option value="attempted">Выполнена попытка</option><option value="completed-self-reported">Завершено по самоотчёту</option><option value="paused">Пауза зафиксирована</option></select></label>
+        </div>
+        <div id="receipt-fields" class="fields receipt-fields"></div>
+        <label class="evidence"><span>Указатель свидетельства</span><textarea name="evidence_pointer" maxlength="1200" required placeholder="Файл, ссылка, событие или «нет внешнего свидетельства»."></textarea></label>
+        <div class="submit-row"><p id="receipt-error" role="alert"></p><button class="primary" type="submit">Сохранить квитанцию <span>↓</span></button></div>
+      </form>
+      <div class="dashboard-actions"><button id="download" class="primary">Скачать план JSON <span>↓</span></button><button id="to-tactics">Передать первый шаг в Тактику <span>→</span></button><button id="new-plan">Новый план</button></div>
+      <p class="evidence-line">self-reported-unverified · outcome_confirmed=false · diagnosis=false · Q=null</p>
+    </section>
+
+    <details class="journal"><summary>Локальные планы · <span id="journal-count">0</span></summary><p id="journal-message"></p><div id="journal-list"></div></details>
+    <section class="boundary"><b>ГРАНИЦА</b><p>Студия фиксирует план и самоотчётные следы действия. Она не является психотерапией, медицинской помощью, оценкой личности или подтверждением результата. Любая телесная практика опциональна; при остром кризисе проход следует остановить и обратиться к профильной помощи.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=practice-20261020-r1"></script>
+</body>
+</html>

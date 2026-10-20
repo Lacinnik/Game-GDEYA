@@ -67,10 +67,23 @@ test("five diagnostic objects expose one working studio with explicit modes", ()
   }
   const counts = Object.groupBy(catalog.items, (item) => item.delivery_stage);
   assert.equal(counts.live.length, 5);
-  assert.equal(counts.prototype.length, 13);
-  assert.equal(counts.specified.length, 20);
+  assert.equal(counts.prototype.length, 17);
+  assert.equal(counts.specified.length, 16);
   assert.equal(counts.hypothesis.length, 17);
   assert.equal(counts["final-phase"].length, 1);
+});
+
+test("four practice programs expose one working time-contour studio", () => {
+  const expected = new Map([
+    ["session-90","session"],
+    ["session-cycle","cycle"],
+    ["restart-kit-7","restart"],
+    ["gdeya-crash-test-30","crash"],
+  ]);
+  for (const [id,mode] of expected) {
+    assert.equal(byId.get(id).delivery_stage,"prototype");
+    assert.equal(byId.get(id).entrypoint,`../labs/practice/?mode=${mode}`);
+  }
 });
 
 test("live objects expose working entrypoints and axis accepts catalog seeds", async () => {

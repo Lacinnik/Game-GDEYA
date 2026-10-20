@@ -77,6 +77,6 @@ test("diagnostic shell, versioned assets and tactics handoff remain connected", 
   assert.match(html, /styles\.css\?v=diagnostics-20261020-r1/u);
   assert.match(html, /app\.mjs\?v=diagnostics-20261020-r1/u);
   assert.match(app, /\.\.\/tactics\/\?\$\{parameters\}#workbench/u);
-  assert.match(worker, /CACHE_REVISION = 'diagnostics-20261020-r1'/u);
+  assert.match(worker, /\.\/labs\/diagnostics\/app\.mjs\?v=diagnostics-20261020-r1/u);
   assert.match(worker, /\.\/labs\/diagnostics\/index\.html/u);
 });
