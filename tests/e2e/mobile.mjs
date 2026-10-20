@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop", "labs/guide/?mode=oracle", "labs/rhythm/?mode=switcher", "labs/frontier/?mode=ontology"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop", "labs/guide/?mode=oracle", "labs/rhythm/?mode=switcher", "labs/frontier/?mode=ontology", "labs/certification/"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -338,6 +338,31 @@ try {
     await desktopPage.waitForURL(/\/labs\/guide\/\?/u);
     assert.equal(await desktopPage.locator('[name="object"]').inputValue(),frontierValues.object);
     assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),frontierValues.invariant);
+
+    await desktopPage.goto(site.url("labs/certification/"));
+    const certificationValues = {
+      candidate_name:"Кандидат E2E", candidate_role:"Ведущий практики", requested_scope:"Одна групповая практика ГДЕЯ", method_scope:"ГДЕЯ и РЕЗОН",
+      prerequisite_trace:"Три учебных протокола", supervision_plan:"Три кейса под наблюдением", object:"Подготовка досье ведущего",
+      subject_manifestation:"Кандидат завершил учебный цикл", reflected_image:"Подготовка кажется достаточной для проверки", target_relation:"Собрать проверяемый пакет",
+      context:"Учебная группа и локальные записи", invariant:"Не присваивать решение участника", canon_reference:"draft/canon-v0.1", competency_version:"draft-0.1", ethics_reference:"draft/ethics-v0.1",
+    };
+    for (const [field,value] of Object.entries(certificationValues)) await desktopPage.locator(`#dossier-form [name="${field}"]`).fill(value);
+    for (const field of ["authorship_ack","consent_ack","boundary_ack","authorization_ack"]) await desktopPage.locator(`#dossier-form [name="${field}"]`).check();
+    await desktopPage.getByRole("button",{name:"Собрать досье готовности →"}).click();
+    await desktopPage.waitForSelector("#dashboard:not([hidden])");
+    assert.match(await desktopPage.locator("#case-count").innerText(),/0 \/ 3/u);
+    assert.match(await desktopPage.locator("#dashboard").innerText(),/certificate_issued=false/u);
+    const certificationCase = {
+      case_title:"Первый супервизируемый кейс", practice_date:"2026-10-20", object:"Один проектный переход", participant_scope:"Добровольный участник без персональных данных",
+      observed_trace:"Участник сам сформулировал объект и следующий шаг", candidate_reflection:"Ведущий удержал процесс", consent_trace:"consent/case-1.md",
+      supervisor_reference:"supervision/case-1.md", evidence_pointer:"evidence/case-1.json",
+    };
+    for (const [field,value] of Object.entries(certificationCase)) await desktopPage.locator(`#case-form [name="${field}"]`).fill(value);
+    await desktopPage.locator('#case-form [name="participant_consent"]').check();
+    await desktopPage.getByRole("button",{name:"Сохранить кейс ↓"}).click();
+    assert.match(await desktopPage.locator("#case-count").innerText(),/1 \/ 3/u);
+    assert.match(await desktopPage.locator("#dashboard").innerText(),/result=false/u);
+    await assertFitsScreen(desktopPage,`${name} certification readiness desktop`);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

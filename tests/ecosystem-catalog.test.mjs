@@ -71,6 +71,7 @@ test("five diagnostic objects expose one working studio with explicit modes", ()
   assert.equal((counts.specified ?? []).length, 0);
   assert.equal((counts.hypothesis ?? []).length, 0);
   assert.equal(counts["final-phase"].length, 1);
+  assert.equal(byId.get("facilitator-certification").entrypoint, "../labs/certification/");
 });
 
 test("four practice programs expose one working time-contour studio", () => {

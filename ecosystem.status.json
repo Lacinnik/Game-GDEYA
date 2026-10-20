@@ -146,6 +146,14 @@
       "status": "prototype",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/frontier/",
       "source": "public-web/public/labs/frontier/CONTRACT.md"
+    },
+    {
+      "id": "facilitator-certification-readiness-studio",
+      "name": "Студия подготовки и допуска ведущих",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/certification/",
+      "source": "public-web/public/labs/certification/CONTRACT.md"
     }
   ]
 }

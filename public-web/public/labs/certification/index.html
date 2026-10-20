@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#12100d">
+  <title>Студия подготовки и допуска · Архитектоника</title>
+  <meta name="description" content="Локальная студия подготовки досье ведущего: практика, супервизия и пакет на авторизованное решение без самосертификации.">
+  <link rel="stylesheet" href="./styles.css?v=certification-20261020-r1">
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../../ecosystem/"><span>А</span><div><b>АРХИТЕКТОНИКА</b><small>КОНТУР 56 · ДОПУСК</small></div></a>
+    <nav><a href="#path">Маршрут</a><a href="#dossier-form">Досье</a><a href="#journal">Журнал</a></nav>
+    <span class="truth">CERTIFICATE ISSUED = FALSE</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="kicker">56 / 56 · РАБОЧИЙ ПУТЬ К ФИНАЛЬНОМУ РЕШЕНИЮ</p>
+        <h1>Допуск начинается<br>не с бейджа,<br><em>а со следа практики.</em></h1>
+        <p class="lead">Соберите проверяемое досье кандидата, три супервизируемых кейса и разбор компетенций. Студия подготовит пакет к рассмотрению — но никогда не выдаст сертификат, роль или право применения самостоятельно.</p>
+        <a class="primary" href="#dossier-form">Начать досье <span>↓</span></a>
+      </div>
+      <div class="seal" aria-label="Статус контура">
+        <div class="seal-ring"><span>6</span><small>ШЛЮЗОВ</small></div>
+        <p><b>Q = null</b><br>до отдельного фактического возврата</p>
+      </div>
+    </section>
+
+    <section class="path" id="path">
+      <header class="section-head"><div><p class="kicker">ПУТЬ ПОДГОТОВКИ</p><h2>Шесть шлюзов. Одно ответственное решение.</h2></div><p>Первые пять шлюзов создают доказательный след. Шестой принадлежит не интерфейсу, а уполномоченному субъекту.</p></header>
+      <div class="stage-grid" id="stage-grid"></div>
+    </section>
+
+    <section class="workspace">
+      <header class="section-head"><div><p class="kicker">ШАГ 01 · ИСХОДНАЯ ОСЬ</p><h2>Открыть досье кандидата</h2></div><p>Версия компетенций ниже — рабочий черновик, а не утверждённый канон.</p></header>
+      <form id="dossier-form" class="form-panel">
+        <fieldset><legend>Кандидат и область</legend><div class="fields two">
+          <label><span>Заявленное имя</span><input name="candidate_name" maxlength="300" required placeholder="Как кандидат называет себя"></label>
+          <label><span>Текущая роль</span><input name="candidate_role" maxlength="500" required placeholder="Фасилитатор, автор практики…"></label>
+          <label><span>Запрашиваемая область допуска</span><textarea name="requested_scope" required placeholder="Что именно кандидат просит рассмотреть"></textarea></label>
+          <label><span>Методы в области</span><textarea name="method_scope" required placeholder="ГДЕЯ, РЕЗОН, Тактика…"></textarea></label>
+          <label><span>След пререквизитов</span><textarea name="prerequisite_trace" required placeholder="Обучение, практика, артефакты"></textarea></label>
+          <label><span>План супервизии</span><textarea name="supervision_plan" required placeholder="Кто, когда и что наблюдает"></textarea></label>
+        </div></fieldset>
+        <fieldset><legend>TeZar-ось допуска</legend><div class="fields two">
+          <label><span>O · объект</span><textarea name="object" required placeholder="Контур подготовки и допуска ведущего"></textarea></label>
+          <label><span>S · проявление субъекта</span><textarea name="subject_manifestation" required placeholder="Что кандидат уже сделал"></textarea></label>
+          <label><span>I · отражённый образ</span><textarea name="reflected_image" required placeholder="Как практика сейчас воспринимается"></textarea></label>
+          <label><span>R<sub>g</sub> · целевое отношение</span><textarea name="target_relation" required placeholder="Какое отношение должно быть достигнуто"></textarea></label>
+          <label><span>C · контекст</span><textarea name="context" required placeholder="Участники, ограничения, среда"></textarea></label>
+          <label><span>Инвариант</span><textarea name="invariant" required placeholder="Что нельзя потерять по дороге"></textarea></label>
+        </div></fieldset>
+        <fieldset><legend>Ссылки рабочего контура</legend><div class="fields three">
+          <label><span>Версия/указатель канона</span><input name="canon_reference" required placeholder="draft/canon-v0.1"></label>
+          <label><span>Версия компетенций</span><input name="competency_version" required value="draft-0.1"></label>
+          <label><span>Этика и безопасность</span><input name="ethics_reference" required placeholder="draft/ethics-v0.1"></label>
+        </div></fieldset>
+        <div class="acknowledgements">
+          <label><input type="checkbox" name="authorship_ack" required><span>Я не присваиваю авторство решений участника.</span></label>
+          <label><input type="checkbox" name="consent_ack" required><span>Согласие можно отозвать; участие можно остановить.</span></label>
+          <label><input type="checkbox" name="boundary_ack" required><span>Досье не расширяет заявленную границу роли.</span></label>
+          <label><input type="checkbox" name="authorization_ack" required><span>Допуск требует отдельного авторизованного решения.</span></label>
+        </div>
+        <p class="error" id="dossier-error" role="alert"></p>
+        <button class="primary" type="submit">Собрать досье готовности <span>→</span></button>
+      </form>
+    </section>
+
+    <section class="dashboard" id="dashboard" hidden>
+      <header class="dash-head"><div><p class="kicker">ЛОКАЛЬНОЕ ДОСЬЕ</p><h2 id="dashboard-title"></h2></div><div class="counter"><b id="case-count">0 / 3</b><span>наблюдаемых кейса</span></div></header>
+      <div class="status-strip"><span>certificate_issued=<b>false</b></span><span>access_granted=<b>false</b></span><span>role_assigned=<b>false</b></span><span>Q=<b>null</b></span></div>
+      <div class="summary-grid" id="dossier-summary"></div>
+
+      <section class="work-step">
+        <header><span>04</span><div><h3>Добавить супервизируемый кейс</h3><p>Кейс засчитывается в минимум только при согласии, наблюдаемом следе и отсутствии открытого инцидента.</p></div></header>
+        <form id="case-form" class="compact-form"><div class="fields two">
+          <label><span>Название кейса</span><input name="case_title" required></label>
+          <label><span>Дата практики</span><input type="date" name="practice_date" required></label>
+          <label><span>Объект работы</span><textarea name="object" required></textarea></label>
+          <label><span>Участники без персональных данных</span><textarea name="participant_scope" required></textarea></label>
+          <label><span>Наблюдаемый след</span><textarea name="observed_trace" required></textarea></label>
+          <label><span>Рефлексия кандидата</span><textarea name="candidate_reflection" required></textarea></label>
+          <label><span>След согласия</span><textarea name="consent_trace" required></textarea></label>
+          <label><span>Указатель супервизора</span><textarea name="supervisor_reference" required></textarea></label>
+          <label><span>Указатель доказательства</span><input name="evidence_pointer" required placeholder="docs/case-01.md"></label>
+          <label><span>Статус основания</span><select name="evidence_status" required><option value="observed">observed</option><option value="derived">derived</option><option value="hypothesis">hypothesis</option><option value="unknown">unknown</option></select></label>
+          <label><span>Инцидент</span><select name="incident_state" required><option value="none">none</option><option value="resolved">resolved</option><option value="escalated">escalated</option><option value="open">open</option></select></label>
+        </div><label class="consent"><input type="checkbox" name="participant_consent" required><span>Явное согласие участника зафиксировано.</span></label><p class="error" id="case-error" role="alert"></p><button class="secondary" type="submit">Сохранить кейс ↓</button></form>
+        <div class="case-list" id="case-list"></div>
+      </section>
+
+      <section class="work-step">
+        <header><span>05</span><div><h3>Записать супервизионный разбор</h3><p>Личность и полномочия рецензента интерфейс не верифицирует.</p></div></header>
+        <form id="review-form" class="compact-form"><div class="fields three">
+          <label><span>Заявленное имя рецензента</span><input name="reviewer_name" required></label>
+          <label><span>Заявленная роль</span><input name="reviewer_role" required></label>
+          <label><span>Дата разбора</span><input type="date" name="review_date" required></label>
+        </div><div class="competence-grid" id="competence-grid"></div><div class="fields two">
+          <label><span>Рекомендация</span><select name="recommendation" required><option value="continue-practice">продолжить практику</option><option value="ready-for-authorized-review">готово к авторизованному рассмотрению</option><option value="pause">поставить на паузу</option></select></label>
+          <label><span>Комментарий разбора</span><textarea name="review_note" required></textarea></label>
+        </div><p class="error" id="review-error" role="alert"></p><button class="secondary" type="submit">Сохранить разбор ↓</button></form>
+        <div id="review-list" class="case-list"></div>
+      </section>
+
+      <section class="work-step final-step">
+        <header><span>06</span><div><h3>Собрать пакет на решение</h3><p id="package-gate">Нужно три подходящих кейса и рекомендация супервизии.</p></div></header>
+        <form id="package-form" class="compact-form"><div class="fields two">
+          <label><span>Утверждённый канон</span><input name="canon_reference" required></label>
+          <label><span>Утверждённые компетенции</span><input name="competency_reference" required></label>
+          <label><span>Политика этики</span><input name="ethics_reference" required></label>
+          <label><span>Политика доступа</span><input name="access_policy_reference" required></label>
+          <label><span>Юридический разбор</span><input name="legal_review_reference" required></label>
+          <label><span>Запрашиваемое решение</span><textarea name="requested_decision" required></textarea></label>
+        </div><p class="error" id="package-error" role="alert"></p><button class="primary" type="submit">Собрать пакет рассмотрения →</button></form>
+        <div id="package-result" class="package-result" hidden></div>
+      </section>
+
+      <div class="dash-actions"><button id="download" class="secondary" type="button">Скачать досье JSON</button><a class="secondary" href="../creator-gate/">Передать запрос автору →</a><button id="new-dossier" class="text-button" type="button">Новое досье</button></div>
+    </section>
+
+    <section class="journal" id="journal"><header class="section-head"><div><p class="kicker">ЛОКАЛЬНЫЙ ЖУРНАЛ</p><h2>Досье остаются у вас</h2></div><p id="journal-message"></p></header><div id="journal-list" class="journal-list"></div></section>
+  </main>
+  <footer><a href="../../product-line/">← Продуктовая линия</a><p>Студия готовит доказательный пакет. Решение, сертификат и право применения возникают только во внешнем авторизованном контуре.</p></footer>
+  <script type="module" src="./app.mjs?v=certification-20261020-r1"></script>
+</body>
+</html>
