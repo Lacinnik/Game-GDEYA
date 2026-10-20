@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#06110f">
+  <meta name="description" content="Архитектоника Тактики — локальный протокол перевода удерживаемого объекта в одно проверяемое микро-действие.">
+  <title>Архитектоника Тактики · Операционный модуль</title>
+  <link rel="stylesheet" href="./styles.css?v=tactics-20261020-r1">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="site-head">
+    <a href="../../platform/"><span class="mark">⊕</span><span><b>АРХИТЕКТОНИКА</b><small>ТАКТИКА · 0.1</small></span></a>
+    <nav aria-label="Навигация Тактики"><a href="../../ecosystem/">Экосистема</a><a href="../axis-cycle/">Живая ось</a><a href="#journal">Журнал</a></nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">ОПЕРАЦИОННЫЙ МОДУЛЬ · СТАТУС НЕ НАЗНАЧЕН</p>
+        <h1>Стратегия задаёт вектор.<br><em>Тактика рождает один шаг.</em></h1>
+        <p class="lead">Переведите удерживаемый объект в микро-действие, соразмерное текущей среде. Модуль показывает только производные от ваших входных оценок — не ставит диагноз и не обещает результат.</p>
+        <div class="hero-actions"><a class="primary" href="#workbench">Собрать микро-действие <span>↓</span></a><a href="../axis-cycle/">Вернуться к оси <span>←</span></a></div>
+      </div>
+      <div class="cycle-visual" aria-label="Семь шагов тактического цикла">
+        <div class="cycle-core"><span>Пₘ</span><b>micro-∂П</b><small>Q = null</small></div>
+        <ol>
+          <li style="--i:0"><span>01</span>STABILIZE</li><li style="--i:1"><span>02</span>SENSE</li><li style="--i:2"><span>03</span>VECTOR</li><li style="--i:3"><span>04</span>ACT</li><li style="--i:4"><span>05</span>COLLAPSE</li><li style="--i:5"><span>06</span>KNOWING</li><li style="--i:6"><span>07</span>SYNTHESIS</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="formula-strip" aria-label="Формулы тактического модуля">
+      <div><span>ТАКТИЧЕСКАЯ ПУСТОТА</span><b>Пₘ = (1 − Noiseₜ) × Dₛ(local) × Focusₘ</b></div>
+      <div><span>ТАКТИЧЕСКИЙ ОБЪЁМ</span><b>Vₘ = Scopeₜ × Timeₜ × Energyₜ</b></div>
+      <p>Индексы относительные и не являются вероятностью успеха. Все входы видимы и принадлежат самоотчёту пользователя.</p>
+    </section>
+
+    <section class="workbench" id="workbench">
+      <header class="section-head"><div><p class="eyebrow">РАБОЧИЙ СТОЛ</p><h2>Соберите паспорт одного тактического цикла</h2></div><p>Если объект пришёл из экосистемы или Живой оси, O и контекст уже будут перенесены. Остальные поля не достраиваются автоматически.</p></header>
+
+      <form id="tactics-form" class="tactics-form">
+        <section class="form-section object-section">
+          <header><span>01</span><div><p>MICRO-SENSE</p><h3>Удержать объект и отношение</h3></div></header>
+          <div class="field-grid">
+            <label class="wide"><span>O · Объект дословно</span><textarea name="object" rows="2" maxlength="500" required placeholder="Что именно должно перейти в действие?"></textarea></label>
+            <label><span>R<sub>g</sub> · Целевое отношение</span><textarea name="target_relation" rows="4" maxlength="1200" required placeholder="Какое отношение к объекту должен провести этот шаг?"></textarea></label>
+            <label><span>C · Контекст</span><textarea name="context" rows="4" maxlength="1200" required placeholder="Где, с кем и при каких ограничениях действует шаг?"></textarea></label>
+            <label><span>Инвариант</span><textarea name="invariant" rows="3" maxlength="1200" required placeholder="Что нельзя потерять ради действия?"></textarea></label>
+            <label><span>Основание входных оценок</span><textarea name="metric_basis" rows="3" maxlength="1600" required placeholder="Какие наблюдаемые следы позволяют выставить оценки ниже?"></textarea></label>
+          </div>
+        </section>
+
+        <section class="form-section measure-section">
+          <header><span>02</span><div><p>MICRO-STABILIZE</p><h3>Оценить локальную среду</h3></div></header>
+          <div class="measure-layout">
+            <div class="score-grid">
+              <label><span>Noiseₜ · шум</span><select name="noise" required><option value="">—</option><option value="0">0 · отсутствует</option><option value="0.25">0.25 · слабый</option><option value="0.5">0.50 · неоднозначный</option><option value="0.75">0.75 · сильный</option><option value="1">1.00 · прямой</option></select></label>
+              <label><span>Dₛ(local) · локальная плотность</span><select name="local_density" required><option value="">—</option><option value="0">0 · отсутствует</option><option value="0.25">0.25 · слабая</option><option value="0.5">0.50 · неоднозначная</option><option value="0.75">0.75 · сильная</option><option value="1">1.00 · прямая опора</option></select></label>
+              <label><span>Focusₘ · фокус</span><select name="focus" required><option value="">—</option><option value="0">0 · отсутствует</option><option value="0.25">0.25 · слабый</option><option value="0.5">0.50 · неоднозначный</option><option value="0.75">0.75 · сильный</option><option value="1">1.00 · прямой</option></select></label>
+              <label><span>Scopeₜ · объём охвата</span><select name="scope" required><option value="">—</option><option value="0">0 · отсутствует</option><option value="0.25">0.25 · малый</option><option value="0.5">0.50 · средний</option><option value="0.75">0.75 · большой</option><option value="1">1.00 · предельный</option></select></label>
+              <label><span>Timeₜ · временная нагрузка</span><select name="time_load" required><option value="">—</option><option value="0">0 · отсутствует</option><option value="0.25">0.25 · малая</option><option value="0.5">0.50 · средняя</option><option value="0.75">0.75 · большая</option><option value="1">1.00 · предельная</option></select></label>
+              <label><span>Energyₜ · энергозатрата</span><select name="energy" required><option value="">—</option><option value="0">0 · отсутствует</option><option value="0.25">0.25 · малая</option><option value="0.5">0.50 · средняя</option><option value="0.75">0.75 · большая</option><option value="1">1.00 · предельная</option></select></label>
+            </div>
+            <aside class="live-metrics" aria-live="polite">
+              <div><span>Пₘ</span><b id="p-metric">—</b><small>относительная пустота</small></div>
+              <div><span>Vₘ</span><b id="v-metric">—</b><small>относительный объём</small></div>
+              <p id="metric-boundary">Заполните шесть видимых входов. Производные появятся без скрытых весов.</p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="form-section action-section">
+          <header><span>03</span><div><p>MICRO-VECTOR → MICRO-ACT → MICRO-COLLAPSE</p><h3>Назвать один исполнимый шаг</h3></div></header>
+          <div class="field-grid">
+            <label><span>М-среда</span><select name="environment" required><option value="">Выберите масштаб</option><option value="m1">Мₘ¹ · шаг · 30 сек–5 мин</option><option value="m2">Мₘ² · мини-задача · 5–25 мин</option><option value="m3">Мₘ³ · микро-цикл · 25–90 мин</option><option value="m4">Мₘ⁴ · ритм · день/неделя</option></select></label>
+            <label><span>Плановый горизонт, минут</span><input name="planned_minutes" type="number" min="0.5" max="10080" step="0.5" required placeholder="5"></label>
+            <label><span>A¹ · Микро-решение</span><textarea name="micro_decision" rows="3" maxlength="800" required placeholder="Какое минимальное решение уже принято?"></textarea></label>
+            <label><span>A² · Микро-вектор</span><textarea name="micro_vector" rows="3" maxlength="800" required placeholder="Куда направлен именно этот шаг?"></textarea></label>
+            <label class="wide"><span>I₉ · Действие</span><textarea name="action" rows="3" maxlength="1200" required placeholder="Один глагол, один объект, один наблюдаемый выход."></textarea></label>
+            <label><span>Сигнал завершения</span><textarea name="completion_signal" rows="3" maxlength="800" required placeholder="Что будет существовать, когда шаг завершён?"></textarea></label>
+            <label><span>A⁴ · Микро-свёртка</span><textarea name="micro_collapse" rows="3" maxlength="800" required placeholder="Что остановить или отпустить сразу после действия?"></textarea></label>
+            <label><span>Окно обратной связи, минут</span><input name="feedback_window_min" type="number" min="3" max="45" step="1" required value="15"></label>
+          </div>
+        </section>
+
+        <div class="submit-row"><p>Паспорт сохранит самоотчёт и производные раздельно. `Q` останется `null` даже после внутренней квитанции.</p><button class="primary" type="submit">Собрать тактический паспорт <span>→</span></button></div>
+        <p class="form-error" id="form-error" role="alert"></p>
+      </form>
+    </section>
+
+    <section class="plan-stage" id="plan-stage" hidden>
+      <header class="section-head"><div><p class="eyebrow">ПАСПОРТ ТАКТИКИ</p><h2 id="plan-title">Микро-действие собрано</h2></div><p id="plan-status"></p></header>
+      <div class="plan-layout">
+        <article class="plan-passport" id="plan-passport"></article>
+        <aside class="plan-actions"><span>ЛОКАЛЬНЫЙ АРТЕФАКТ</span><h3>Провести действие</h3><p>Сделайте ровно сформулированный шаг. После него оставьте 10 секунд на микро-свёртку и вернитесь только с тем, что действительно наблюдали.</p><button class="primary" id="download-plan" type="button">Скачать план JSON <span>↓</span></button><button id="copy-action" type="button">Скопировать действие</button><button id="edit-plan" type="button">Изменить входы</button></aside>
+      </div>
+      <form id="observation-form" class="observation-form">
+        <header><p class="eyebrow">I₁₀ → I₁₂</p><h3>Вернуть фактический след</h3><p>Этот самоотчёт не подтверждает эффективность и не заполняет Q.</p></header>
+        <label class="wide"><span>Что фактически произошло?</span><textarea name="action_result" rows="3" maxlength="2000" required></textarea></label>
+        <label><span>Фактическое время, минут</span><input name="elapsed_minutes" type="number" min="0.1" max="10080" step="0.1" required></label>
+        <label><span>I₁₀ · Микро-коррекция</span><textarea name="correction" rows="3" maxlength="1200" required></textarea></label>
+        <label><span>I₁₁ · Мини-узнавание</span><textarea name="recognition" rows="3" maxlength="1200" required></textarea></label>
+        <label><span>I₁₂ · Мини-синтез</span><textarea name="synthesis" rows="3" maxlength="1200" required></textarea></label>
+        <div class="observation-submit"><p id="observation-error" role="alert"></p><button class="primary" type="submit">Собрать квитанцию <span>↓</span></button></div>
+      </form>
+      <article class="receipt" id="receipt" hidden></article>
+    </section>
+
+    <section class="journal" id="journal">
+      <header class="section-head"><div><p class="eyebrow">ЛОКАЛЬНЫЙ ЖУРНАЛ</p><h2>Следы остаются в этом браузере</h2></div><p>Последние планы и квитанции сохраняются только локально. Для переноса между устройствами скачайте JSON.</p></header>
+      <div class="journal-list" id="journal-list"><p>Записей пока нет.</p></div>
+    </section>
+
+    <section class="boundary"><b>ГРАНИЦА</b><p>Пₘ и Vₘ — относительные производные от видимых входных оценок, не вероятность успеха и не объективная диагностика. Модуль не выполняет действие за человека. Авторский статус продукта не назначен; `Q` остаётся `null` до отдельного внешнего наблюдения.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=tactics-20261020-r1"></script>
+</body>
+</html>

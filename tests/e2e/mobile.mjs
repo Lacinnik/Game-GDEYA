@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/"]) {
+    for (const path of ["platform/", "ecosystem/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -94,6 +94,34 @@ try {
     assert.match(await desktopPage.locator('[name="object"]').inputValue(), /Программный интерфейс различения объектов/u);
     assert.equal(await desktopPage.locator('[name="context"]').inputValue(), "Цифровая экосистема · ИИ/API онтологический движок");
     await assertFitsScreen(desktopPage, `${name} ecosystem desktop handoff`);
+
+    const tacticSeed = new URLSearchParams({ object: "Проверяемый объект тактики", context: "E2E · локальный контекст" });
+    await desktopPage.goto(site.url(`labs/tactics/?${tacticSeed.toString()}#workbench`));
+    await desktopPage.waitForFunction(() => document.querySelector('[name="object"]')?.value.length > 0);
+    await desktopPage.locator('[name="target_relation"]').fill("Перевести объект в один шаг");
+    await desktopPage.locator('[name="invariant"]').fill("Сохранить исходный объект");
+    await desktopPage.locator('[name="metric_basis"]').fill("Есть 15 минут, один исполнитель и рабочий документ.");
+    for (const [field, value] of [["noise", "0.25"], ["local_density", "0.75"], ["focus", "1"], ["scope", "0.25"], ["time_load", "0.5"], ["energy", "0.75"], ["environment", "m2"]]) {
+      await desktopPage.locator(`[name="${field}"]`).selectOption(value);
+    }
+    await desktopPage.locator('[name="planned_minutes"]').fill("15");
+    await desktopPage.locator('[name="micro_decision"]').fill("Собрать один абзац");
+    await desktopPage.locator('[name="micro_vector"]').fill("К проверяемой формулировке");
+    await desktopPage.locator('[name="action"]').fill("Написать и сохранить один абзац");
+    await desktopPage.locator('[name="completion_signal"]').fill("Абзац существует в документе");
+    await desktopPage.locator('[name="micro_collapse"]').fill("Закрыть редактор и сделать паузу");
+    await desktopPage.getByRole("button", { name: "Собрать тактический паспорт →" }).click();
+    await desktopPage.waitForSelector("#plan-stage:not([hidden])");
+    assert.match(await desktopPage.locator("#plan-passport").innerText(), /Q = null/u);
+    await desktopPage.locator('[name="action_result"]').fill("Абзац сохранён.");
+    await desktopPage.locator('[name="elapsed_minutes"]').fill("12");
+    await desktopPage.locator('[name="correction"]').fill("Убран второй сценарий.");
+    await desktopPage.locator('[name="recognition"]').fill("Одного абзаца достаточно для проверки.");
+    await desktopPage.locator('[name="synthesis"]').fill("Следующий цикл — после чтения участником.");
+    await desktopPage.getByRole("button", { name: "Собрать квитанцию ↓" }).click();
+    await desktopPage.waitForSelector("#receipt:not([hidden])");
+    assert.match(await desktopPage.locator("#receipt").innerText(), /Q = null/u);
+    await assertFitsScreen(desktopPage, `${name} tactics desktop cycle`);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

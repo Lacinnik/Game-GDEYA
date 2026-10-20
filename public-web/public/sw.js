@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'ecosystem-20261020-r1';
+const CACHE_REVISION = 'tactics-20261020-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -59,9 +59,15 @@ const SHELL = [
   './labs/axis-cycle/',
   './labs/axis-cycle/index.html',
   './labs/axis-cycle/styles.css?v=axis-cycle-20261020-r1',
-  './labs/axis-cycle/app.mjs?v=ecosystem-20261020-r1',
+  './labs/axis-cycle/app.mjs?v=tactics-20261020-r1',
   './labs/axis-cycle/protocol.mjs?v=axis-cycle-20261020-r1',
   './labs/axis-cycle/CONTRACT.md',
+  './labs/tactics/',
+  './labs/tactics/index.html',
+  './labs/tactics/styles.css?v=tactics-20261020-r1',
+  './labs/tactics/app.mjs?v=tactics-20261020-r1',
+  './labs/tactics/protocol.mjs?v=tactics-20261020-r1',
+  './labs/tactics/CONTRACT.md',
   './labs/core-separation/manifest.json',
   './labs/core-separation/sw.js',
 ];
@@ -93,6 +99,7 @@ function navigationFallback(request) {
   if (/\/labs\/module(?:\/|$)/u.test(pathname)) return caches.match('./labs/module/index.html');
   if (/\/labs\/meta-core(?:\/|$)/u.test(pathname)) return caches.match('./labs/meta-core/index.html');
   if (/\/labs\/axis-cycle(?:\/|$)/u.test(pathname)) return caches.match('./labs/axis-cycle/index.html');
+  if (/\/labs\/tactics(?:\/|$)/u.test(pathname)) return caches.match('./labs/tactics/index.html');
   if (/\/ecosystem(?:\/|$)/u.test(pathname)) return caches.match('./ecosystem/index.html');
   if (/\/platform(?:\/|$)/u.test(pathname)) return caches.match('./platform/index.html');
   return undefined;

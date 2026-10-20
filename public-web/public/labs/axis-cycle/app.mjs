@@ -40,6 +40,17 @@ function handoffUrl(handoff) {
   return `${RESON_URL}#axis=${encodeEnvelope(handoff)}`;
 }
 
+function tacticsUrl(handoff) {
+  const parameters = new URLSearchParams({
+    object: handoff.object,
+    target_relation: handoff.target_relation,
+    context: handoff.context,
+    next_action: handoff.next_action,
+    invariant: handoff.invariant,
+  });
+  return `../tactics/?${parameters.toString()}#workbench`;
+}
+
 function activateHandoff(handoff) {
   state.handoff = handoff;
   $("#passport").innerHTML = passportMarkup(handoff);
@@ -87,6 +98,7 @@ function renderReturn(returned) {
   $("#return-decision").classList.toggle("hold", !returned.allow);
   $("#return-reason").textContent = returned.allow ? "Предварительный порог по предъявленным данным пройден." : `Возврат к пересборке · gate=${returned.gate}.`;
   $("#return-links").textContent = returned.links_verified ? "ПРЕДЪЯВЛЕНЫ" : "НЕПОЛНЫ";
+  $("#open-tactics").href = tacticsUrl(state.handoff);
   $("[data-step-button='return']").disabled = false;
   showStage("return");
 }

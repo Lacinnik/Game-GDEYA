@@ -66,6 +66,14 @@
       "status": "unstated",
       "url": "https://lacinnik.github.io/Game-GDEYA/ecosystem/",
       "source": "public-web/public/ecosystem/CONTRACT.md"
+    },
+    {
+      "id": "architectonics-tactics",
+      "name": "Архитектоника Тактики · Операционный модуль",
+      "version": "0.1",
+      "status": "unstated",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/tactics/",
+      "source": "public-web/public/labs/tactics/CONTRACT.md"
     }
   ]
 }
