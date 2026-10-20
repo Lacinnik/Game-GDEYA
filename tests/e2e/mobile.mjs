@@ -75,11 +75,26 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/"]) {
+    for (const path of ["platform/", "ecosystem/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
     }
+
+    const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const desktopPage = await desktopContext.newPage();
+    desktopPage.on("pageerror", (error) => errors.push(`desktop: ${error.message}`));
+    await desktopPage.goto(site.url("ecosystem/"));
+    await desktopPage.getByPlaceholder("Например: диагностика, агент, команда…").fill("онтологический");
+    await desktopPage.getByRole("button", { name: "Цифровые оболочки" }).click();
+    assert.match(await desktopPage.locator("#filter-result").innerText(), /Показано 1 из 56/u);
+    await desktopPage.getByRole("button", { name: "Паспорт объекта" }).click();
+    await desktopPage.getByRole("link", { name: "Передать в ось →" }).click();
+    await desktopPage.waitForFunction(() => document.querySelector('[name="object"]')?.value.length > 0);
+    assert.match(await desktopPage.locator('[name="object"]').inputValue(), /Программный интерфейс различения объектов/u);
+    assert.equal(await desktopPage.locator('[name="context"]').inputValue(), "Цифровая экосистема · ИИ/API онтологический движок");
+    await assertFitsScreen(desktopPage, `${name} ecosystem desktop handoff`);
+    await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();
     console.log(`✓ ${name} · iPhone 13`);

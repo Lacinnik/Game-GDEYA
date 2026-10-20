@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071312">
+  <meta name="description" content="Рабочий реестр цифровой экосистемы Архитектоники: от ГДЕЯ и РЕЗОН до программ, модулей и цифровых оболочек.">
+  <title>Цифровая экосистема · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=ecosystem-20261020-r1">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <header class="site-head">
+    <a class="brand" href="../platform/" aria-label="Вернуться в Архитектонику">
+      <span class="brand-mark">⊕</span>
+      <span><b>АРХИТЕКТОНИКА</b><small>ЦИФРОВАЯ ЭКОСИСТЕМА</small></span>
+    </a>
+    <nav aria-label="Навигация экосистемы">
+      <a href="#spine">Ось</a>
+      <a href="#registry">Реестр</a>
+      <a href="#roadmap">Сборка</a>
+      <a class="nav-accent" href="../labs/axis-cycle/">Живая ось →</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow">РАБОЧАЯ СБОРКА · 20.10.2026</p>
+        <h1>Не россыпь идей.<br><em>Одна живая система.</em></h1>
+        <p class="lead">Готовые продукты становятся мостом для следующих. Каждая идея получает собственный объект, место в архитектуре и проверяемый следующий ход — без преждевременного канона и обещаний результата.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#registry">Открыть полный реестр <span>↓</span></a>
+          <a class="button secondary" href="../labs/axis-cycle/">Провести свой проект <span>→</span></a>
+        </div>
+      </div>
+      <div class="hero-instrument" aria-label="Пять состояний цифровой экосистемы">
+        <div class="instrument-ring r1"></div>
+        <div class="instrument-ring r2"></div>
+        <div class="instrument-ring r3"></div>
+        <div class="instrument-core"><span>O</span><b>ЭКОСИСТЕМА</b><small>Q = null</small></div>
+        <span class="instrument-label il1">ГДЕЯ</span>
+        <span class="instrument-label il2">РЕЗОН</span>
+        <span class="instrument-label il3">ТАКТИКА</span>
+        <span class="instrument-label il4">МОДУЛИ</span>
+        <span class="instrument-label il5">ОБОЛОЧКИ</span>
+      </div>
+    </section>
+
+    <section class="principle shell" aria-label="Принцип экосистемы">
+      <span class="principle-mark">O</span>
+      <div><p class="eyebrow">ЕДИНИЦА СБОРКИ</p><h2>Не название продукта, а точно удерживаемый объект.</h2></div>
+      <p>Паспорт фиксирует O, роль, источник и следующий ход. S, I, R<sub>g</sub> и C формулирует человек в ГДЕЯ; поле проверяется в РЕЗОН; Q появляется только после отдельного наблюдения.</p>
+    </section>
+
+    <section class="spine-section shell" id="spine">
+      <header class="section-head">
+        <div><p class="eyebrow">НЕСУЩАЯ ЛИНИЯ</p><h2>Шесть контуров одной траектории</h2></div>
+        <p>Первые два уже создают рабочий мост. Следующие раскрываются по мере проверки и не требуют строить новую вселенную поверх существующей.</p>
+      </header>
+      <div class="spine" id="spine-list" aria-live="polite"></div>
+    </section>
+
+    <section class="registry-section" id="registry">
+      <div class="shell">
+        <header class="section-head registry-head">
+          <div><p class="eyebrow">ПОЛНЫЙ РАБОЧИЙ РЕЕСТР</p><h2>Все продукты и идеи — в одной системе координат</h2></div>
+          <p id="registry-summary">Загрузка реестра…</p>
+        </header>
+
+        <div class="registry-tools">
+          <label class="search-field">
+            <span>Найти объект</span>
+            <input id="search" type="search" autocomplete="off" placeholder="Например: диагностика, агент, команда…">
+          </label>
+          <div class="stage-key" id="stage-key" aria-label="Рабочие стадии"></div>
+        </div>
+
+        <div class="category-filters" id="category-filters" role="group" aria-label="Категории продуктов"></div>
+        <p class="filter-result" id="filter-result" aria-live="polite"></p>
+        <div class="catalog-grid" id="catalog-grid"></div>
+      </div>
+    </section>
+
+    <section class="roadmap-section shell" id="roadmap">
+      <header class="section-head">
+        <div><p class="eyebrow">ПОРЯДОК СБОРКИ</p><h2>Строим от работающего моста к масштабу</h2></div>
+        <p>Не все объекты должны стать приложениями. Форма выбирается после прохода через объект, поле и наблюдение.</p>
+      </header>
+      <div class="roadmap" id="roadmap-list"></div>
+    </section>
+
+    <section class="boundary shell">
+      <div><span>ГРАНИЦА ТЕКУЩЕЙ ВЕРСИИ</span><h2>Финальные решения пока намеренно открыты.</h2></div>
+      <ul id="deferred-list"></ul>
+      <p>Стадии в каталоге описывают только готовность к сборке. Они не являются авторским, юридическим или коммерческим статусом.</p>
+    </section>
+  </main>
+
+  <footer class="site-foot shell">
+    <a class="brand compact" href="../platform/"><span class="brand-mark">⊕</span><span><b>АРХИТЕКТОНИКА</b><small>ПЛАТФОРМА ПРОДУКТОВ</small></span></a>
+    <p>ГДЕЯ различает объект. РЕЗОН предъявляет поле. Наблюдение возвращает реальность.</p>
+    <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">К началу ↑</a>
+  </footer>
+
+  <noscript><p class="noscript">Для работы реестра включите JavaScript.</p></noscript>
+  <script type="module" src="./app.mjs?v=ecosystem-20261020-r1"></script>
+</body>
+</html>

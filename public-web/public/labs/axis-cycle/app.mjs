@@ -68,6 +68,19 @@ function restoreDraft() {
   } catch { /* Corrupt optional draft is ignored. */ }
 }
 
+function applyCatalogSeed() {
+  const parameters = new URLSearchParams(location.search);
+  const seeds = {
+    object: parameters.get("object")?.trim().slice(0, 500),
+    context: parameters.get("context")?.trim().slice(0, 1200),
+  };
+  for (const [name, value] of Object.entries(seeds)) {
+    if (!value) continue;
+    const field = $("#axis-form").elements.namedItem(name);
+    if (field) field.value = value;
+  }
+}
+
 function renderReturn(returned) {
   state.returned = returned;
   $("#return-decision").textContent = returned.allow ? "ALLOW" : "HOLD";
@@ -131,5 +144,6 @@ $("#observation-form").addEventListener("submit", (event) => {
 });
 
 restoreDraft();
+applyCatalogSeed();
 loadReturn();
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js").catch(() => {});

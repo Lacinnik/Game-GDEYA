@@ -58,6 +58,14 @@
       "status": "unstated",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/axis-cycle/",
       "source": "public-web/public/labs/axis-cycle/CONTRACT.md"
+    },
+    {
+      "id": "ecosystem-registry",
+      "name": "Цифровая экосистема Архитектоники",
+      "version": "0.1",
+      "status": "unstated",
+      "url": "https://lacinnik.github.io/Game-GDEYA/ecosystem/",
+      "source": "public-web/public/ecosystem/CONTRACT.md"
     }
   ]
 }
