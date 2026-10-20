@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071312">
+  <meta name="description" content="Живая ось — локальный маршрут передачи объекта из ГДЕЯ в РЕЗОН и возвращения наблюдаемого отклика.">
+  <title>Живая ось · ГДЕЯ × РЕЗОН</title>
+  <link rel="stylesheet" href="./styles.css?v=axis-cycle-20261020-r1">
+  <style>
+    @media (max-width: 900px) {
+      .hero-copy,
+      .axis-visual { min-width: 0; }
+    }
+
+    @media (max-width: 680px) {
+      .hero h1 {
+        font-size: clamp(40px, 11.5vw, 56px);
+        overflow-wrap: anywhere;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient" aria-hidden="true"></div>
+  <header class="site-head">
+    <a href="../../platform/"><span class="mark">⊕</span><span><b>АРХИТЕКТОНИКА</b><small>ЖИВАЯ ОСЬ</small></span></a>
+    <p>ГДЕЯ <i>→</i> РЕЗОН <i>→</i> ВОЗВРАТ</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">СКВОЗНОЙ МАРШРУТ · СТАТУС НЕ НАЗНАЧЕН</p>
+        <h1>Ось становится живой,<br>когда <em>возвращается.</em></h1>
+        <p class="lead">ГДЕЯ удерживает личный объект и следующий ход. РЕЗОН проверяет, предъявлено ли коллективное поле. Возврат не доказывает эффективность — он создаёт место для отдельного наблюдения.</p>
+      </div>
+      <div class="axis-visual" aria-label="ГДЕЯ передаёт объект РЕЗОНУ, после чего наблюдение возвращается в ГДЕЯ">
+        <div class="pole subject"><span>10 / SUBJECT</span><b>ГДЕЯ</b><small>личная ось</small></div>
+        <div class="bridge"><span></span><i>O</i><i>S</i><i>I</i><i>R<sub>g</sub></i><i>C</i><strong>Q?</strong></div>
+        <div class="pole field"><span>10 / FIELD</span><b>РЕЗОН</b><small>общее поле</small></div>
+      </div>
+    </section>
+
+    <section class="journey" id="journey">
+      <nav class="steps" aria-label="Этапы живой оси">
+        <button class="active" type="button" data-step-button="compose"><span>01</span> СОБРАТЬ</button>
+        <button type="button" data-step-button="handoff" disabled><span>02</span> ПЕРЕДАТЬ</button>
+        <button type="button" data-step-button="return" disabled><span>03</span> ВЕРНУТЬ</button>
+      </nav>
+
+      <section class="stage active" data-stage="compose">
+        <div class="stage-head"><p class="stage-code">01 · ГДЕЯ / SUBJECT</p><h2>Назовите то, что должно пройти через поле.</h2><p>Паспорт не диагностирует вас и не подтверждает истинность образа. Он сохраняет различия между объектом, проявлением субъекта и способом действия.</p></div>
+        <form id="axis-form" class="axis-form">
+          <label class="wide"><span>O · Объект дословно</span><textarea name="object" rows="2" maxlength="500" required placeholder="Как именно вы называете объект перехода?"></textarea></label>
+          <label><span>S · Проявление субъекта</span><textarea name="subject_manifestation" rows="4" maxlength="1200" required placeholder="Как вы сейчас действуете по отношению к объекту?"></textarea></label>
+          <label><span>I · Отражённый образ</span><textarea name="reflected_image" rows="4" maxlength="1200" required placeholder="Какой образ или смысл возникает? Это интерпретация, не факт."></textarea></label>
+          <label><span>R<sub>g</sub> · Целевое отношение</span><textarea name="target_relation" rows="4" maxlength="1200" required placeholder="Какое отношение к объекту вы хотите провести?"></textarea></label>
+          <label><span>C · Контекст</span><textarea name="context" rows="4" maxlength="1200" required placeholder="Где, с кем и при каких ограничениях происходит переход?"></textarea></label>
+          <label><span>Следующий наблюдаемый шаг</span><textarea name="next_action" rows="3" maxlength="1200" required placeholder="Что конкретно будет сделано после проверки поля?"></textarea></label>
+          <label><span>Сохраняемый инвариант</span><textarea name="invariant" rows="3" maxlength="1200" required placeholder="Что нельзя потерять при переходе?"></textarea></label>
+          <div class="form-end wide"><p>Все данные остаются в браузере до тех пор, пока вы сами не откроете ссылку передачи или не скачаете JSON.</p><button class="primary" type="submit">Собрать паспорт <span>→</span></button></div>
+        </form>
+      </section>
+
+      <section class="stage" data-stage="handoff" aria-hidden="true">
+        <div class="stage-head"><p class="stage-code">02 · ПАСПОРТ ПЕРЕХОДА</p><h2>Один объект. Два независимых контура.</h2><p>URL-фрагмент читается только браузером и не отправляется серверу GitHub Pages. РЕЗОН получит черновик, но не полномочие действовать от вашего имени.</p></div>
+        <div class="passport-layout">
+          <div class="passport" id="passport"></div>
+          <aside class="handoff-actions">
+            <span class="signal">ГОТОВО К ПЕРЕДАЧЕ</span>
+            <h3>Перейти в поле</h3>
+            <p>Добавьте от двух до шести голосов, предъявите связи и предварительные оценки. Наблюдаемое Q останется пустым.</p>
+            <a class="primary" id="open-reson" href="#" rel="noopener">Открыть РЕЗОН <span>↗</span></a>
+            <button id="download-handoff" type="button">Скачать паспорт JSON</button>
+            <button id="edit-handoff" type="button">Изменить формулировки</button>
+          </aside>
+        </div>
+      </section>
+
+      <section class="stage" data-stage="return" aria-hidden="true">
+        <div class="stage-head"><p class="stage-code">03 · ВОЗВРАТ ИЗ РЕЗОНА</p><h2>Поле ответило. Результат ещё предстоит наблюдать.</h2><p>ALLOW или HOLD — это решение локального протокола по предъявленным данным. Оно не является наблюдаемым Q и не подтверждает согласие или эффективность.</p></div>
+        <div class="return-grid">
+          <article class="return-card"><span>РЕШЕНИЕ ПОЛЯ</span><b id="return-decision">—</b><p id="return-reason"></p></article>
+          <article class="return-card"><span>СВЯЗИ</span><b id="return-links">—</b><p>Предъявлены или требуют возвращения к составу поля.</p></article>
+          <article class="return-card q-card"><span>НАБЛЮДАЕМОЕ Q</span><b id="return-q">null</b><p>Не заполняется решением РЕЗОНА.</p></article>
+        </div>
+        <form id="observation-form" class="observation-form">
+          <label><span>Фактический возврат объекта</span><textarea name="observation" rows="4" maxlength="2000" placeholder="Что произошло после следующего действия? Оставьте пустым, если наблюдения ещё нет."></textarea></label>
+          <label><span>Q · только при наличии наблюдения</span><input name="observed_q" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
+          <div class="observation-actions"><button class="primary" type="submit">Собрать квитанцию оси <span>↓</span></button><a id="repeat-field" href="#" rel="noopener">Повторить проверку поля</a></div>
+          <p id="observation-error" role="alert"></p>
+        </form>
+      </section>
+    </section>
+
+    <section class="boundary"><b>ГРАНИЦА</b><p>Паспорт — локальный перенос авторской формулировки. Он не удостоверяет личность, полномочия, согласие других людей или истинность образа. `Q` остаётся `null`, пока фактический возврат не описан отдельно.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=axis-cycle-20261020-r1"></script>
+</body>
+</html>

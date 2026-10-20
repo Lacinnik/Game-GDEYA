@@ -28,6 +28,7 @@
 - **MODULE 1.0 stable:** `https://lacinnik.github.io/Game-GDEYA/labs/module/` — исполнимый контур `49 Азов × 24 Буки × 7 Передач` с локальным паспортом.
 - **VoidOCR 1.0 stable:** `https://lacinnik.github.io/Game-GDEYA/labs/voidocr/` — локальный четырёхэтапный протокол различения с JSON-экспортом и подготовленным офлайн-контуром.
 - **SEP-7×7 v0.1:** `https://lacinnik.github.io/Game-GDEYA/labs/core-separation/` — карта 7 законов сохранения Ядра × 7 жизненных контуров с одним ⊕-шагом и наблюдаемым возвратом.
+- **Живая ось:** `https://lacinnik.github.io/Game-GDEYA/labs/axis-cycle/` — локальный сквозной маршрут `ГДЕЯ → РЕЗОН → возврат`; статус продукта автором пока не назначен, `Q=null` до отдельного наблюдения.
 
 Реестр является источником статусов для лаунчера. Статусы дисциплинарного корпуса ТзАр сверяются с `contour/manifest.json` репозитория `Lacinnik/-tensor-architectonics`; QENGINE публикуется только как `candidate · author-reviewed`, не как канон.
 
