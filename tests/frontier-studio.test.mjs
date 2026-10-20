@@ -87,7 +87,7 @@ test("catalog routes all 18 former frontier objects into their exact modes", asy
     assert.equal(byId.get(track.id).entrypoint, `../labs/frontier/?mode=${track.mode}`);
   }
   assert.equal(byId.get("facilitator-certification").delivery_stage, "final-phase");
-  assert.equal(byId.get("facilitator-certification").entrypoint, null);
+  assert.equal(byId.get("facilitator-certification").entrypoint, "../labs/certification/");
 });
 
 test("frontier shell and offline route are wired", async () => {
@@ -100,7 +100,7 @@ test("frontier shell and offline route are wired", async () => {
   assert.match(html, /styles\.css\?v=frontier-20261020-r1/u);
   assert.match(html, /app\.mjs\?v=frontier-20261020-r1/u);
   assert.match(app, /frontierTrackByProduct/u);
-  assert.match(worker, /CACHE_REVISION = 'frontier-20261020-r1'/u);
+  assert.match(worker, /CACHE_REVISION = 'certification-20261020-r1'/u);
   assert.match(worker, /\.\/labs\/frontier\/index\.html/u);
 });
 
