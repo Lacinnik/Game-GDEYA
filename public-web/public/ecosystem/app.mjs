@@ -35,11 +35,13 @@ function renderSpine() {
   $("#spine-list").innerHTML = state.catalog.spine.map((id, index) => {
     const item = byId.get(id);
     if (!item) return "";
+    const entrypoint = item.entrypoint ? `<a href="${escapeHtml(item.entrypoint)}"${item.entrypoint.startsWith("http") ? ' target="_blank" rel="noopener noreferrer"' : ""}>Открыть →</a>` : "";
     return `<article class="spine-node">
       <span class="spine-index">${String(index + 1).padStart(2, "0")}</span>
       <h3>${escapeHtml(item.name)}</h3>
       <p>${escapeHtml(item.role)}</p>
       ${stagePill(item.delivery_stage)}
+      ${entrypoint}
     </article>`;
   }).join("");
 }

@@ -91,6 +91,7 @@ button, input { font: inherit; }
 .stage-pill { display: inline-flex; align-items: center; gap: 7px; width: max-content; margin-top: auto; color: var(--dim); font-size: 9px; letter-spacing: .11em; text-transform: uppercase; }
 .stage-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 0 9px currentColor; }
 .stage-pill.live { color: var(--mint); }.stage-pill.prototype { color: var(--blue); }.stage-pill.specified { color: var(--gold); }.stage-pill.hypothesis { color: var(--violet); }.stage-pill.final-phase { color: var(--coral); }
+.spine-node > a { margin-top: 13px; color: var(--gold); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
 
 .registry-section { padding: 110px 0 128px; background: linear-gradient(180deg, rgba(14,35,30,.46), rgba(6,16,15,.12)); border-block: 1px solid var(--line); }
 .registry-head { align-items: start; }

@@ -35,6 +35,10 @@ test("six-part spine follows the declared product line", () => {
   assert.equal(byId.get("architectonics-tactics").entrypoint, "../labs/tactics/");
   assert.equal(byId.get("living-materialization-module").delivery_stage, "live");
   assert.equal(byId.get("living-materialization-module").entrypoint, "../labs/module/");
+  assert.equal(byId.get("core-architecture-license").delivery_stage, "prototype");
+  assert.equal(byId.get("core-architecture-license").entrypoint, "../labs/core-license/");
+  assert.equal(byId.get("architect-creator").delivery_stage, "prototype");
+  assert.equal(byId.get("architect-creator").entrypoint, "../labs/creator-gate/");
 });
 
 test("final decisions and observed Q remain outside the registry", () => {

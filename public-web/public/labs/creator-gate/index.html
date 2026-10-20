@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0a0910">
+  <meta name="description" content="Закрытый контур Архитектор / Творец: подготовка запроса на рассмотрение без самоназначения роли и фиктивной выдачи доступа.">
+  <title>Архитектор / Творец · Закрытый контур</title>
+  <link rel="stylesheet" href="./styles.css?v=product-line-20261020-r1">
+  <style>.acknowledgements input{width:1px;height:1px;pointer-events:none}</style>
+</head>
+<body>
+  <div class="field" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <nav><a href="../../ecosystem/">Экосистема</a><a href="../core-license/">Core License</a></nav>
+    <small>CLOSED CONTOUR · REQUEST GATE</small>
+  </header>
+  <main>
+    <section class="hero">
+      <p class="kicker">LEVEL 04 · CANONICAL ACCESS</p>
+      <h1>Граница ядра —<br><em>не форма исключения.</em></h1>
+      <div class="hero-foot"><p>Она удерживает ответственность, качество передачи и различие между изучением системы и правом говорить от её имени.</p><span>ЗАПРОС ≠ ДОПУСК</span></div>
+    </section>
+
+    <section class="vertical" aria-label="Рабочая вертикаль закрытого контура">
+      <article><span>01</span><b>Источник</b><p>Минимальный порождающий код. Не присваивается интерфейсом.</p></article>
+      <article><span>02</span><b>Творец</b><p>Смысловая мера и причинная линия.</p></article>
+      <article><span>03</span><b>Архитектор</b><p>Структура, циклы и проверка согласованности.</p></article>
+      <article><span>04</span><b>Миры</b><p>Материализация в конкретной форме и контексте.</p></article>
+    </section>
+    <p class="source-note">Вертикаль показана как рабочая модель из исходных материалов, а не как закреплённый канон или иерархия людей.</p>
+
+    <form id="access-form" class="workbench">
+      <div class="form-intro"><p class="kicker">ACCESS REQUEST · LOCAL ONLY</p><h2>Подготовить запрос на рассмотрение</h2><p>Форма не проверяет личность, не раскрывает закрытые материалы и не выдаёт доступ. Она собирает точный объект, проявление субъекта, образ, отношение и контекст.</p></div>
+      <section class="tensor-grid">
+        <label><span>O · объект дословно</span><textarea name="object" maxlength="600" required placeholder="С чем именно вы хотите работать?"></textarea></label>
+        <label><span>S · субъектное проявление</span><textarea name="subject_manifestation" maxlength="1800" required placeholder="Что вы лично уже делаете по отношению к объекту?"></textarea></label>
+        <label><span>I · отражённый образ</span><textarea name="reflected_image" maxlength="1800" required placeholder="Как объект сейчас выглядит в вашем опыте?"></textarea></label>
+        <label><span>R<sub>g</sub> · целевое отношение</span><textarea name="target_relation" maxlength="1800" required placeholder="Какое отношение вы хотите провести?"></textarea></label>
+        <label><span>C · контекст</span><textarea name="context" maxlength="1800" required placeholder="Среда, роли, ограничения, срок."></textarea></label>
+        <label><span>Инвариант</span><textarea name="invariant" maxlength="1800" required placeholder="Что не должно быть потеряно?"></textarea></label>
+      </section>
+
+      <section class="request-grid">
+        <label><span>Запрашиваемый контур</span><select name="role" required><option value="">Выберите без самоназначения</option><option value="creator">Творец</option><option value="architect">Архитектор</option><option value="bridge">Связка Творец ↔ Архитектор</option><option value="research">Исследовательский доступ</option></select></label>
+        <label><span>Цель запроса</span><textarea name="purpose" maxlength="1800" required placeholder="Зачем нужен именно закрытый контур?"></textarea></label>
+        <label><span>Предыдущий след</span><textarea name="prior_trace" maxlength="1800" required placeholder="Артефакты, прохождения, исследования — без преувеличений."></textarea></label>
+        <label><span>Вклад и ответственность</span><textarea name="contribution" maxlength="1800" required placeholder="Что вы готовы удерживать и производить?"></textarea></label>
+        <label><span>Запрашиваемый материал</span><textarea name="requested_material" maxlength="1800" required placeholder="Какой конкретный объём нужен?"></textarea></label>
+        <label><span>Личные границы</span><textarea name="boundaries" maxlength="1800" required placeholder="Что для вас недопустимо или требует отдельного согласования?"></textarea></label>
+        <label class="wide"><span>Рекомендация / проверяемая ссылка</span><input name="sponsor_reference" maxlength="1000" required placeholder="Контакт, документ или URL; если рекомендации нет — напишите «нет»"></label>
+      </section>
+
+      <fieldset class="acknowledgements"><legend>Явные согласия</legend>
+        <label><input type="checkbox" name="consent" required><span><b>Добровольность</b> Я формирую запрос без давления и могу остановиться.</span></label>
+        <label><input type="checkbox" name="confidentiality" required><span><b>Конфиденциальность</b> Я понимаю, что отдельные материалы могут иметь ограниченный режим.</span></label>
+        <label><input type="checkbox" name="non_assignment" required><span><b>Без самоназначения</b> Запрос не делает меня носителем роли и не даёт права говорить от имени системы.</span></label>
+      </fieldset>
+      <div class="submit-row"><p id="form-error" role="alert"></p><button class="primary" type="submit">Собрать запрос <span>→</span></button></div>
+    </form>
+
+    <section id="result" class="result" hidden>
+      <div class="status"><span>REVIEW REQUIRED</span><b>ACCESS GRANTED = FALSE</b></div>
+      <h2>Запрос собран.<br>Решение не присвоено.</h2>
+      <div id="result-output" class="result-grid"></div>
+      <div class="result-actions"><button id="download" class="primary">Скачать запрос JSON <span>↓</span></button><a href="../../product-line/">Вернуться к линии →</a></div>
+    </section>
+    <section class="boundary"><b>ГРАНИЦА</b><p>Это технический шлюз подготовки запроса, а не система авторизации. Он не подтверждает идентичность, субъектность, канонический статус, допуск или результат. `Q` остаётся `null`.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=product-line-20261020-r1"></script>
+</body>
+</html>
