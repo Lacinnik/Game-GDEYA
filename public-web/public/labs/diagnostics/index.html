@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07100f">
+  <meta name="description" content="Диагностическая студия Архитектоники: пять нейтральных протоколов, явные основания и переход к действию без скрытого диагноза.">
+  <title>Диагностическая студия · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=diagnostics-20261020-r1">
+</head>
+<body>
+  <div class="grid" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <nav><a href="../../ecosystem/">Экосистема</a><a href="../tactics/">Тактика</a><a href="../core-license/">Core License</a></nav>
+    <small>DIAGNOSTIC STUDIO · 0.1</small>
+  </header>
+  <main>
+    <section class="hero">
+      <div><p class="kicker">FIVE INSTRUMENTS · ONE EVIDENCE BOUNDARY</p><h1>Не поставить диагноз.<br><em>Найти следующий проверяемый ход.</em></h1></div>
+      <div class="hero-copy"><p>Студия собирает самоотчёт вокруг точного объекта, показывает видимые производные и выпускает паспорт для Тактики. Личность, полномочия и результат не выводятся из чисел.</p><div class="hero-state"><span>5 ПРОТОКОЛОВ</span><b>O → S → I → R<sub>g</sub></b><small>verified=false · Q=null</small></div></div>
+    </section>
+
+    <section class="mode-section">
+      <header><p class="kicker">01 · SELECT INSTRUMENT</p><h2>Какой контур вы исследуете?</h2></header>
+      <div id="mode-list" class="mode-list" role="tablist"></div>
+    </section>
+
+    <form id="diagnostic-form" class="workbench">
+      <section class="mode-intro"><p id="mode-code" class="kicker"></p><h2 id="mode-title"></h2><p id="mode-purpose"></p><small id="mode-source"></small></section>
+      <section class="tensor-section">
+        <header><span>02</span><div><p class="kicker">OBJECT–SUBJECT TENSOR</p><h2>Зафиксируйте ось без подмены</h2></div></header>
+        <div class="fields">
+          <label><span>O · объект дословно</span><textarea name="object" maxlength="600" required placeholder="Что именно исследуется?"></textarea></label>
+          <label><span>S · наблюдаемое проявление субъекта</span><textarea name="subject_manifestation" maxlength="1800" required placeholder="Какие действия, документы или решения уже существуют?"></textarea></label>
+          <label><span>I · отражённый образ</span><textarea name="reflected_image" maxlength="1800" required placeholder="Как объект описан или воспринимается сейчас?"></textarea></label>
+          <label><span>R<sub>g</sub> · целевое отношение</span><textarea name="target_relation" maxlength="1800" required placeholder="Какое отношение к конкретной цели проводится?"></textarea></label>
+          <label><span>C · контекст</span><textarea name="context" maxlength="1800" required placeholder="Среда, роли, ограничения и окно наблюдения."></textarea></label>
+          <label><span>Инвариант</span><textarea name="invariant" maxlength="1800" required placeholder="Что нельзя потерять при следующем ходе?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="instrument-section">
+        <header><span>03</span><div><p class="kicker">VISIBLE INPUTS</p><h2>Рабочие наблюдения</h2></div></header>
+        <div class="scale-legend" id="scale-legend"><span>0 · опровергнуто</span><span>0.25 · слабый след</span><span>0.5 · неоднозначно</span><span>0.75 · сильный след</span><span>1 · прямая опора</span></div>
+        <div id="instrument"></div>
+      </section>
+
+      <section class="evidence-section">
+        <header><span>04</span><div><p class="kicker">EVIDENCE · ACTION</p><h2>Назовите основание и следующий ход</h2></div></header>
+        <div class="fields">
+          <label><span>Окно наблюдения</span><textarea name="observation_window" maxlength="1200" required placeholder="Например: последние две недели, один проект, одна встреча."></textarea></label>
+          <label><span>Указатель свидетельства</span><textarea name="evidence_pointer" maxlength="1200" required placeholder="Документ, ссылка, событие или «нет внешнего свидетельства»."></textarea></label>
+          <label class="wide"><span>Следующий проверяемый шаг</span><textarea name="next_action" maxlength="1200" required placeholder="Один глагол, один объект, один наблюдаемый выход."></textarea></label>
+        </div>
+      </section>
+      <div class="submit-row"><p id="form-error" role="alert"></p><button class="primary" type="submit">Собрать диагностический паспорт <span>→</span></button></div>
+    </form>
+
+    <section id="result" class="result" hidden>
+      <div class="result-head"><div><p class="kicker">SELF-REPORTED ROUTING PASSPORT</p><h2 id="result-title"></h2></div><span>DIAGNOSIS = FALSE<br>Q = NULL</span></div>
+      <div id="result-output"></div>
+      <div class="result-actions"><button id="download" class="primary">Скачать JSON <span>↓</span></button><button id="to-tactics">Передать в Тактику <span>→</span></button><button id="new-passport">Новый проход</button></div>
+    </section>
+
+    <details class="journal"><summary>Локальный журнал · <span id="journal-count">0</span></summary><p id="journal-message"></p><div id="journal-list"></div></details>
+    <section class="boundary"><b>ГРАНИЦА</b><p>Все ответы — самоотчёт в выбранном окне. Производные являются равновесными средними из видимых входов, а минимальный сектор — гипотезой маршрутизации. Студия не оценивает людей, не ставит психологический, медицинский, кадровый или организационный диагноз и не подтверждает результат.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=diagnostics-20261020-r1"></script>
+</body>
+</html>
