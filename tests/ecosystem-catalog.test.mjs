@@ -67,9 +67,9 @@ test("five diagnostic objects expose one working studio with explicit modes", ()
   }
   const counts = Object.groupBy(catalog.items, (item) => item.delivery_stage);
   assert.equal(counts.live.length, 5);
-  assert.equal(counts.prototype.length, 22);
+  assert.equal(counts.prototype.length, 27);
   assert.equal(counts.specified.length, 11);
-  assert.equal(counts.hypothesis.length, 17);
+  assert.equal(counts.hypothesis.length, 12);
   assert.equal(counts["final-phase"].length, 1);
 });
 
@@ -100,6 +100,22 @@ test("five facilitation products expose one consent-based working studio", () =>
   }
   assert.equal(byId.get("hr-evaluation").delivery_stage,"hypothesis");
   assert.equal(byId.get("hr-evaluation").entrypoint,null);
+});
+
+test("five digital products expose one authorship-preserving guide studio", () => {
+  const expected = new Map([
+    ["digital-oracle","oracle"],
+    ["telegram-guide","messenger"],
+    ["digital-deck","deck"],
+    ["architectonics-day","day"],
+    ["coach-bot","coach"],
+  ]);
+  for (const [id,mode] of expected) {
+    assert.equal(byId.get(id).delivery_stage,"prototype");
+    assert.equal(byId.get(id).entrypoint,`../labs/guide/?mode=${mode}`);
+  }
+  assert.equal(byId.get("self-diagnosis-app").delivery_stage,"hypothesis");
+  assert.equal(byId.get("self-diagnosis-app").entrypoint,null);
 });
 
 test("live objects expose working entrypoints and axis accepts catalog seeds", async () => {

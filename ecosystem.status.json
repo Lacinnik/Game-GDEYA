@@ -122,6 +122,14 @@
       "status": "prototype",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/facilitation/",
       "source": "public-web/public/labs/facilitation/CONTRACT.md"
+    },
+    {
+      "id": "digital-guide-studio",
+      "name": "Цифровой проводник Архитектоники",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/guide/",
+      "source": "public-web/public/labs/guide/CONTRACT.md"
     }
   ]
 }

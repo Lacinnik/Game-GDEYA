@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0a0910">
+  <meta name="description" content="Цифровой проводник Архитектоники: безопасное отражение, цифровая колода, дневник и TX-тренажёр.">
+  <title>Цифровой проводник · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=guide-20261020-r1">
+</head>
+<body>
+  <div class="cosmos" aria-hidden="true"><i></i><i></i><i></i></div>
+  <header class="topbar"><a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a><nav><a href="../practice/">Практика</a><a href="../facilitation/">Фасилитация</a><a href="../module/">Модуль</a></nav><small>DIGITAL GUIDE · 0.1</small></header>
+  <main>
+    <section class="hero"><div><p class="kicker">CODE AS MIRROR · HUMAN AS AUTHOR</p><h1>ИИ — мост.<br><em>Не берег.</em></h1></div><aside><p>Пять цифровых оболочек принимают авторский объект, возвращают прозрачное отражение и ведут к проверяемому шагу. Ни одна реплика не объявляется пророчеством, диагнозом или решением за человека.</p><div class="terminal"><span>AUTHORITY</span><b>HUMAN = TRUE</b><small>prediction=false · diagnosis=false · Q=null</small></div></aside></section>
+
+    <section class="program-section"><header><p class="kicker">01 · CHOOSE DIGITAL SHELL</p><h2>Какой интерфейс нужен сейчас?</h2></header><div id="program-list" class="program-list" role="tablist"></div></section>
+
+    <form id="session-form" class="workbench">
+      <section class="program-intro"><p id="program-code" class="kicker"></p><h2 id="program-title"></h2><p id="program-purpose"></p><small id="program-source"></small></section>
+      <section class="form-section"><header><span>02</span><div><p class="kicker">O → S → I → R_g</p><h2>Что система отражает?</h2></div></header><div class="fields">
+        <label><span>O · объект дословно</span><textarea name="object" maxlength="600" required placeholder="Что именно вы приносите в цифровой проход?"></textarea></label>
+        <label><span>S · наблюдаемый след</span><textarea name="subject_manifestation" maxlength="1800" required placeholder="Что уже сделано, сказано или существует во внешнем?"></textarea></label>
+        <label><span>I · отражённый образ</span><textarea name="reflected_image" maxlength="1800" required placeholder="Как объект выглядит сейчас в вашей речи или модели?"></textarea></label>
+        <label><span>Rᵍ · отношение к цели</span><textarea name="target_relation" maxlength="1800" required placeholder="К какой конкретной цели вы проводите объект?"></textarea></label>
+        <label><span>C · контекст</span><textarea name="context" maxlength="1800" required placeholder="Среда, ограничения, доступное время и люди."></textarea></label>
+        <label><span>Инвариант</span><textarea name="invariant" maxlength="1800" required placeholder="Что цифровая подсказка не имеет права подменить?"></textarea></label>
+      </div></section>
+      <section class="form-section"><header><span>03</span><div><p class="kicker">GUIDE CONTRACT</p><h2>Маршрут и право остановиться</h2></div></header><div class="fields">
+        <label><span>Тип запроса</span><select name="request_type" id="request-type" required></select></label>
+        <label><span>Рабочая линза</span><select name="lens" id="lens" required></select></label>
+        <label><span>Открывающий вопрос</span><textarea name="opening_question" maxlength="1200" required placeholder="Какой вопрос вы задаёте — без просьбы предсказать исход?"></textarea></label>
+        <label><span>Первое действие</span><textarea name="first_action" maxlength="1200" required placeholder="Один шаг, который остаётся вашим решением."></textarea></label>
+        <label><span>Политика свидетельств</span><textarea name="evidence_policy" maxlength="1200" required placeholder="Какой факт или артефакт будет записан и где он хранится?"></textarea></label>
+        <label><span>Передача человеку</span><textarea name="human_handoff" maxlength="1200" required placeholder="При каком условии цифровой проход прекращается и нужен человек или профильная помощь?"></textarea></label>
+      </div><div class="acks">
+        <label><input name="authorship_ack" type="checkbox" required><span>Я остаюсь автором интерпретации и решения; система только отражает введённый материал.</span></label>
+        <label><input name="no_prediction_ack" type="checkbox" required><span>Ответ не является пророчеством, диагнозом, терапией или профессиональной рекомендацией.</span></label>
+        <label><input name="local_storage_ack" type="checkbox" required><span>Записи остаются локально в этом браузере до моего явного экспорта.</span></label>
+      </div></section>
+      <section class="form-section"><header><span>04</span><div><p class="kicker">VISIBLE ROUTE</p><h2>Все шаги до запуска</h2></div></header><div id="step-preview" class="step-preview"></div></section>
+      <div class="submit-row"><p id="session-error" role="alert"></p><button class="primary" type="submit">Запустить цифровой проход <span>→</span></button></div>
+    </form>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-head"><div><p class="kicker">LOCAL GUIDE SESSION</p><h2 id="dashboard-title"></h2></div><div class="progress-mark"><b id="progress-count">0 / 0</b><span>ШАГОВ СО СЛЕДОМ</span></div></div><div class="progress"><i id="progress-bar"></i></div>
+      <div id="reflection" class="reflection"></div><div id="session-summary" class="session-summary"></div><div id="step-grid" class="step-grid"></div>
+      <form id="receipt-form" class="receipt-form"><header><span>05</span><div><p class="kicker">AUTHORED RETURN</p><h2>Квитанция шага</h2></div></header><div class="fields compact">
+        <label><span>Шаг маршрута</span><select name="step_id" required></select></label><label><span>Статус основания</span><select name="evidence_status" required><option value="observed">Наблюдение</option><option value="derived">Вывод</option><option value="hypothesis">Гипотеза</option><option value="unknown">Неизвестно</option></select></label>
+        <label><span>Ваш ответ</span><textarea name="authored_response" maxlength="1800" required placeholder="Смысл, который сформулировали вы."></textarea></label><label><span>Наблюдаемый след</span><textarea name="observed_trace" maxlength="1800" required placeholder="Что фактически произошло или «данных пока нет»."></textarea></label>
+        <label><span>Интерпретация</span><textarea name="interpretation" maxlength="1800" required placeholder="Что вы предполагаете; не смешивайте с фактом."></textarea></label><label><span>Следующий ход</span><textarea name="next_action" maxlength="1800" required placeholder="Какое действие проверит главную гипотезу?"></textarea></label>
+      </div><label class="evidence"><span>Указатель свидетельства</span><textarea name="evidence_pointer" maxlength="1200" required placeholder="Файл, ссылка, событие или «внешнего свидетельства нет»."></textarea></label><div class="submit-row"><p id="receipt-error" role="alert"></p><button class="primary" type="submit">Сохранить квитанцию <span>↓</span></button></div></form>
+      <div class="dashboard-actions"><button id="download" class="primary">Скачать сессию JSON <span>↓</span></button><button id="to-practice">Передать в Практику <span>→</span></button><button id="to-tactics">Передать ход в Тактику <span>→</span></button><button id="new-session">Новый проход</button></div><p class="evidence-line">generated-reflection-not-truth · assistant_authority=false · prediction=false · diagnosis=false · Q=null</p>
+    </section>
+    <details class="journal"><summary>Локальные проходы · <span id="journal-count">0</span></summary><p id="journal-message"></p><div id="journal-list"></div></details>
+    <section class="boundary"><b>СТОП‑ГРАНИЦА</b><p>При угрозе безопасности, остром кризисе, медицинском, юридическом, финансовом или ином высокорисковом решении цифровой проход нужно остановить и обратиться к подходящему человеку или профильной помощи. Студия не отправляет сообщения и не подключена к Telegram.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=guide-20261020-r1"></script>
+</body></html>
