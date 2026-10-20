@@ -131,4 +131,8 @@ test("public Service Worker restores Platform 2.1, the ecosystem, labs and the l
   const creatorResponse = await worker.navigate("./labs/creator-gate/?offline=1");
   assert.equal(creatorResponse.status, 200);
   assert.match(await creatorResponse.text(), /labs\/creator-gate\/index\.html$/u);
+
+  const diagnosticsResponse = await worker.navigate("./labs/diagnostics/?mode=business&offline=1");
+  assert.equal(diagnosticsResponse.status, 200);
+  assert.match(await diagnosticsResponse.text(), /labs\/diagnostics\/index\.html$/u);
 });

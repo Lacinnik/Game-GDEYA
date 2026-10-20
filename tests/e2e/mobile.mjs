@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -185,6 +185,24 @@ try {
     assert.match(await desktopPage.locator("#result").innerText(), /ACCESS GRANTED = FALSE/u);
     assert.match(await desktopPage.locator("#result").innerText(), /Решение не присвоено/u);
     await assertFitsScreen(desktopPage, `${name} creator gate desktop`);
+
+    await desktopPage.goto(site.url("labs/diagnostics/?mode=business"));
+    const diagnosticValues = {
+      object:"Пилот диагностического маршрута", subject_manifestation:"Собран один рабочий протокол", reflected_image:"Виден разрыв между потоком и результатом",
+      target_relation:"Найти один проверяемый следующий ход", context:"Один проект, последние две недели", invariant:"Не выдавать самоотчёт за диагноз",
+      observation_window:"Последние две недели", evidence_pointer:"docs/pilot.md", next_action:"Проверить минимальный сектор на одной встрече",
+    };
+    for (const [field,value] of Object.entries(diagnosticValues)) await desktopPage.locator(`[name="${field}"]`).fill(value);
+    for (const field of await desktopPage.locator("[data-answer]").all()) await field.selectOption("0.5");
+    await desktopPage.getByRole("button", { name:"Собрать диагностический паспорт →" }).click();
+    await desktopPage.waitForSelector("#result:not([hidden])");
+    assert.match(await desktopPage.locator("#result").innerText(), /diagnosis=false/u);
+    assert.match(await desktopPage.locator("#result").innerText(), /Q=null/u);
+    await assertFitsScreen(desktopPage, `${name} diagnostics desktop`);
+    await desktopPage.getByRole("button", { name:"Передать в Тактику →" }).click();
+    await desktopPage.waitForURL(/\/labs\/tactics\/\?/u);
+    assert.equal(await desktopPage.locator('[name="object"]').inputValue(), diagnosticValues.object);
+    assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(), diagnosticValues.invariant);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

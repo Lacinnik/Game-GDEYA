@@ -98,6 +98,14 @@
       "status": "prototype",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/creator-gate/",
       "source": "public-web/public/labs/creator-gate/CONTRACT.md"
+    },
+    {
+      "id": "diagnostic-studio",
+      "name": "Диагностическая студия Архитектоники",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/diagnostics/",
+      "source": "public-web/public/labs/diagnostics/CONTRACT.md"
     }
   ]
 }

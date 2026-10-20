@@ -53,6 +53,26 @@ test("final decisions and observed Q remain outside the registry", () => {
   assert.ok(catalog.items.every((item) => !("q" in item)), "catalog must not invent observed Q");
 });
 
+test("five diagnostic objects expose one working studio with explicit modes", () => {
+  const expected = new Map([
+    ["architectonics-business-diagnostics", "business"],
+    ["hws-diagnostics", "hws"],
+    ["point-diagnostics", "point"],
+    ["decision-navigation", "decision"],
+    ["team-dynamics", "team"],
+  ]);
+  for (const [id, mode] of expected) {
+    assert.equal(byId.get(id).delivery_stage, "prototype");
+    assert.equal(byId.get(id).entrypoint, `../labs/diagnostics/?mode=${mode}`);
+  }
+  const counts = Object.groupBy(catalog.items, (item) => item.delivery_stage);
+  assert.equal(counts.live.length, 5);
+  assert.equal(counts.prototype.length, 13);
+  assert.equal(counts.specified.length, 20);
+  assert.equal(counts.hypothesis.length, 17);
+  assert.equal(counts["final-phase"].length, 1);
+});
+
 test("live objects expose working entrypoints and axis accepts catalog seeds", async () => {
   for (const item of catalog.items.filter((candidate) => candidate.delivery_stage === "live")) {
     assert.ok(item.entrypoint, `${item.id} is marked live without an entrypoint`);
