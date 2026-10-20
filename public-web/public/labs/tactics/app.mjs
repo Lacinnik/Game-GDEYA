@@ -62,6 +62,18 @@ function statusLabel(status) {
   })[status] || status;
 }
 
+function materializationUrl(plan) {
+  const parameters = new URLSearchParams({
+    object: plan.object,
+    target_relation: plan.target_relation,
+    context: plan.context,
+    invariant: plan.invariant,
+    next_action: plan.action.statement,
+    source_tactic: plan.id,
+  });
+  return `../module/?${parameters.toString()}#axis`;
+}
+
 function updateMetrics() {
   const input = values($("#tactics-form"));
   try {
@@ -173,6 +185,9 @@ $("#tactics-form").addEventListener("submit", (event) => {
 });
 
 $("#download-plan").addEventListener("click", () => state.plan && download(`${state.plan.id}.json`, state.plan));
+$("#materialize-plan").addEventListener("click", () => {
+  if (state.plan) location.href = materializationUrl(state.plan);
+});
 $("#copy-action").addEventListener("click", async (event) => {
   if (!state.plan) return;
   try {

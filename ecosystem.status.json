@@ -21,11 +21,11 @@
     },
     {
       "id": "module",
-      "name": "MODULE",
-      "version": "1.0",
+      "name": "Живой модуль материализации",
+      "version": "1.1",
       "status": "stable",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/module/",
-      "source": "README.md"
+      "source": "public-web/public/labs/module/CONTRACT.md"
     },
     {
       "id": "voidocr",

@@ -91,6 +91,9 @@ test("tactics page is linked, offline and names its interpretation boundary", as
   assert.match(html, /Пₘ = \(1 − Noiseₜ\)/u);
   assert.match(html, /не являются вероятностью успеха/u);
   assert.match(app, /architectonica\.tactics\.journal\.v1/u);
+  assert.match(app, /function materializationUrl\(plan\)/u);
+  assert.match(app, /source_tactic: plan\.id/u);
+  assert.match(html, /id="materialize-plan"/u);
   assert.match(css, /@media\(max-width:700px\)/u);
   assert.match(axis, /function tacticsUrl\(handoff\)/u);
   for (const name of ["index.html", "styles.css", "app.mjs", "protocol.mjs", "CONTRACT.md"]) {
