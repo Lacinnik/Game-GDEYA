@@ -130,6 +130,14 @@
       "status": "prototype",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/guide/",
       "source": "public-web/public/labs/guide/CONTRACT.md"
+    },
+    {
+      "id": "rhythm-transition-studio",
+      "name": "Студия ритма и переходов Архитектоники",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/rhythm/",
+      "source": "public-web/public/labs/rhythm/CONTRACT.md"
     }
   ]
 }

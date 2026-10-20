@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop", "labs/guide/?mode=oracle"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop", "labs/guide/?mode=oracle", "labs/rhythm/?mode=switcher"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -279,6 +279,36 @@ try {
     await desktopPage.waitForURL(/\/labs\/practice\/\?/u);
     assert.equal(await desktopPage.locator('[name="object"]').inputValue(),guideValues.object);
     assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),guideValues.invariant);
+
+    await desktopPage.goto(site.url("labs/rhythm/?mode=switcher"));
+    const rhythmValues = {
+      object:"Переход от исследования к сборке", subject_manifestation:"Существует рабочая заметка и пустой макет", reflected_image:"Исследование кажется незавершённым",
+      target_relation:"Явно начать сборку прототипа", context:"Один автор и один рабочий блок", invariant:"Сохранить исходные наблюдения",
+      start_date:"2026-10-20", time_budget:"Один блок до двадцати минут", evidence_policy:"Локальная запись и ссылка на макет",
+      stop_condition:"Остановиться при потере объекта или необходимости профильной оценки",
+    };
+    for (const [field,value] of Object.entries(rhythmValues)) await desktopPage.locator(`#plan-form [name="${field}"]`).fill(value);
+    await desktopPage.locator('#plan-form [name="intent"]').selectOption("change");
+    for (const field of ["authorship_ack","non_medical_ack","local_schedule_ack"]) await desktopPage.locator(`#plan-form [name="${field}"]`).check();
+    await desktopPage.getByRole("button",{name:"Собрать ритм →"}).click();
+    await desktopPage.waitForSelector("#dashboard:not([hidden])");
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/0 \/ 4/u);
+    const rhythmCheckin = {
+      observed_trace:"Закрыт документ исследования и открыт макет", interpretation:"Маркер помог различить два контекста",
+      next_action:"Собрать первый блок макета", evidence_pointer:"prototype/index.html",
+    };
+    for (const [field,value] of Object.entries(rhythmCheckin)) await desktopPage.locator(`#checkin-form [name="${field}"]`).fill(value);
+    await desktopPage.locator('#checkin-form [name="completion_state"]').selectOption("done");
+    await desktopPage.locator('#checkin-form [name="evidence_status"]').selectOption("observed");
+    await desktopPage.getByRole("button",{name:"Сохранить квитанцию ↓"}).click();
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/1 \/ 4/u);
+    assert.match(await desktopPage.locator("#done-count").innerText(),/выполнено 1/u);
+    assert.match(await desktopPage.locator("#dashboard").innerText(),/automated_notification=false/u);
+    await assertFitsScreen(desktopPage,`${name} rhythm studio desktop`);
+    await desktopPage.getByRole("button",{name:"Передать в Проводник →"}).click();
+    await desktopPage.waitForURL(/\/labs\/guide\/\?/u);
+    assert.equal(await desktopPage.locator('[name="object"]').inputValue(),rhythmValues.object);
+    assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),rhythmValues.invariant);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

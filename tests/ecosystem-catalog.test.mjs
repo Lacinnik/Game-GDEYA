@@ -67,9 +67,9 @@ test("five diagnostic objects expose one working studio with explicit modes", ()
   }
   const counts = Object.groupBy(catalog.items, (item) => item.delivery_stage);
   assert.equal(counts.live.length, 5);
-  assert.equal(counts.prototype.length, 27);
-  assert.equal(counts.specified.length, 11);
-  assert.equal(counts.hypothesis.length, 12);
+  assert.equal(counts.prototype.length, 32);
+  assert.equal(counts.specified.length, 7);
+  assert.equal(counts.hypothesis.length, 11);
   assert.equal(counts["final-phase"].length, 1);
 });
 
@@ -116,6 +116,20 @@ test("five digital products expose one authorship-preserving guide studio", () =
   }
   assert.equal(byId.get("self-diagnosis-app").delivery_stage,"hypothesis");
   assert.equal(byId.get("self-diagnosis-app").entrypoint,null);
+});
+
+test("five rhythm products expose one local transition studio", () => {
+  const expected = new Map([
+    ["resonance-vertical","vertical"],
+    ["overheat-relief","interval"],
+    ["ritual-switcher","switcher"],
+    ["unfold-cycle","unfold"],
+    ["reminders-exercises","seven"],
+  ]);
+  for (const [id,mode] of expected) {
+    assert.equal(byId.get(id).delivery_stage,"prototype");
+    assert.equal(byId.get(id).entrypoint,`../labs/rhythm/?mode=${mode}`);
+  }
 });
 
 test("live objects expose working entrypoints and axis accepts catalog seeds", async () => {
