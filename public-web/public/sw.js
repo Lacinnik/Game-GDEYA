@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'practice-20261020-r1';
+const CACHE_REVISION = 'facilitation-20261020-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -88,6 +88,13 @@ const SHELL = [
   './labs/practice/protocol.mjs?v=practice-20261020-r1',
   './labs/practice/catalog.mjs',
   './labs/practice/CONTRACT.md',
+  './labs/facilitation/',
+  './labs/facilitation/index.html',
+  './labs/facilitation/styles.css?v=facilitation-20261020-r1',
+  './labs/facilitation/app.mjs?v=facilitation-20261020-r1',
+  './labs/facilitation/protocol.mjs?v=facilitation-20261020-r1',
+  './labs/facilitation/catalog.mjs',
+  './labs/facilitation/CONTRACT.md',
   './labs/axis-cycle/',
   './labs/axis-cycle/index.html',
   './labs/axis-cycle/styles.css?v=axis-cycle-20261020-r1',
@@ -133,6 +140,7 @@ function navigationFallback(request) {
   if (/\/labs\/creator-gate(?:\/|$)/u.test(pathname)) return caches.match('./labs/creator-gate/index.html');
   if (/\/labs\/diagnostics(?:\/|$)/u.test(pathname)) return caches.match('./labs/diagnostics/index.html');
   if (/\/labs\/practice(?:\/|$)/u.test(pathname)) return caches.match('./labs/practice/index.html');
+  if (/\/labs\/facilitation(?:\/|$)/u.test(pathname)) return caches.match('./labs/facilitation/index.html');
   if (/\/labs\/meta-core(?:\/|$)/u.test(pathname)) return caches.match('./labs/meta-core/index.html');
   if (/\/labs\/axis-cycle(?:\/|$)/u.test(pathname)) return caches.match('./labs/axis-cycle/index.html');
   if (/\/labs\/tactics(?:\/|$)/u.test(pathname)) return caches.match('./labs/tactics/index.html');

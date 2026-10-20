@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#081011">
+  <meta name="description" content="Фасилитационная студия Архитектоники: личная работа, группы, лидерские и творческие команды, организационные пилоты.">
+  <title>Фасилитационная студия · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=facilitation-20261020-r1">
+</head>
+<body>
+  <div class="field" aria-hidden="true"><i></i><i></i><i></i></div>
+  <header class="topbar">
+    <a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <nav><a href="../diagnostics/">Диагностика</a><a href="../practice/">Практика</a><a href="../tactics/">Тактика</a></nav>
+    <small>FACILITATION · 0.1</small>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div><p class="kicker">PERSONAL AXIS × SHARED FIELD</p><h1>Не оценивать людей.<br><em>Проектировать способ работать вместе.</em></h1></div>
+      <aside><p>Пять продуктовых форм работают на одном этическом ядре: объект группы отделён от проявлений участников, интерпретации помечены, а любой общий вывод допускает авторскую корректировку.</p><div class="signal"><span>5 ФОРМ · 6 ФАЗ</span><b>O → S → I → R<sub>g</sub></b><small>consent=true · people_scored=false · Q=null</small></div></aside>
+    </section>
+
+    <section class="principles" aria-label="Принципы фасилитации">
+      <article><i>01</i><b>Личная ось остаётся личной</b><p>Участник сам определяет объём предъявления и может отозвать вклад.</p></article>
+      <article><i>02</i><b>Наблюдаем процесс</b><p>Фиксируются действия, передачи и артефакты, а не качества личности.</p></article>
+      <article><i>03</i><b>Гипотеза видна как гипотеза</b><p>Факт, вывод, неизвестное и внешняя проверка не смешиваются.</p></article>
+    </section>
+
+    <section class="program-section">
+      <header><p class="kicker">01 · CHOOSE WORKING FORM</p><h2>Какому полю нужен маршрут?</h2></header>
+      <div id="program-list" class="program-list" role="tablist"></div>
+    </section>
+
+    <form id="plan-form" class="workbench">
+      <section class="program-intro"><p id="program-code" class="kicker"></p><h2 id="program-title"></h2><p id="program-purpose"></p><small id="program-source"></small></section>
+      <section class="form-section">
+        <header><span>02</span><div><p class="kicker">OBJECT–SUBJECT TENSOR</p><h2>Общий объект без подмены людей</h2></div></header>
+        <div class="fields">
+          <label><span>O · объект дословно</span><textarea name="object" maxlength="600" required placeholder="Какой проект, процесс, решение или бриф рассматриваем?"></textarea></label>
+          <label><span>S · наблюдаемое проявление</span><textarea name="subject_manifestation" maxlength="1800" required placeholder="Какие действия, слова или артефакты уже существуют?"></textarea></label>
+          <label><span>I · отражённый образ</span><textarea name="reflected_image" maxlength="1800" required placeholder="Как объект сейчас описывается группой или документом?"></textarea></label>
+          <label><span>Rᵍ · отношение к цели</span><textarea name="target_relation" maxlength="1800" required placeholder="К какой конкретной цели проводится объект?"></textarea></label>
+          <label><span>C · контекст</span><textarea name="context" maxlength="1800" required placeholder="Среда, ограничения, роли и временное окно."></textarea></label>
+          <label><span>Инвариант</span><textarea name="invariant" maxlength="1800" required placeholder="Что нельзя потерять в совместной работе?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <header><span>03</span><div><p class="kicker">FACILITATION CHARTER</p><h2>Кто, как и в каких границах</h2></div></header>
+        <div class="fields">
+          <label><span>Название прохода</span><input name="title" maxlength="240" required placeholder="Например: согласование редакционного цикла"></label>
+          <label><span>Роль фасилитатора</span><input name="facilitator_role" maxlength="360" required placeholder="Что ведёт фасилитатор — и чего он не решает"></label>
+          <label><span>Роли участников</span><textarea name="participant_roles" maxlength="1200" required placeholder="Только роли или функции; без лишних персональных данных."></textarea></label>
+          <label><span>Дата начала</span><input name="start_date" type="date" required></label>
+          <label><span>Длительность / ритм</span><input name="duration" maxlength="240" required placeholder="90 минут, 2 встречи, пилот 14 дней…"></label>
+          <label><span>Граница наблюдения</span><textarea name="observation_boundary" maxlength="1200" required placeholder="Что можно фиксировать и что остаётся вне записи?"></textarea></label>
+          <label><span>Хранение и видимость</span><textarea name="storage_policy" maxlength="1200" required placeholder="Где записи хранятся и кто их увидит?"></textarea></label>
+          <label><span>Право остановить участие</span><textarea name="withdrawal_path" maxlength="1200" required placeholder="Как участник ставит паузу, отзывает вклад или просит исправление?"></textarea></label>
+        </div>
+        <div class="consents">
+          <label><input name="voluntary_consent" type="checkbox" required><span>Участие добровольно; у каждого есть понятный путь остановить работу.</span></label>
+          <label><input name="shared_boundary_ack" type="checkbox" required><span>Объём общего материала и доступ к записям объявлены до начала.</span></label>
+          <label><input name="no_people_scoring_ack" type="checkbox" required><span>Студия не используется для скрытой оценки людей, HR‑решений или психологической диагностики.</span></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <header><span>04</span><div><p class="kicker">VISIBLE ROUTE</p><h2>Шесть фаз до начала</h2></div></header>
+        <div id="phase-preview" class="phase-preview"></div>
+      </section>
+      <div class="submit-row"><p id="plan-error" role="alert"></p><button class="primary" type="submit">Собрать фасилитационный план <span>→</span></button></div>
+    </form>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-head"><div><p class="kicker">LOCAL FACILITATION DOSSIER</p><h2 id="dashboard-title"></h2></div><div class="progress-mark"><b id="progress-count">0 / 6</b><span>ФАЗ СО СЛЕДОМ</span></div></div>
+      <div class="progress"><i id="progress-bar"></i></div>
+      <div id="plan-summary" class="plan-summary"></div>
+      <div id="phase-grid" class="phase-grid"></div>
+
+      <form id="note-form" class="note-form">
+        <header><span>05</span><div><p class="kicker">SEPARATED OBSERVATION</p><h2>Квитанция фасилитации</h2></div></header>
+        <div class="fields compact">
+          <label><span>Фаза</span><select name="phase_id" required></select></label>
+          <label><span>Статус основания</span><select name="evidence_status" required><option value="observed">Наблюдение</option><option value="derived">Вывод из видимых входов</option><option value="hypothesis">Гипотеза для проверки</option><option value="unknown">Неизвестно / данных нет</option></select></label>
+          <label><span>Ролевая область</span><input name="role_scope" maxlength="600" required placeholder="Команда целиком, роль редактора, связка двух функций…"></label>
+          <label><span>Указатель свидетельства</span><input name="evidence_pointer" maxlength="1200" required placeholder="Протокол, документ, событие или «внешнего следа нет»"></label>
+        </div>
+        <div id="note-fields" class="fields"></div>
+        <label class="review"><input name="participant_reviewed" type="checkbox"><span>Участник или команда видели запись и могли её скорректировать.</span></label>
+        <div class="submit-row"><p id="note-error" role="alert"></p><button class="primary" type="submit">Сохранить квитанцию <span>↓</span></button></div>
+      </form>
+      <div class="dashboard-actions"><button id="download" class="primary">Скачать досье JSON <span>↓</span></button><button id="to-practice">Передать объект в Практику <span>→</span></button><button id="to-tactics">Передать ход в Тактику <span>→</span></button><button id="new-plan">Новый план</button></div>
+      <p class="evidence-line">self-reported-unverified · outcome_confirmed=false · people_scored=false · access_granted=false · Q=null</p>
+    </section>
+
+    <details class="journal"><summary>Локальные досье · <span id="journal-count">0</span></summary><p id="journal-message"></p><div id="journal-list"></div></details>
+    <section class="boundary"><b>ГРАНИЦА ПРИМЕНЕНИЯ</b><p>Это среда проектирования и документирования добровольной фасилитации. Она не является психотерапией, кадровой оценкой, аттестацией или системой контроля сотрудников. Записи остаются локально в браузере; любое внешнее распространение требует отдельного решения людей, которых затрагивает материал.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=facilitation-20261020-r1"></script>
+</body>
+</html>
