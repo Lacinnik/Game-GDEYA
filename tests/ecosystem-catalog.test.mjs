@@ -31,6 +31,8 @@ test("six-part spine follows the declared product line", () => {
     "architect-creator",
   ]);
   for (const id of catalog.spine) assert.ok(byId.has(id), `spine references missing object ${id}`);
+  assert.equal(byId.get("architectonics-tactics").delivery_stage, "prototype");
+  assert.equal(byId.get("architectonics-tactics").entrypoint, "../labs/tactics/");
 });
 
 test("final decisions and observed Q remain outside the registry", () => {
