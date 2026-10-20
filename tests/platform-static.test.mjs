@@ -15,6 +15,7 @@ test("Platform links to the ecosystem registry and the complete product line", a
   ]);
   assert.match(html, /href="\.\.\/ecosystem\/"/u);
   assert.match(html, /href="\.\.\/product-line\/"/u);
+  assert.match(html, /href="\.\.\/labs\/guide\/"/u);
   assert.match(app, /Открыть цифровую экосистему/u);
   assert.match(app, /Пройти всю несущую линию/u);
 });

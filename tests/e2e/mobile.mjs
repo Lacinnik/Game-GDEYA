@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop", "labs/guide/?mode=oracle"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -249,6 +249,36 @@ try {
     await desktopPage.waitForURL(/\/labs\/practice\/\?/u);
     assert.equal(await desktopPage.locator('[name="object"]').inputValue(),facilitationValues.object);
     assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),facilitationValues.invariant);
+
+    await desktopPage.goto(site.url("labs/guide/?mode=oracle"));
+    const guideValues = {
+      object:"Вопрос цифрового прохода", subject_manifestation:"Записан один наблюдаемый факт", reflected_image:"Вопрос выглядит как развилка",
+      target_relation:"Получить один проверяемый следующий ход", context:"Личная работа, двадцать минут", invariant:"Не выдавать отражение за истину",
+      opening_question:"Что я пока смешиваю в этом вопросе?", first_action:"Записать две стороны разрыва",
+      evidence_policy:"Локальная запись и рабочий документ", human_handoff:"Остановиться при необходимости профессиональной оценки",
+    };
+    for (const [field,value] of Object.entries(guideValues)) await desktopPage.locator(`#session-form [name="${field}"]`).fill(value);
+    await desktopPage.locator('#session-form [name="request_type"]').selectOption("clarity");
+    await desktopPage.locator('#session-form [name="lens"]').selectOption("TX4");
+    for (const field of ["authorship_ack","no_prediction_ack","local_storage_ack"]) await desktopPage.locator(`#session-form [name="${field}"]`).check();
+    await desktopPage.getByRole("button",{name:"Запустить цифровой проход →"}).click();
+    await desktopPage.waitForSelector("#dashboard:not([hidden])");
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/0 \/ 5/u);
+    const guideReceipt = {
+      authored_response:"Я различил объект и ожидаемый исход", observed_trace:"Существуют две отдельные формулировки",
+      interpretation:"Гипотеза: различение снизит неопределённость", next_action:"Переписать вопрос одним предложением",
+      evidence_pointer:"notes/question.md",
+    };
+    for (const [field,value] of Object.entries(guideReceipt)) await desktopPage.locator(`#receipt-form [name="${field}"]`).fill(value);
+    await desktopPage.locator('#receipt-form [name="evidence_status"]').selectOption("hypothesis");
+    await desktopPage.getByRole("button",{name:"Сохранить квитанцию ↓"}).click();
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/1 \/ 5/u);
+    assert.match(await desktopPage.locator("#dashboard").innerText(),/assistant_authority=false/u);
+    await assertFitsScreen(desktopPage,`${name} digital guide desktop`);
+    await desktopPage.getByRole("button",{name:"Передать в Практику →"}).click();
+    await desktopPage.waitForURL(/\/labs\/practice\/\?/u);
+    assert.equal(await desktopPage.locator('[name="object"]').inputValue(),guideValues.object);
+    assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),guideValues.invariant);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();
