@@ -6,7 +6,8 @@
   <meta name="theme-color" content="#071312">
   <meta name="description" content="Живая ось — локальный маршрут передачи объекта из ГДЕЯ в РЕЗОН и возвращения наблюдаемого отклика.">
   <title>Живая ось · ГДЕЯ × РЕЗОН</title>
-  <link rel="stylesheet" href="./styles.css?v=axis-cycle-20261020-r1">
+  <link rel="stylesheet" href="./styles.css?v=axis-cycle-20261021-r2">
+  <style>.evidence-wide{grid-column:1/-1}.observation-form select{width:100%;min-height:48px;padding:12px;border:1px solid rgba(128,201,188,.18);background:#071713;color:#edf8f5}.evidence-status,.exchange-journal output{color:#8db2a9;font-size:11px;line-height:1.7}.exchange-journal{margin-top:52px;padding:36px;border:1px solid rgba(128,201,188,.18);background:rgba(7,20,18,.72)}.exchange-journal h2{margin:16px 0;font:400 clamp(30px,4vw,48px) Georgia,serif}.exchange-journal>p:not(.stage-code){max-width:850px;color:#829a95;font-size:12px;line-height:1.75}.journal-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:24px 0}.journal-actions button,.journal-actions a,.import-button{min-height:46px;padding:0 16px;border:1px solid rgba(128,201,188,.18);background:transparent;color:#edf8f5;display:inline-flex;align-items:center;cursor:pointer;font-size:10px}.import-button input{display:none}.journal-actions a{color:#56e2cc}.practice-guide{margin:22px 0;border-top:1px solid rgba(128,201,188,.18);border-bottom:1px solid rgba(128,201,188,.18);color:#9ab5ae}.practice-guide summary{padding:18px 0;cursor:pointer;color:#56e2cc;font-size:12px}.practice-guide ol{padding-left:24px;color:#829a95;font-size:12px;line-height:1.9}.practice-guide li{padding-left:6px;margin-bottom:8px}@media(max-width:680px){.exchange-journal{padding:22px 18px}}</style>
   <style>
     @media (max-width: 900px) {
       .hero-copy,
@@ -88,14 +89,29 @@
         <form id="observation-form" class="observation-form">
           <label><span>Фактический возврат объекта</span><textarea name="observation" rows="4" maxlength="2000" placeholder="Что произошло после следующего действия? Оставьте пустым, если наблюдения ещё нет."></textarea></label>
           <label><span>Q · только при наличии наблюдения</span><input name="observed_q" type="number" min="0" max="1" step="0.25" placeholder="null"></label>
+          <label class="evidence-wide"><span>Происхождение свидетельства</span><select name="evidence_class"><option value="none">Нет отдельного свидетельства</option><option value="self-reported">Самоотчёт участника</option><option value="documented">Документ / артефакт</option><option value="independent-observation">Независимое наблюдение</option></select></label>
+          <label><span>Дата наблюдения</span><input name="observed_at" type="date"></label>
+          <label class="evidence-wide"><span>Ссылка или идентификатор артефакта (необязательно)</span><input name="evidence_reference" maxlength="500" placeholder="URL или локальный ID — не добавляйте персональные данные"></label>
+          <label class="evidence-wide"><span>Роль наблюдателя (необязательно)</span><input name="observer_role" maxlength="120" placeholder="Например: владелец проекта / внешний наблюдатель"></label>
           <div class="observation-actions"><button class="primary" type="submit">Собрать квитанцию оси <span>↓</span></button><a id="open-tactics" href="#">Собрать микро-действие →</a><a id="repeat-field" href="#" rel="noopener">Повторить проверку поля</a></div>
+          <output id="practice-status" class="evidence-status" aria-live="polite"></output>
           <p id="observation-error" role="alert"></p>
         </form>
       </section>
     </section>
 
+    <section class="exchange-journal" id="exchange-journal">
+      <p class="stage-code">ОБЩИЙ ФОРМАТ · ЛОКАЛЬНЫЙ РЕЕСТР</p>
+      <h2>Внешний возврат — с происхождением.</h2>
+      <p>Импортируйте паспорт, решение поля или квитанцию из другого подключённого продукта. Записи хранятся только в этом браузере. Конверт унифицирует структуру, но не проверяет подписи, личность или достоверность вложенных утверждений.</p>
+      <div class="journal-actions"><label class="import-button">Импортировать JSON<input id="import-exchange" type="file" accept="application/json,.json"></label><button id="export-journal" type="button">Экспортировать журнал</button><a href="./exchange.schema.json" target="_blank" rel="noopener">Спецификация формата ↗</a></div>
+      <details class="practice-guide"><summary>Как провести практику внешнего возврата</summary><ol><li>До действия зафиксируйте в паспорте один конкретный следующий шаг и сохраните JSON.</li><li>Передайте объект в РЕЗОН; участники поля отдельно решают, что именно они готовы подтвердить.</li><li>После действия попросите внешнего наблюдателя описать только видимый факт: что произошло, когда и какой артефакт остался. Не запрашивайте интерпретацию личности.</li><li>Внесите возврат, выберите его источник и роль наблюдателя, приложите безопасный идентификатор артефакта. Чужие имена, закрытые документы и секреты не загружайте.</li><li>Скачайте квитанцию/журнал и импортируйте его на устройстве, где продолжаете проект. `independent-observation` — заявленный источник, не автоматическая проверка личности или подлинности.</li></ol></details>
+      <output id="journal-status" aria-live="polite">Данные не покидают браузер без вашего экспорта или передачи.</output>
+    </section>
+
     <section class="boundary"><b>ГРАНИЦА</b><p>Паспорт — локальный перенос авторской формулировки. Он не удостоверяет личность, полномочия, согласие других людей или истинность образа. `Q` остаётся `null`, пока фактический возврат не описан отдельно.</p></section>
   </main>
-  <script type="module" src="./app.mjs?v=tactics-20261020-r1"></script>
+  <script type="module" src="./app.mjs?v=axis-cycle-20261021-r2"></script>
+  <script type="module" src="../exchange-panel.mjs?v=exchange-20261021-r1"></script>
 </body>
 </html>
