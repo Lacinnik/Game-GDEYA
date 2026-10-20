@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -224,6 +224,31 @@ try {
     await desktopPage.waitForURL(/\/labs\/tactics\/\?/u);
     assert.equal(await desktopPage.locator('[name="object"]').inputValue(),practiceValues.object);
     assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),practiceValues.invariant);
+
+    await desktopPage.goto(site.url("labs/facilitation/?mode=workshop"));
+    const facilitationValues = {
+      object:"Редакционный цикл команды", subject_manifestation:"Существуют два черновика и один протокол", reflected_image:"Команда называет процесс несогласованным",
+      target_relation:"Собрать одну предъявимую версию", context:"Три рабочие роли и одна встреча", invariant:"Сохранить авторство каждого вклада",
+      title:"Мастерская редакционного решения", facilitator_role:"Удерживает процесс и не решает за группу", participant_roles:"Автор, редактор, продюсер",
+      start_date:"2026-10-20", duration:"90 минут", observation_boundary:"Только общая речь, действия и рабочие артефакты", storage_policy:"Локально; экспорт по отдельному решению группы", withdrawal_path:"Стоп-сигнал и право исправить или отозвать вклад",
+    };
+    for (const [field,value] of Object.entries(facilitationValues)) await desktopPage.locator(`#plan-form [name="${field}"]`).fill(value);
+    for (const field of ["voluntary_consent","shared_boundary_ack","no_people_scoring_ack"]) await desktopPage.locator(`#plan-form [name="${field}"]`).check();
+    await desktopPage.getByRole("button",{name:"Собрать фасилитационный план →"}).click();
+    await desktopPage.waitForSelector("#dashboard:not([hidden])");
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/0 \/ 6/u);
+    await desktopPage.locator('#note-form [name="role_scope"]').fill("Группа целиком");
+    await desktopPage.locator('#note-form [name="evidence_pointer"]').fill("protocol.md#charter");
+    for (const field of await desktopPage.locator("[data-note]").all()) await field.fill("Запись отделена от оценки человека и допускает корректировку.");
+    await desktopPage.locator('#note-form [name="participant_reviewed"]').check();
+    await desktopPage.getByRole("button",{name:"Сохранить квитанцию ↓"}).click();
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/1 \/ 6/u);
+    assert.match(await desktopPage.locator("#dashboard").innerText(),/people_scored=false/u);
+    await assertFitsScreen(desktopPage,`${name} facilitation studio desktop`);
+    await desktopPage.getByRole("button",{name:"Передать объект в Практику →"}).click();
+    await desktopPage.waitForURL(/\/labs\/practice\/\?/u);
+    assert.equal(await desktopPage.locator('[name="object"]').inputValue(),facilitationValues.object);
+    assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),facilitationValues.invariant);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

@@ -422,25 +422,25 @@
       "id": "individual-consulting",
       "name": "Индивидуальное консультирование",
       "category": "program",
-      "delivery_stage": "specified",
+      "delivery_stage": "prototype",
       "canonical_status": "unstated",
       "object": "Индивидуальная работа с проектом, решением или переходом клиента.",
       "role": "Применяет контуры ГДЕЯ, РЕЗОН и Тактики к конкретному авторскому объекту.",
-      "evidence": ["Продуктовые материалы"],
-      "next_action": "Описать путь клиента, границы практики и формат результата сессии.",
-      "entrypoint": null
+      "evidence": ["Программа клиентского цикла 5–6 сессий", "Действующая фасилитационная студия · индивидуальный режим"],
+      "next_action": "Провести добровольный пилот и сопоставить фасилитационные записи с авторскими корректировками участника.",
+      "entrypoint": "../labs/facilitation/?mode=individual"
     },
     {
       "id": "groups-workshops",
       "name": "Группы и мастерские",
       "category": "program",
-      "delivery_stage": "specified",
+      "delivery_stage": "prototype",
       "canonical_status": "unstated",
       "object": "Групповые пространства практики и совместной сборки проектов.",
       "role": "Даёт каждому участнику личную ось и одновременно делает видимыми связи общего поля.",
-      "evidence": ["Продуктовые материалы"],
-      "next_action": "Собрать регламент группы, роли ведущего и протокол согласия участников.",
-      "entrypoint": null
+      "evidence": ["Матрица продуктов Архитектоники", "Действующая фасилитационная студия · режим группы"],
+      "next_action": "Провести пилот мастерской и проверить хартию, право отзыва вклада и общий артефакт.",
+      "entrypoint": "../labs/facilitation/?mode=workshop"
     },
     {
       "id": "facilitator-certification",
@@ -482,37 +482,37 @@
       "id": "leadership-games",
       "name": "Игры лидерства и команд",
       "category": "corporate",
-      "delivery_stage": "specified",
+      "delivery_stage": "prototype",
       "canonical_status": "unstated",
       "object": "Игровые форматы исследования лидерства, распределения ролей и совместного решения.",
       "role": "Создаёт безопасный полигон для наблюдения действий и связей в смоделированной ситуации.",
-      "evidence": ["Материалы игр для лидеров и команд"],
-      "next_action": "Выбрать одну механику, описать дебриф и критерии наблюдения.",
-      "entrypoint": null
+      "evidence": ["Материалы игр для лидеров и команд", "Действующая фасилитационная студия · лидерский режим"],
+      "next_action": "Испытать одну игру с прозрачным дебрифом и наблюдением процесса без кадрового скоринга.",
+      "entrypoint": "../labs/facilitation/?mode=leadership"
     },
     {
       "id": "creative-industry-games",
       "name": "Игры для креативных индустрий",
       "category": "corporate",
-      "delivery_stage": "specified",
+      "delivery_stage": "prototype",
       "canonical_status": "unstated",
       "object": "Игровые форматы для команд, создающих культурные, медийные и творческие продукты.",
       "role": "Соединяет авторский импульс, производственную форму, аудиторию и полевой отклик.",
-      "evidence": ["Материалы игр для креативных индустрий"],
-      "next_action": "Собрать сценарий вокруг одного реального творческого брифа.",
-      "entrypoint": null
+      "evidence": ["Материалы игр для креативных индустрий", "Действующая фасилитационная студия · креативный режим"],
+      "next_action": "Провести один реальный бриф до версии 0.3 и отделить отклик аудитории от ожиданий команды.",
+      "entrypoint": "../labs/facilitation/?mode=creative"
     },
     {
       "id": "resonance-management",
       "name": "Resonance Management / Conscious Systems Design",
       "category": "corporate",
-      "delivery_stage": "specified",
+      "delivery_stage": "prototype",
       "canonical_status": "unstated",
       "object": "Организационный подход к управлению через связность решений, ролей и обратных связей.",
       "role": "Переводит методы экосистемы на уровень организационного дизайна и управленческих циклов.",
-      "evidence": ["Материалы Resonance Management", "Материалы Conscious Systems Design"],
-      "next_action": "Описать пилот внедрения с исходной точкой, вмешательствами и наблюдаемыми метриками.",
-      "entrypoint": null
+      "evidence": ["Материалы Resonance Management", "Материалы Conscious Systems Design", "Действующая фасилитационная студия · организационный режим"],
+      "next_action": "Проверить ограниченный организационный пилот с исходной точкой, одним вмешательством и отдельным возвратом.",
+      "entrypoint": "../labs/facilitation/?mode=resonance"
     },
     {
       "id": "spatial-practices",

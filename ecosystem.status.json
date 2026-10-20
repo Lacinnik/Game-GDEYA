@@ -114,6 +114,14 @@
       "status": "prototype",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/practice/",
       "source": "public-web/public/labs/practice/CONTRACT.md"
+    },
+    {
+      "id": "facilitation-studio",
+      "name": "Фасилитационная студия Архитектоники",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/facilitation/",
+      "source": "public-web/public/labs/facilitation/CONTRACT.md"
     }
   ]
 }
