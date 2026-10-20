@@ -50,6 +50,14 @@
       "status": "unstated",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/core-separation/",
       "source": "README.md"
+    },
+    {
+      "id": "axis-cycle",
+      "name": "Живая ось · ГДЕЯ × РЕЗОН",
+      "version": "0.1",
+      "status": "unstated",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/axis-cycle/",
+      "source": "public-web/public/labs/axis-cycle/CONTRACT.md"
     }
   ]
 }

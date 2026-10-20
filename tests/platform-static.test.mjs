@@ -46,6 +46,7 @@ test("published verticals expose their accepted versions and public entrypoints"
   assert.match(byId.get("module").entrypoints[0].url, /\/labs\/module\/$/u);
   assert.match(byId.get("voidocr").entrypoints[0].url, /\/labs\/voidocr\/$/u);
   assert.ok(byId.get("gdeya").entrypoints.some((entrypoint) => /\/labs\/core-separation\/$/u.test(entrypoint.url)));
+  assert.ok(byId.get("gdeya").entrypoints.some((entrypoint) => /\/labs\/axis-cycle\/$/u.test(entrypoint.url)));
   assert.match(byId.get("collective-meta-core").entrypoints[0].url, /\/field-check\/$/u);
   assert.match(byId.get("seven-transmissions").entrypoints[0].url, /\/transmissions\/$/u);
 });
