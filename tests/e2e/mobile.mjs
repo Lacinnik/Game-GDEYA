@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -203,6 +203,27 @@ try {
     await desktopPage.waitForURL(/\/labs\/tactics\/\?/u);
     assert.equal(await desktopPage.locator('[name="object"]').inputValue(), diagnosticValues.object);
     assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(), diagnosticValues.invariant);
+
+    await desktopPage.goto(site.url("labs/practice/?mode=session"));
+    const practiceValues = {
+      object:"Пилот практического цикла", subject_manifestation:"Существует один рабочий черновик", reflected_image:"Черновик воспринимается как незавершённый",
+      target_relation:"Провести объект к одному внешнему следу", context:"Один проект и девяносто минут", invariant:"Не подменять объект оценкой человека",
+      start_date:"2026-10-20", evidence_policy:"Локальный документ и ссылка на артефакт", first_action:"За двадцать минут собрать один абзац", completion_signal:"Шесть отдельных квитанций",
+    };
+    for (const [field,value] of Object.entries(practiceValues)) await desktopPage.locator(`#plan-form [name="${field}"]`).fill(value);
+    await desktopPage.getByRole("button", {name:"Собрать план цикла →"}).click();
+    await desktopPage.waitForSelector("#dashboard:not([hidden])");
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/0 \/ 6/u);
+    for (const field of await desktopPage.locator("[data-receipt]").all()) await field.fill("Зафиксирован один наблюдаемый след.");
+    await desktopPage.locator('#receipt-form [name="evidence_pointer"]').fill("docs/session.md#step-1");
+    await desktopPage.getByRole("button", {name:"Сохранить квитанцию ↓"}).click();
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/1 \/ 6/u);
+    assert.match(await desktopPage.locator("#dashboard").innerText(),/outcome_confirmed=false/u);
+    await assertFitsScreen(desktopPage,`${name} practice studio desktop`);
+    await desktopPage.getByRole("button", {name:"Передать первый шаг в Тактику →"}).click();
+    await desktopPage.waitForURL(/\/labs\/tactics\/\?/u);
+    assert.equal(await desktopPage.locator('[name="object"]').inputValue(),practiceValues.object);
+    assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),practiceValues.invariant);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

@@ -135,4 +135,8 @@ test("public Service Worker restores Platform 2.1, the ecosystem, labs and the l
   const diagnosticsResponse = await worker.navigate("./labs/diagnostics/?mode=business&offline=1");
   assert.equal(diagnosticsResponse.status, 200);
   assert.match(await diagnosticsResponse.text(), /labs\/diagnostics\/index\.html$/u);
+
+  const practiceResponse = await worker.navigate("./labs/practice/?mode=cycle&offline=1");
+  assert.equal(practiceResponse.status, 200);
+  assert.match(await practiceResponse.text(), /labs\/practice\/index\.html$/u);
 });

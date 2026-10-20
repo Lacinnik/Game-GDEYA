@@ -106,6 +106,14 @@
       "status": "prototype",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/diagnostics/",
       "source": "public-web/public/labs/diagnostics/CONTRACT.md"
+    },
+    {
+      "id": "practice-studio",
+      "name": "Студия практических циклов Архитектоники",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/practice/",
+      "source": "public-web/public/labs/practice/CONTRACT.md"
     }
   ]
 }
