@@ -8,6 +8,15 @@ const languageRegistry = JSON.parse(await readFile(new URL("tzar-language.profil
 const byId = new Map(registry.entities.map((entity) => [entity.id, entity]));
 const languageById = new Map(languageRegistry.profiles.map((profile) => [profile.id, profile]));
 
+test("Platform links to the ecosystem registry", async () => {
+  const [html, app] = await Promise.all([
+    readFile(new URL("index.html", root), "utf8"),
+    readFile(new URL("app.js", root), "utf8"),
+  ]);
+  assert.match(html, /href="\.\.\/ecosystem\/"/u);
+  assert.match(app, /Открыть цифровую экосистему/u);
+});
+
 test("Platform 2.0 registers 22 unique entities across two complete 10/10 laboratories", () => {
   assert.equal(registry.schema_version, "2.0");
   assert.equal(registry.entities.length, 22);

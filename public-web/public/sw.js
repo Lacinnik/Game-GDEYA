@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'axis-cycle-20261020-r1';
+const CACHE_REVISION = 'ecosystem-20261020-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -6,9 +6,15 @@ const SHELL = [
   './platform/',
   './platform/index.html',
   './platform/styles.css',
-  './platform/app.js?v=axis-cycle-20261020-r1',
+  './platform/app.js?v=ecosystem-20261020-r1',
   './platform/products.registry.json',
   './platform/tzar-language.profiles.json',
+  './ecosystem/',
+  './ecosystem/index.html',
+  './ecosystem/styles.css?v=ecosystem-20261020-r1',
+  './ecosystem/app.mjs?v=ecosystem-20261020-r1',
+  './ecosystem/catalog.json',
+  './ecosystem/CONTRACT.md',
   './labs/voidocr/',
   './labs/voidocr/index.html',
   './labs/voidocr/styles.css',
@@ -53,7 +59,7 @@ const SHELL = [
   './labs/axis-cycle/',
   './labs/axis-cycle/index.html',
   './labs/axis-cycle/styles.css?v=axis-cycle-20261020-r1',
-  './labs/axis-cycle/app.mjs?v=axis-cycle-20261020-r1',
+  './labs/axis-cycle/app.mjs?v=ecosystem-20261020-r1',
   './labs/axis-cycle/protocol.mjs?v=axis-cycle-20261020-r1',
   './labs/axis-cycle/CONTRACT.md',
   './labs/core-separation/manifest.json',
@@ -87,6 +93,7 @@ function navigationFallback(request) {
   if (/\/labs\/module(?:\/|$)/u.test(pathname)) return caches.match('./labs/module/index.html');
   if (/\/labs\/meta-core(?:\/|$)/u.test(pathname)) return caches.match('./labs/meta-core/index.html');
   if (/\/labs\/axis-cycle(?:\/|$)/u.test(pathname)) return caches.match('./labs/axis-cycle/index.html');
+  if (/\/ecosystem(?:\/|$)/u.test(pathname)) return caches.match('./ecosystem/index.html');
   if (/\/platform(?:\/|$)/u.test(pathname)) return caches.match('./platform/index.html');
   return undefined;
 }
