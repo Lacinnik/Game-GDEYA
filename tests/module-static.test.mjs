@@ -2,10 +2,23 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { AZ, BUKI, TRANSMISSIONS } from "../public-web/public/labs/module/catalog.mjs";
-import { MODULE_SCHEMA, buildPassport, canOpenPassport, validateDraft } from "../public-web/public/labs/module/runtime.mjs";
+import {
+  MATERIALIZATION_RECEIPT_SCHEMA,
+  MODULE_SCHEMA,
+  buildPassport,
+  canOpenMaterializationReceipt,
+  canOpenPassport,
+  createMaterializationReceipt,
+  validateDraft,
+} from "../public-web/public/labs/module/runtime.mjs";
 
 const root = new URL("../public-web/public/labs/module/", import.meta.url);
-const complete = { intent:"Провести идею в действие", invariant:"Сохранить авторскую ось", azId:"A1", bukaId:"B1", txId:"TX5", induction:"Активирую ясное действие", inversion:"Принимаю готовую форму", axis:"preserved" };
+const complete = {
+  object:"Провести идею в действие", targetRelation:"Создать проверяемую форму", context:"Рабочий документ и один исполнитель",
+  invariant:"Сохранить авторскую ось", tacticalAction:"Написать и сохранить один абзац", sourceTacticId:"tactic-test",
+  azId:"A1", bukaId:"B1", txId:"TX5", induction:"Активирую ясное действие", inversion:"Принимаю готовую форму",
+  geometry:"Euclid", point:"Вход", axis:"preserved",
+};
 
 test("MODULE carries the complete 49 × 24 × 7 corpus", () => {
   assert.equal(AZ.length, 49); assert.equal(BUKI.length, 24); assert.equal(TRANSMISSIONS.length, 7);
@@ -19,19 +32,42 @@ test("MODULE validates explicit user-authored inputs", () => {
 
 test("MODULE produces a deterministic local passport", () => {
   const passport = buildPassport(complete, {az:AZ,buki:BUKI,transmissions:TRANSMISSIONS}, {now:()=>"2026-07-20T00:00:00.000Z",uuid:()=>"test-module"});
-  assert.equal(passport.schema, MODULE_SCHEMA); assert.equal(passport.id, "test-module"); assert.equal(passport.outcome, "conduct"); assert.match(passport.formula.notation, /Азъ × ⊕/); assert.equal(passport.storage, "local-browser-only");
+  assert.equal(passport.schema, MODULE_SCHEMA); assert.equal(passport.id, "module-test-module"); assert.equal(passport.outcome, "conduct"); assert.match(passport.formula.notation, /Азъ × ⊕/); assert.equal(passport.storage, "local-browser-only");
   assert.equal(passport.language.modelId, "TZAR-LANGUAGE-001");
   assert.equal(passport.language.profile, "module");
-  assert.equal(passport.language.tensor.O, complete.intent);
+  assert.equal(passport.language.tensor.O, complete.object);
   assert.equal(passport.language.tensor.Q, null);
+  assert.equal(passport.targetRelation, complete.targetRelation);
+  assert.equal(passport.context, complete.context);
+  assert.equal(passport.tacticalAction, complete.tacticalAction);
+  assert.equal(passport.sourceTacticId, complete.sourceTacticId);
   assert.equal(passport.language.selection.az.id, complete.azId);
   assert.equal(passport.language.selection.buka.id, complete.bukaId);
   assert.equal(passport.language.selection.transmission.id, complete.txId);
 });
 
-test("MODULE release has no external runtime dependency", async () => {
+test("MODULE release has no external runtime dependency and exposes the tactics bridge", async () => {
   const [html, app, css] = await Promise.all([readFile(new URL("index.html",root),"utf8"),readFile(new URL("app.mjs",root),"utf8"),readFile(new URL("styles.css",root),"utf8")]);
-  assert.match(html, /49<\/b> Азов/); assert.match(html, /24<\/b> Буки/); assert.match(html, /7<\/b> Передач/); assert.doesNotMatch(html, /https?:\/\//); assert.match(app, /persistJournal/); assert.match(css, /-webkit-appearance:none/);
+  assert.match(html, /49<\/b> Азов/); assert.match(html, /24<\/b> Буки/); assert.match(html, /7<\/b> Передач/); assert.doesNotMatch(html, /https?:\/\//); assert.match(app, /persistJournal/); assert.match(app, /source_tactic/); assert.match(css, /-webkit-appearance:none/);
+});
+
+test("MODULE creates a separate self-reported materialization receipt without filling Q", () => {
+  const passport = buildPassport(complete, {az:AZ,buki:BUKI,transmissions:TRANSMISSIONS}, {now:() => "2026-10-20T00:00:00.000Z",uuid:() => "passport"});
+  const receipt = createMaterializationReceipt(passport, {
+    artifactKind:"document", artifactStatement:"Создан один рабочий абзац", completionMarker:"Абзац сохранён в документе",
+    evidencePointer:"docs/working-note.md#paragraph-1", returnKind:"partial", externalTrace:"Один участник оставил уточнение",
+    integrationDecision:"Сохранить форму и уточнить термин",
+  }, {now:Date.parse("2026-10-20T00:15:00.000Z"),uuid:() => "receipt"});
+  assert.equal(receipt.schema, MATERIALIZATION_RECEIPT_SCHEMA);
+  assert.equal(receipt.passportId, passport.id);
+  assert.equal(receipt.evidenceStatus.verified, false);
+  assert.equal(receipt.q, null);
+  assert.equal(canOpenMaterializationReceipt(receipt), true);
+});
+
+test("MODULE refuses a trace when the authored axis is not preserved", () => {
+  const passport = buildPassport({...complete, axis:"review"}, {az:AZ,buki:BUKI,transmissions:TRANSMISSIONS});
+  assert.throws(() => createMaterializationReceipt(passport, {}), /AXIS_NOT_PRESERVED/u);
 });
 
 test("saved MODULE decisions reopen unchanged for every declared axis outcome", () => {
@@ -46,7 +82,7 @@ test("saved MODULE decisions reopen unchanged for every declared axis outcome", 
 
 test("unsupported and damaged records cannot be shown as valid MODULE passports", () => {
   const p = buildPassport(complete, {az:AZ,buki:BUKI,transmissions:TRANSMISSIONS});
-  for (const value of [null, 1, "text", [], {}, {...p, schema:"future"}, {...p, language:null}, {...p, intent:{}}, {...p, formula:null}, {...p, axisVerdict:"rupture"}, {...p, language:{...p.language,tensor:{Q:1}}}]) {
+  for (const value of [null, 1, "text", [], {}, {...p, schema:"future"}, {...p, language:null}, {...p, intent:{}}, {...p, formula:null}, {...p, targetRelation:""}, {...p, axisVerdict:"rupture"}, {...p, language:{...p.language,tensor:{Q:1}}}]) {
     const original = JSON.stringify(value);
     assert.equal(canOpenPassport(value), false);
     assert.equal(JSON.stringify(value), original);
