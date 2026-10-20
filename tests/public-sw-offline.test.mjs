@@ -151,4 +151,8 @@ test("public Service Worker restores Platform 2.1, the ecosystem, labs and the l
   const rhythmResponse = await worker.navigate("./labs/rhythm/?mode=seven&offline=1");
   assert.equal(rhythmResponse.status, 200);
   assert.match(await rhythmResponse.text(), /labs\/rhythm\/index\.html$/u);
+
+  const frontierResponse = await worker.navigate("./labs/frontier/?mode=ontology&offline=1");
+  assert.equal(frontierResponse.status, 200);
+  assert.match(await frontierResponse.text(), /labs\/frontier\/index\.html$/u);
 });

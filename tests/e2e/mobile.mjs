@@ -75,7 +75,7 @@ try {
     await page.waitForTimeout(300);
     assert.equal(await page.locator(".modal").count(), 0, `${name}: walkthrough reappeared after completion`);
 
-    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop", "labs/guide/?mode=oracle", "labs/rhythm/?mode=switcher"]) {
+    for (const path of ["platform/", "ecosystem/", "product-line/", "labs/module/", "labs/voidocr/", "labs/meta-core/", "labs/core-separation/", "labs/axis-cycle/", "labs/tactics/", "labs/core-license/", "labs/creator-gate/", "labs/diagnostics/?mode=business", "labs/practice/?mode=session", "labs/facilitation/?mode=workshop", "labs/guide/?mode=oracle", "labs/rhythm/?mode=switcher", "labs/frontier/?mode=ontology"]) {
       await page.goto(site.url(path));
       await page.waitForLoadState("load");
       await assertFitsScreen(page, `${name} ${path}`);
@@ -309,6 +309,35 @@ try {
     await desktopPage.waitForURL(/\/labs\/guide\/\?/u);
     assert.equal(await desktopPage.locator('[name="object"]').inputValue(),rhythmValues.object);
     assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),rhythmValues.invariant);
+
+    await desktopPage.goto(site.url("labs/frontier/?mode=ontology"));
+    await desktopPage.waitForFunction(() => document.querySelector('[name="specific_entities"]'));
+    const frontierValues = {
+      object:"Версионированный контракт O–S–I–R_g–C–Q", subject_manifestation:"Существуют три паспорта действующих продуктов", reflected_image:"Схема кажется общей для всех вертикалей",
+      target_relation:"Проверить совместимость трёх паспортов", context:"Локальный прототип без внешнего API", invariant:"Не подменять объект категорией и не заполнять неизвестное нулём",
+      scenario_title:"Три паспорта → одна схема → отчёт ошибок", participant:"Автор схемы и разработчик интеграции", duration:"90 минут",
+      success_signal:"Три маппинга проходят валидацию либо возвращают явные несовместимости", stop_condition:"Остановиться при потере исходного объекта или неявном преобразовании",
+      specific_entities:"Object, subject trace, reflected image, target relation, context and nullable Q",
+      specific_relations:"Every relation names its target g and evidence status",
+      specific_examples:"Тактика, Материализация и Цифровой проводник",
+    };
+    for (const [field,value] of Object.entries(frontierValues)) await desktopPage.locator(`#blueprint-form [name="${field}"]`).fill(value);
+    for (const field of ["authorship_ack","boundary_ack","local_ack"]) await desktopPage.locator(`#blueprint-form [name="${field}"]`).check();
+    await desktopPage.getByRole("button",{name:"Собрать прототип →"}).click();
+    await desktopPage.waitForSelector("#dashboard:not([hidden])");
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/0 \/ 4/u);
+    const frontierReceipt = { observed_trace:"Три паспорта преобразованы, один вернул несовместимое имя поля", interpretation:"Схеме нужен явный адаптер версии", evidence_pointer:"schemas/report.json", next_action:"Добавить версию адаптера без изменения O" };
+    for (const [field,value] of Object.entries(frontierReceipt)) await desktopPage.locator(`#receipt-form [name="${field}"]`).fill(value);
+    await desktopPage.locator('#receipt-form [name="completion_state"]').selectOption("done");
+    await desktopPage.locator('#receipt-form [name="evidence_status"]').selectOption("observed");
+    await desktopPage.getByRole("button",{name:"Сохранить квитанцию ↓"}).click();
+    assert.match(await desktopPage.locator("#progress-count").innerText(),/1 \/ 4/u);
+    assert.match(await desktopPage.locator("#dashboard").innerText(),/prototype_validated=false/u);
+    await assertFitsScreen(desktopPage,`${name} frontier foundry desktop`);
+    await desktopPage.getByRole("button",{name:"Передать дальше →"}).click();
+    await desktopPage.waitForURL(/\/labs\/guide\/\?/u);
+    assert.equal(await desktopPage.locator('[name="object"]').inputValue(),frontierValues.object);
+    assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),frontierValues.invariant);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

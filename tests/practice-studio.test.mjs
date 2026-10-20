@@ -87,6 +87,6 @@ test("practice shell, versioned assets, offline route and tactics handoff stay c
   assert.match(html,/styles\.css\?v=practice-20261020-r1/u);
   assert.match(html,/app\.mjs\?v=practice-20261020-r1/u);
   assert.match(app,/\.\.\/tactics\/\?\$\{parameters\}#workbench/u);
-  assert.match(worker,/CACHE_REVISION = 'rhythm-20261020-r1'/u);
+  assert.match(worker,/CACHE_REVISION = 'frontier-20261020-r1'/u);
   assert.match(worker,/\.\/labs\/practice\/index\.html/u);
 });

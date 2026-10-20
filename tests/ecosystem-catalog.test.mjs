@@ -67,9 +67,9 @@ test("five diagnostic objects expose one working studio with explicit modes", ()
   }
   const counts = Object.groupBy(catalog.items, (item) => item.delivery_stage);
   assert.equal(counts.live.length, 5);
-  assert.equal(counts.prototype.length, 32);
-  assert.equal(counts.specified.length, 7);
-  assert.equal(counts.hypothesis.length, 11);
+  assert.equal(counts.prototype.length, 50);
+  assert.equal((counts.specified ?? []).length, 0);
+  assert.equal((counts.hypothesis ?? []).length, 0);
   assert.equal(counts["final-phase"].length, 1);
 });
 
@@ -98,8 +98,8 @@ test("five facilitation products expose one consent-based working studio", () =>
     assert.equal(byId.get(id).delivery_stage,"prototype");
     assert.equal(byId.get(id).entrypoint,`../labs/facilitation/?mode=${mode}`);
   }
-  assert.equal(byId.get("hr-evaluation").delivery_stage,"hypothesis");
-  assert.equal(byId.get("hr-evaluation").entrypoint,null);
+  assert.equal(byId.get("hr-evaluation").delivery_stage,"prototype");
+  assert.equal(byId.get("hr-evaluation").entrypoint,"../labs/frontier/?mode=hr");
 });
 
 test("five digital products expose one authorship-preserving guide studio", () => {
@@ -114,8 +114,8 @@ test("five digital products expose one authorship-preserving guide studio", () =
     assert.equal(byId.get(id).delivery_stage,"prototype");
     assert.equal(byId.get(id).entrypoint,`../labs/guide/?mode=${mode}`);
   }
-  assert.equal(byId.get("self-diagnosis-app").delivery_stage,"hypothesis");
-  assert.equal(byId.get("self-diagnosis-app").entrypoint,null);
+  assert.equal(byId.get("self-diagnosis-app").delivery_stage,"prototype");
+  assert.equal(byId.get("self-diagnosis-app").entrypoint,"../labs/frontier/?mode=self-check");
 });
 
 test("five rhythm products expose one local transition studio", () => {
