@@ -1,6 +1,7 @@
 export const AXIS_HANDOFF_SCHEMA = "architectonica.axis-handoff/1.0.0";
 export const AXIS_RETURN_SCHEMA = "architectonica.axis-return/1.0.0";
 export const AXIS_RECEIPT_SCHEMA = "architectonica.axis-receipt/1.0.0";
+export const ECOSYSTEM_EXCHANGE_SCHEMA = "architectonica.ecosystem-exchange/1.0.0";
 
 const MAX_TOKEN_LENGTH = 16000;
 const LIMITS = {
@@ -104,7 +105,61 @@ export function createAxisReceipt(handoff, returned, input, environment = {}) {
     observed_return: observation || null,
     q: observedQ,
     evidence_status: observedQ === null ? "return-not-observed" : "self-reported-observation",
+    evidence: input?.evidence && typeof input.evidence === "object" ? sanitizeEvidence(input.evidence) : { class: observedQ === null ? "none" : "self-reported", references: [], verified: false },
   };
+}
+
+const EVIDENCE_CLASSES = new Set(["none", "self-reported", "documented", "independent-observation"]);
+const safeReference = (value) => typeof value === "string" && value.trim().length > 0 && value.trim().length <= 500
+  && !/^(javascript|data):/iu.test(value.trim());
+
+function sanitizeEvidence(value) {
+  const evidenceClass = EVIDENCE_CLASSES.has(value.class) ? value.class : "none";
+  const references = Array.isArray(value.references) ? value.references.filter(safeReference).slice(0, 12).map((reference) => reference.trim()) : [];
+  return {
+    class: evidenceClass,
+    observer_role: typeof value.observer_role === "string" ? value.observer_role.trim().slice(0, 120) : null,
+    observed_at: validDate(value.observed_at) ? value.observed_at : null,
+    references,
+    note: typeof value.note === "string" ? value.note.trim().slice(0, 1000) : null,
+    verified: false,
+  };
+}
+
+export function createExchangeRecord(record, environment = {}) {
+  if (!record || typeof record !== "object" || typeof record.schema !== "string" || !validId(record.id)) throw new Error("INVALID_EXCHANGE_RECORD");
+  const now = environment.now ?? Date.now();
+  const product = record.producer === "reson-field-check" || record.schema === "reson.collective-meta-decision/1.1.0" ? "reson-field-check" : "gdeya-axis";
+  return {
+    schema: ECOSYSTEM_EXCHANGE_SCHEMA,
+    id: (environment.uuid ?? uuid)(),
+    created_at: new Date(now).toISOString(),
+    source: { ecosystem: "architectonica", product, repository: product === "reson-field-check" ? "reason-" : "Game-GDEYA", record_schema: record.schema, record_id: record.id },
+    payload: record,
+    evidence_class: record.evidence?.class ?? (record.evidence_status === "self-reported-observation" ? "self-reported" : "none"),
+    verified: false,
+  };
+}
+
+export function validateExchangeRecord(value) {
+  return Boolean(value && value.schema === ECOSYSTEM_EXCHANGE_SCHEMA && validId(value.id) && validDate(value.created_at)
+    && value.source?.ecosystem === "architectonica" && typeof value.source.product === "string"
+    && typeof value.source.record_schema === "string" && value.payload?.schema === value.source.record_schema
+    && value.payload?.id === value.source.record_id && EVIDENCE_CLASSES.has(value.evidence_class) && value.verified === false);
+}
+
+export function readExchangeRecord(value) {
+  if (validateExchangeRecord(value)) return value;
+  if (value?.schema === AXIS_RECEIPT_SCHEMA && validId(value.id)) return createExchangeRecord(value);
+  if (validateAxisHandoff(value)) return createExchangeRecord(value);
+  if (validateAxisReturn(value)) return createExchangeRecord(value);
+  throw new Error("UNSUPPORTED_EXCHANGE_RECORD");
+}
+
+export function readExchangeRecords(value) {
+  const values = value?.schema === "architectonica.exchange-journal/1.0.0" && Array.isArray(value.entries) ? value.entries : [value];
+  if (values.length > 100) throw new Error("EXCHANGE_BATCH_TOO_LARGE");
+  return values.map(readExchangeRecord);
 }
 
 export function fragmentValue(hash, key) {
