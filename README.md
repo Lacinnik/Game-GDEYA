@@ -41,6 +41,7 @@
 - **Фасилитационная студия · прототип 0.1:** `https://lacinnik.github.io/Game-GDEYA/labs/facilitation/` — пять форм совместной работы: индивидуальное сопровождение, группа, лидерская игра, креативная игра и организационный пилот; обязательное согласие, разделённые факты и интерпретации, `people_scored=false`, `Q=null`.
 - **Цифровой проводник · прототип 0.1:** `https://lacinnik.github.io/Game-GDEYA/labs/guide/` — пять цифровых оболочек: Оракул, проводник, колода, дневной цикл и TX-тренажёр; локальный журнал отделяет наблюдение от интерпретации, `assistant_authority=false`, `prediction=false`, `diagnosis=false`, `Q=null`.
 - **Студия ритма и переходов · прототип 0.1:** `https://lacinnik.github.io/Game-GDEYA/labs/rhythm/` — пять контуров темпа: резонансная вертикаль, 48-часовой интервал, ритуальный переключатель, ⊕-разворачивание и семь возвращений; расписание локально, `automated_notification=false`, `medical_assessment=false`, `Q=null`.
+- **Цех прототипов · 0.1:** `https://lacinnik.github.io/Game-GDEYA/labs/frontier/` — 18 предметных режимов для всей оставшейся продуктовой линии: от узла Человек—ИИ—Поле и корпусов до HR, генераторов, SaaS и онтологического API; каждый режим имеет собственные вопросы, четыре шага и стоп‑границы, `prototype_validated=false`, `outcome_confirmed=false`, `Q=null`.
 
 Реестр является источником статусов для лаунчера. Статусы дисциплинарного корпуса ТзАр сверяются с `contour/manifest.json` репозитория `Lacinnik/-tensor-architectonics`; QENGINE публикуется только как `candidate · author-reviewed`, не как канон.
 

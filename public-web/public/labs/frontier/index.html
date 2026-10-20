@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111410">
+  <meta name="description" content="Цех прототипов Архитектоники: 18 оставшихся продуктов превращаются в отдельные проверяемые сценарии.">
+  <title>Цех прототипов · Архитектоника</title>
+  <link rel="stylesheet" href="./styles.css?v=frontier-20261020-r1">
+</head>
+<body>
+  <div class="grid-field" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="../../product-line/"><span>⊕</span><b>АРХИТЕКТОНИКА</b></a>
+    <nav><a href="../../ecosystem/">56 объектов</a><a href="../rhythm/">Ритм</a><a href="../axis-cycle/">Живая ось</a></nav>
+    <small>FRONTIER FOUNDRY · 0.1</small>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="kicker">18 OBJECTS · 18 FIRST TESTS</p>
+        <h1>Не список идей.<br><em>Цех прототипов.</em></h1>
+      </div>
+      <aside>
+        <p>Каждый оставшийся продукт получает собственный режим: три предметных вопроса, четыре проверяемых шага, стоп‑границы и квитанцию наблюдения. Общая форма одна — логика у каждого объекта своя.</p>
+        <div class="counter"><b>55<span>/56</span></b><p>будут иметь рабочую или прототипную форму</p><small>certification remains final-phase · Q=null</small></div>
+      </aside>
+    </section>
+
+    <section class="selector">
+      <header><div><p class="kicker">01 · SELECT OBJECT</p><h2>Выбери контур сборки</h2></div><p id="track-count">18 режимов</p></header>
+      <div id="track-list" class="track-list" role="tablist"></div>
+    </section>
+
+    <form id="blueprint-form" class="workbench">
+      <section class="track-intro">
+        <div><p id="track-code" class="kicker"></p><h2 id="track-title"></h2><p id="track-purpose"></p></div>
+        <div class="output"><span>ВЫХОД ПРОТОТИПА</span><b id="track-output"></b><small id="track-source"></small></div>
+      </section>
+
+      <section class="form-section">
+        <header><span>02</span><div><p class="kicker">OBJECT BEFORE FORMAT</p><h2>Удержать объект</h2></div></header>
+        <div class="fields">
+          <label><span>O · объект дословно</span><textarea name="object" maxlength="800" required></textarea></label>
+          <label><span>S · наблюдаемый след</span><textarea name="subject_manifestation" maxlength="2400" required placeholder="Что уже существует во внешнем?"></textarea></label>
+          <label><span>I · отражённый образ</span><textarea name="reflected_image" maxlength="2400" required placeholder="Как объект выглядит в текущем описании?"></textarea></label>
+          <label><span>Rᵍ · отношение к цели</span><textarea name="target_relation" maxlength="2400" required placeholder="Какой конкретной цели служит прототип?"></textarea></label>
+          <label><span>C · контекст</span><textarea name="context" maxlength="2400" required placeholder="Среда, люди, ресурс и ограничения."></textarea></label>
+          <label><span>Инвариант</span><textarea name="invariant" maxlength="2400" required placeholder="Что нельзя потерять при сборке?"></textarea></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <header><span>03</span><div><p class="kicker">PRODUCT-SPECIFIC CONTRACT</p><h2>Ответить по существу</h2></div></header>
+        <div id="specific-fields" class="fields"></div>
+      </section>
+
+      <section class="form-section">
+        <header><span>04</span><div><p class="kicker">ONE REAL SCENARIO</p><h2>Ограничить первую проверку</h2></div></header>
+        <div class="fields">
+          <label><span>Название сценария</span><input name="scenario_title" maxlength="800" required placeholder="Один первый проход"></label>
+          <label><span>Участник / пользователь</span><input name="participant" maxlength="1200" required placeholder="Для кого и с чьим согласием?"></label>
+          <label><span>Временная рамка</span><input name="duration" maxlength="600" required placeholder="Например: 45 минут или 7 дней"></label>
+          <label><span>Наблюдаемый признак</span><textarea name="success_signal" maxlength="1600" required placeholder="Что должно появиться во внешнем?"></textarea></label>
+          <label class="wide"><span>Условие остановки</span><textarea name="stop_condition" maxlength="1600" required placeholder="Когда тест прекращается или передаётся человеку?"></textarea></label>
+        </div>
+        <div id="guardrails" class="guardrails"></div>
+        <div class="acks">
+          <label><input name="authorship_ack" type="checkbox" required><span>Человек сохраняет авторство решения и отвечает за запуск сценария.</span></label>
+          <label><input name="boundary_ack" type="checkbox" required><span>Я принимаю предметные стоп‑границы выбранного продукта.</span></label>
+          <label><input name="local_ack" type="checkbox" required><span>Данные остаются в этом браузере; экспорт выполняется только вручную.</span></label>
+        </div>
+      </section>
+
+      <section class="form-section">
+        <header><span>05</span><div><p class="kicker">VISIBLE BEFORE START</p><h2>Четыре шага прототипа</h2></div></header>
+        <div id="step-preview" class="step-preview"></div>
+      </section>
+      <div class="submit-row"><p id="blueprint-error" role="alert"></p><button class="primary" type="submit">Собрать прототип <span>→</span></button></div>
+    </form>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-head"><div><p class="kicker">LOCAL PROTOTYPE BLUEPRINT</p><h2 id="dashboard-title"></h2></div><div class="progress-mark"><b id="progress-count">0 / 4</b><span>ШАГОВ ДОКУМЕНТИРОВАНО</span><small id="done-count">выполнено 0</small></div></div>
+      <div class="progress"><i id="progress-bar"></i></div>
+      <div id="blueprint-summary" class="blueprint-summary"></div>
+      <div id="timeline" class="timeline"></div>
+
+      <form id="receipt-form" class="receipt-form">
+        <header><span>06</span><div><p class="kicker">TRACE, NOT PROMISE</p><h2>Квитанция проверки</h2></div></header>
+        <div class="fields compact">
+          <label><span>Шаг</span><select name="step_id" required></select></label>
+          <label><span>Состояние</span><select name="completion_state" required><option value="done">Выполнен</option><option value="partial">Частично</option><option value="stopped">Остановлен</option><option value="skipped">Пропущен</option></select></label>
+          <label><span>Статус основания</span><select name="evidence_status" required><option value="observed">Наблюдение</option><option value="derived">Вывод</option><option value="hypothesis">Гипотеза</option><option value="unknown">Неизвестно</option></select></label>
+          <label><span>Наблюдаемый след</span><textarea name="observed_trace" maxlength="2400" required></textarea></label>
+          <label><span>Интерпретация</span><textarea name="interpretation" maxlength="2400" required></textarea></label>
+          <label><span>Указатель свидетельства</span><textarea name="evidence_pointer" maxlength="1600" required placeholder="Файл, ссылка, событие или «внешнего свидетельства нет»"></textarea></label>
+          <label class="wide"><span>Следующий ход</span><textarea name="next_action" maxlength="2400" required></textarea></label>
+        </div>
+        <label class="review"><input name="participant_reviewed" type="checkbox"><span>Участник видел запись и мог её исправить (если участник есть).</span></label>
+        <div class="submit-row"><p id="receipt-error" role="alert"></p><button class="primary" type="submit">Сохранить квитанцию <span>↓</span></button></div>
+      </form>
+      <div class="dashboard-actions"><button id="download" class="primary">Скачать JSON <span>↓</span></button><button id="handoff">Передать дальше <span>→</span></button><button id="new-blueprint">Новый прототип</button></div>
+      <p class="evidence-line">prototype_validated=false · outcome_confirmed=false · access_granted=false · Q=null</p>
+    </section>
+
+    <details class="journal"><summary>Локальные прототипы · <span id="journal-count">0</span></summary><p id="journal-message"></p><div id="journal-list"></div></details>
+    <section class="boundary"><b>НЕ 18 ОБЕЩАНИЙ</b><p>Наличие рабочего маршрута переводит объект из идеи или спецификации в прототип. Оно не подтверждает полезность, безопасность, экономический результат, юридический статус или каноничность. Для этого нужны отдельные наблюдения и решения.</p></section>
+  </main>
+  <script type="module" src="./app.mjs?v=frontier-20261020-r1"></script>
+</body>
+</html>
+

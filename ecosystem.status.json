@@ -138,6 +138,14 @@
       "status": "prototype",
       "url": "https://lacinnik.github.io/Game-GDEYA/labs/rhythm/",
       "source": "public-web/public/labs/rhythm/CONTRACT.md"
+    },
+    {
+      "id": "frontier-prototype-foundry",
+      "name": "Цех прототипов Архитектоники",
+      "version": "0.1",
+      "status": "prototype",
+      "url": "https://lacinnik.github.io/Game-GDEYA/labs/frontier/",
+      "source": "public-web/public/labs/frontier/CONTRACT.md"
     }
   ]
 }
