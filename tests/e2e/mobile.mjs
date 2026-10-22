@@ -352,16 +352,54 @@ try {
     await desktopPage.waitForSelector("#dashboard:not([hidden])");
     assert.match(await desktopPage.locator("#case-count").innerText(),/0 \/ 3/u);
     assert.match(await desktopPage.locator("#dashboard").innerText(),/certificate_issued=false/u);
-    const certificationCase = {
-      case_title:"Первый супервизируемый кейс", practice_date:"2026-10-20", object:"Один проектный переход", participant_scope:"Добровольный участник без персональных данных",
-      observed_trace:"Участник сам сформулировал объект и следующий шаг", candidate_reflection:"Ведущий удержал процесс", consent_trace:"consent/case-1.md",
-      supervisor_reference:"supervision/case-1.md", evidence_pointer:"evidence/case-1.json",
+    assert.equal(await desktopPage.locator('#package-form button[type="submit"]').isEnabled(),false);
+
+    const certificationReview = {
+      reviewer_name:"Заявленный супервизор E2E", reviewer_role:"Заявленная роль супервизора", review_date:"2026-10-20",
+      review_note:"Рекомендация относится только к технической передаче пакета.",
     };
-    for (const [field,value] of Object.entries(certificationCase)) await desktopPage.locator(`#case-form [name="${field}"]`).fill(value);
-    await desktopPage.locator('#case-form [name="participant_consent"]').check();
-    await desktopPage.getByRole("button",{name:"Сохранить кейс ↓"}).click();
-    assert.match(await desktopPage.locator("#case-count").innerText(),/1 \/ 3/u);
+    for (const [field,value] of Object.entries(certificationReview)) await desktopPage.locator(`#review-form [name="${field}"]`).fill(value);
+    for (const competency of ["object-authorship","evidence-separation","consent-withdrawal","process-boundary","evidence-escalation"]) {
+      await desktopPage.locator(`#review-form [name="status-${competency}"]`).selectOption("observed");
+      await desktopPage.locator(`#review-form [name="basis-${competency}"]`).fill(`Синтетическое основание ${competency}`);
+    }
+    await desktopPage.locator('#review-form [name="recommendation"]').selectOption("ready-for-authorized-review");
+    await desktopPage.getByRole("button",{name:"Сохранить разбор ↓"}).click();
+    assert.match(await desktopPage.locator("#review-error").innerText(),/до трёх технически подходящих кейсов/u);
+    assert.equal(await desktopPage.locator("#review-list article").count(),0);
+
+    for (let index = 1; index <= 3; index += 1) {
+      const certificationCase = {
+        case_title:`Супервизируемый кейс ${index}`, practice_date:"2026-10-20", object:"Один проектный переход", participant_scope:"Добровольный участник без персональных данных",
+        observed_trace:"Участник сам сформулировал объект и следующий шаг", candidate_reflection:"Ведущий удержал процесс", consent_trace:`consent/case-${index}.md`,
+        supervisor_reference:"supervision/review.md", evidence_pointer:`evidence/case-${index}.json`,
+      };
+      for (const [field,value] of Object.entries(certificationCase)) await desktopPage.locator(`#case-form [name="${field}"]`).fill(value);
+      await desktopPage.locator('#case-form [name="participant_consent"]').check();
+      await desktopPage.getByRole("button",{name:"Сохранить кейс ↓"}).click();
+    }
+    assert.match(await desktopPage.locator("#case-count").innerText(),/3 \/ 3/u);
     assert.match(await desktopPage.locator("#dashboard").innerText(),/result=false/u);
+    assert.equal(await desktopPage.locator('#package-form button[type="submit"]').isEnabled(),false);
+
+    await desktopPage.locator('#review-form [name="status-process-boundary"]').selectOption("needs-review");
+    await desktopPage.getByRole("button",{name:"Сохранить разбор ↓"}).click();
+    assert.match(await desktopPage.locator("#review-error").innerText(),/все пять компетенций/u);
+    await desktopPage.locator('#review-form [name="status-process-boundary"]').selectOption("observed");
+    await desktopPage.getByRole("button",{name:"Сохранить разбор ↓"}).click();
+    assert.equal(await desktopPage.locator("#review-list article").count(),1);
+    assert.match(await desktopPage.locator("#package-gate").innerText(),/подлинность и утверждённость студия не проверяет/u);
+    assert.equal(await desktopPage.locator('#package-form button[type="submit"]').isEnabled(),true);
+
+    const certificationPackage = {
+      canon_reference:"fake://canon", competency_reference:"fake://competencies", ethics_reference:"fake://ethics",
+      access_policy_reference:"fake://access", legal_review_reference:"fake://legal", requested_decision:"Синтетический запрос на человеческое рассмотрение",
+    };
+    for (const [field,value] of Object.entries(certificationPackage)) await desktopPage.locator(`#package-form [name="${field}"]`).fill(value);
+    await desktopPage.getByRole("button",{name:"Собрать пакет рассмотрения →"}).click();
+    assert.match(await desktopPage.locator("#package-result").innerText(),/ТЕХНИЧЕСКИ СОБРАН · СВЕДЕНИЯ НЕ ВЕРИФИЦИРОВАНЫ/u);
+    assert.match(await desktopPage.locator("#package-result").innerText(),/reviewer_authority_verified=false/u);
+    assert.match(await desktopPage.locator("#package-result").innerText(),/canon_approved=false/u);
     await assertFitsScreen(desktopPage,`${name} certification readiness desktop`);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
