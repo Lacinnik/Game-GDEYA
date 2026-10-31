@@ -47,7 +47,105 @@ async function startGame(page, site) {
   await page.getByText("ВОЙТИ В ЖИВОЙ ЦИКЛ").click();
   await page.locator("textarea").nth(0).fill("Запустить проект");
   await page.locator("textarea").nth(1).fill("Сохранить ясность");
+  const sc5Link = await page.getByRole("link", {name: /ИСХОДНАЯ САМООЦЕНКА/}).getAttribute("href");
+  const cycleId = new URL(sc5Link, site.url()).searchParams.get("cycleId");
   await page.getByRole("button", { name: "РОДИТЬ ТОЧКУ" }).click();
+  return cycleId;
+}
+
+async function finishQuickGame(page) {
+  for (let turn = 0; turn < 4; turn++) {
+    const count = Number((await page.locator(".eventTop").innerText()).match(/N = (\d+)/u)[1]);
+    for (let i = 0; i < count; i++) {
+      await page.locator(".inputRow input").fill(`Синтетическое состояние ${i}`);
+      await page.locator(".inputRow button").click();
+    }
+    await page.getByRole("button", {name: "УВИДЕТЬ ГЕОМЕТРИЮ"}).click();
+    await page.locator(".geometryGrid button").first().click();
+    await page.locator(".pointGrid button").first().click();
+    await page.locator(".creatorCheck textarea").fill("Синтетическое наблюдение: не вход Chronos");
+    await page.getByRole("button", {name: "СОБРАТЬ ФОРМУЛУ"}).click();
+    await page.locator(".formulaChoices:not(.three) button").first().click();
+    await page.locator(".formulaChoices.three button").first().click();
+    await page.locator(".txGrid button").first().click();
+    await page.getByPlaceholder("Что активирую внутри?").fill("Тестовая индукция");
+    await page.getByPlaceholder("Что втягиваю из будущего?").fill("Тестовая инверсия");
+    await page.getByRole("button", {name: "ПРОВЕСТИ ФОРМУЛУ"}).click();
+    await page.getByRole("button", {name: turn === 3 ? "СВЕРНУТЬ ЦИКЛ" : "СЛЕДУЮЩИЙ УЗЕЛ"}).click();
+  }
+  await page.waitForSelector(".end");
+}
+
+async function checkChronosIntegration(page, context, site, name) {
+  const cycleId = await startGame(page, site);
+  await finishQuickGame(page);
+  const panel = page.getByRole("region", {name: "Chronos AI · исследование"});
+  const run = panel.getByRole("button");
+  const status = panel.getByRole("status");
+  assert.match(await panel.innerText(), /Семантический анализ не выполнен/u);
+  assert.match(await panel.innerText(), /Qsim в расчёт не поступают/u);
+  const followupLink = new URL(await page.getByRole("link", {name: "SC-5 × CHRONOS · ИССЛЕДОВАНИЕ"}).getAttribute("href"), site.url());
+  assert.equal(followupLink.searchParams.get("cycleId"), cycleId);
+  assert.equal(followupLink.searchParams.get("phase"), "after");
+  await run.click(); // Existing records of another cycle must not qualify.
+  await status.filter({hasText: "минимум два"}).waitFor();
+
+  // Save real lab records in another tab, then run from the game's end screen.
+  let lab = await context.newPage();
+  for (const [phase, choice] of [["before", 2], ["after", 3]]) {
+    if (phase === "after") {
+      await lab.close();
+      const opened = context.waitForEvent("page");
+      await page.getByRole("link", {name: "SC-5 × CHRONOS · ИССЛЕДОВАНИЕ"}).click();
+      lab = await opened;
+      await lab.waitForURL(followupLink.href);
+    } else {
+      await lab.goto(site.url(`labs/sc5-chronos/?cycleId=${cycleId}&phase=${phase}`));
+    }
+    await lab.locator("#consent").check();
+    for (const question of await lab.locator("#items .question").all()) await question.locator("button").nth(choice).click();
+    await lab.locator("#save").click();
+    assert.match(await lab.locator("#status").innerText(), /Запись сохранена/u);
+  }
+  await lab.close();
+  const original = await page.evaluate(() => localStorage.getItem("gdeya.sc5.research.v1"));
+  const requests = [];
+  const trackRequest = request => requests.push(request.url());
+  page.on("request", trackRequest);
+  await run.click();
+  await status.filter({hasText: "Измерений SC-5: 2"}).waitFor();
+  page.off("request", trackRequest);
+  assert.deepEqual(requests, [], "Chronos must not send input to a server");
+  const report = await status.innerText();
+  assert.match(report, /Семантический анализ не выполнен/u);
+  assert.match(report, /невалидированные эвристики/u);
+  assert.match(report, /недостаточно истории для проверки/u);
+  assert.equal(await run.isEnabled(), true);
+  assert.equal(await page.evaluate(() => localStorage.getItem("gdeya.sc5.research.v1")), original);
+  await run.click();
+  await status.filter({hasText: "Измерений SC-5: 2"}).waitFor();
+  assert.equal(await status.innerText(), report, "repeated clicks must not accumulate engine memory");
+
+  await page.evaluate(cycleId => {
+    const data = JSON.parse(localStorage.getItem("gdeya.sc5.research.v1"));
+    data.records.find(r => r.cycleId === cycleId).factors.alpha = .9;
+    localStorage.setItem("gdeya.sc5.research.v1", JSON.stringify(data));
+  }, cycleId);
+  await run.click();
+  await status.filter({hasText: "Неверный формат истории"}).waitFor();
+  assert.doesNotMatch(await status.innerText(), /Тип \(эвристика\)/u, "failure must replace the old success report");
+  await page.evaluate(() => localStorage.setItem("gdeya.sc5.research.v1", "{broken private content"));
+  await run.click();
+  await status.filter({hasText: "Неверный формат истории"}).waitFor();
+  assert.doesNotMatch(await status.innerText(), /private content/u);
+  await page.evaluate(raw => localStorage.setItem("gdeya.sc5.research.v1", raw), original);
+  await run.click();
+  await status.filter({hasText: "Измерений SC-5: 2"}).waitFor();
+  await assertFitsScreen(page, `${name} Chronos end screen`);
+  await page.getByRole("button", {name: "НОВЫЙ ВИТОК"}).click();
+  assert.equal(await panel.count(), 0);
+  const newCycle = new URL(await page.getByRole("link", {name: /ИСХОДНАЯ САМООЦЕНКА/}).getAttribute("href"), site.url()).searchParams.get("cycleId");
+  assert.notEqual(newCycle, cycleId);
 }
 
 const engines = { chromium, webkit };
@@ -100,6 +198,7 @@ try {
     assert.match(await page.locator("#history").innerText(), /Парное изменение/u);
     assert.match(await page.locator("#history").innerText(), /alpha 0\.250/u);
     await assertFitsScreen(page, `${name} SC-5 lab`);
+    await checkChronosIntegration(page, context, site, name);
     const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const desktopPage = await desktopContext.newPage();
     desktopPage.on("pageerror", (error) => errors.push(`desktop: ${error.message}`));

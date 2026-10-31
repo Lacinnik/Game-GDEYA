@@ -34,3 +34,13 @@ test("replay supports cycle filter",()=>{
  const result=replayAssessmentHistory([a,b],{cycleId:"cycle-research-001"});
  assert.equal(result.eventCount,1);
 });
+
+test("replay orders instants across time zones and resolves equal instants by code-point ID",()=>{
+ const a=record("a","2026-10-31T12:00:00+03:00",Array(15).fill(.5));
+ const A=record("A","2026-10-31T09:00:00Z",Array(15).fill(.5));
+ const b=record("b","2026-10-31T10:00:00Z",Array(15).fill(.75));
+ const result=replayAssessmentHistory([b,a,A]);
+ assert.deepEqual(result.trajectory.map(x=>x.eventId),["A","a","b"]);
+ assert.equal(result.trajectory[1].at,"2026-10-31T09:00:00.000Z");
+ assert.equal(result.trajectory[2].delta.alpha,.25);
+});

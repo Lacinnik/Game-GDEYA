@@ -11,9 +11,9 @@ export function replayAssessmentHistory(records,{cycleId=null}={}){
   if(seen.has(record.assessmentId))throw Error("Повторный assessmentId");
   seen.add(record.assessmentId);
   if(cycleId!==null&&record.cycleId!==cycleId)continue;
-  events.push({eventId:record.assessmentId,at:record.timestamp,cycleId:record.cycleId??null,plate:record.plate,phase:record.phase??null,complete:record.complete,values:Object.fromEntries(FACTORS.map(f=>[f.key,record.factors[f.key]]))});
+  events.push({eventId:record.assessmentId,at:new Date(record.timestamp).toISOString(),cycleId:record.cycleId??null,plate:record.plate,phase:record.phase??null,complete:record.complete,values:Object.fromEntries(FACTORS.map(f=>[f.key,record.factors[f.key]]))});
  }
- events.sort((a,b)=>a.at.localeCompare(b.at)||a.eventId.localeCompare(b.eventId));
+ events.sort((a,b)=>Date.parse(a.at)-Date.parse(b.at)||(a.eventId<b.eventId?-1:a.eventId>b.eventId?1:0));
  let prev=null;
  const trajectory=events.map(event=>{
   const delta=prev&&prev.complete&&event.complete&&prev.plate===event.plate&&prev.cycleId===event.cycleId
@@ -23,5 +23,5 @@ export function replayAssessmentHistory(records,{cycleId=null}={}){
   prev=event;
   return result;
  });
- return {schema:REPLAY_VERSION,algorithmVersion:"1.0.0-research",eventCount:events.length,trajectory,researchOnly:true,prediction:false,diagnosis:false,accessDecision:false};
+ return {schema:REPLAY_VERSION,algorithmVersion:"1.0.1-research",eventCount:events.length,trajectory,researchOnly:true,prediction:false,diagnosis:false,accessDecision:false};
 }
