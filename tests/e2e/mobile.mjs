@@ -98,7 +98,7 @@ try {
     for (const question of await page.locator("#items .question").all()) await question.locator("button").nth(3).click();
     await page.locator("#save").click();
     assert.match(await page.locator("#history").innerText(), /Парное изменение/u);
-    assert.match(await page.locator("#history").innerText(), /alpha 0\\.250/u);
+    assert.match(await page.locator("#history").innerText(), /alpha 0\.250/u);
     await assertFitsScreen(page, `${name} SC-5 lab`);
     const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const desktopPage = await desktopContext.newPage();
