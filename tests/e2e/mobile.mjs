@@ -81,6 +81,25 @@ try {
       await assertFitsScreen(page, `${name} ${path}`);
     }
 
+    // SC-5 research lab: same-cycle baseline / follow-up, persistent browser history.
+    const sc5Cycle = "cycle-e2e-research-001";
+    const sc5Base = `labs/sc5-chronos/?cycleId=${sc5Cycle}&phase=before`;
+    await page.goto(site.url(sc5Base));
+    await page.waitForSelector("#items .question");
+    assert.equal(await page.locator("#items .question").count(), 15, `${name}: SC-5 indicators`);
+    await page.locator("#consent").check();
+    for (const question of await page.locator("#items .question").all()) await question.locator("button").nth(2).click();
+    await page.locator("#save").click();
+    assert.match(await page.locator("#count").innerText(), /1/u);
+    await page.reload();
+    assert.match(await page.locator("#count").innerText(), /1/u);
+    await page.goto(site.url(`labs/sc5-chronos/?cycleId=${sc5Cycle}&phase=after`));
+    await page.locator("#consent").check();
+    for (const question of await page.locator("#items .question").all()) await question.locator("button").nth(3).click();
+    await page.locator("#save").click();
+    assert.match(await page.locator("#history").innerText(), /Парное изменение/u);
+    assert.match(await page.locator("#history").innerText(), /alpha 0\\.250/u);
+    await assertFitsScreen(page, `${name} SC-5 lab`);
     const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const desktopPage = await desktopContext.newPage();
     desktopPage.on("pageerror", (error) => errors.push(`desktop: ${error.message}`));
