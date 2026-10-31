@@ -66,3 +66,19 @@ jobs:
           path: dist-public
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify published pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://lacinnik.github.io/Game-GDEYA/"
+          for page in "" "labs/sc5-chronos/"; do
+            ok=0
+            for attempt in 1 2 3 4 5 6; do
+              if curl --fail --location --silent --show-error --max-time 20 "${base}${page}" -o /tmp/gdeya-published.html; then
+                if grep -qi '<html' /tmp/gdeya-published.html; then ok=1; break; fi
+              fi
+              sleep 10
+            done
+            if [ "$ok" != 1 ]; then echo "Unverified publication: ${base}${page}" >&2; exit 1; fi
+            echo "Published page verified: ${base}${page}"
+          done
