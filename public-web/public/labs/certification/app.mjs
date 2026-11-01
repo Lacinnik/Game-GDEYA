@@ -7,8 +7,9 @@ import {
   buildCertificationDossier,
   buildSupervisedCase,
   buildSupervisionReview,
+  getAuthorizationReadiness,
   validateCertificationDossier,
-} from "./protocol.mjs?v=certification-20261020-r1";
+} from "./protocol.mjs?v=certification-20261022-r2";
 import { downloadJson, persistJournal, persistValue, readJournal } from "../local-journal.mjs";
 
 const STORAGE_KEY = "architectonica.certification.dossiers.v1";
@@ -51,18 +52,20 @@ function renderJournal() {
 
 function renderDashboard(dossier) {
   state.active = dossier;
+  const readiness = getAuthorizationReadiness(dossier);
   $("#dashboard-title").textContent = `${dossier.candidate.declared_name} · ${dossier.requested_scope}`;
   $("#case-count").textContent = `${dossier.progress.eligible_cases} / ${dossier.progress.required_cases}`;
   $("#dossier-summary").innerHTML = [
     ["O · ОБЪЕКТ", dossier.tensor.O], ["R_g · ОТНОШЕНИЕ", dossier.tensor.Rg], ["ИНВАРИАНТ", dossier.invariant],
     ["ОБЛАСТЬ", dossier.requested_scope], ["МЕТОДЫ", dossier.method_scope], ["СТАТУС", dossier.progress.status],
   ].map(([label,value]) => `<article><span>${label}</span><p>${escapeHtml(value)}</p></article>`).join("");
-  $("#case-list").innerHTML = dossier.cases.map((entry,index) => `<article><i>${String(dossier.cases.length-index).padStart(2,"0")}</i><div><b>${escapeHtml(entry.case_title)}</b><p>${escapeHtml(entry.observed_trace)}</p></div><small>${entry.evidence_status} · incident=${entry.incident_state} · result=false</small></article>`).join("");
-  $("#review-list").innerHTML = dossier.reviews.map((review,index) => `<article><i>${String(dossier.reviews.length-index).padStart(2,"0")}</i><div><b>${escapeHtml(review.reviewer.declared_name)}</b><p>${escapeHtml(review.review_note)}</p></div><small>${review.recommendation} · identity_verified=false</small></article>`).join("");
-  $("#package-gate").textContent = dossier.progress.supervised_practice_complete && dossier.progress.supervision_recommends_review ? "Шлюзы практики и супервизии пройдены. Укажите пять утверждённых источников для пакета." : `Нужно ${dossier.progress.required_cases} подходящих кейса и рекомендация супервизии. Сейчас: ${dossier.progress.eligible_cases}/${dossier.progress.required_cases}.`;
+  $("#case-list").innerHTML = dossier.cases.map((entry,index) => `<article><i>${String(dossier.cases.length-index).padStart(2,"0")}</i><div><b>${escapeHtml(entry.case_title)}</b><p>${escapeHtml(entry.observed_trace)}</p></div><small>${entry.evidence_status} (заявлено; не верифицировано) · incident=${entry.incident_state} · result=false</small></article>`).join("");
+  $("#review-list").innerHTML = dossier.reviews.map((review,index) => `<article><i>${String(dossier.reviews.length-index).padStart(2,"0")}</i><div><b>${escapeHtml(review.reviewer.declared_name)}</b><p>${escapeHtml(review.review_note)}</p></div><small>${review.recommendation} · identity_verified=false · authority_verified=false</small></article>`).join("");
+  $("#package-gate").textContent = readiness.ready ? "Технические шлюзы пройдены. Укажите пять заявленных ссылок; их подлинность и утверждённость студия не проверяет." : `Нужно ${dossier.progress.required_cases} уникальных подходящих кейса, наблюдение всех пяти компетенций и текущая рекомендация супервизии. Сейчас: ${dossier.progress.eligible_cases}/${dossier.progress.required_cases}.`;
+  $("#package-form button[type=submit]").disabled = !readiness.ready;
   const latestPackage = dossier.authorization_packages[0];
   $("#package-result").hidden = !latestPackage;
-  if (latestPackage) $("#package-result").innerHTML = `<b>ПАКЕТ ГОТОВ К АВТОРИЗОВАННОМУ РАССМОТРЕНИЮ</b><br>${escapeHtml(latestPackage.id)}<br>decision=null · certificate_issued=false · access_granted=false · role_assigned=false · Q=null`;
+  if (latestPackage) $("#package-result").innerHTML = `<b>ПАКЕТ ТЕХНИЧЕСКИ СОБРАН · СВЕДЕНИЯ НЕ ВЕРИФИЦИРОВАНЫ</b><br>${escapeHtml(latestPackage.id)}<br>decision=null · reviewer_identity_verified=false · reviewer_authority_verified=false · canon_approved=false · certificate_issued=false · access_granted=false · role_assigned=false · Q=null`;
   $("#dashboard").hidden = false;
 }
 
@@ -87,7 +90,13 @@ $("#case-form").addEventListener("submit", (event) => {
     });
     const dossier = attachSupervisedCase(state.active, entry); const saved = saveActive(dossier); renderDashboard(dossier); renderJournal(); form.reset(); form.querySelector('[name="practice_date"]').value = new Date().toISOString().slice(0,10);
     if (!saved.ok) $("#case-error").textContent = "Кейс собран, но локальная запись не подтверждена. Скачайте JSON.";
-  } catch (error) { $("#case-error").textContent = `Кейс не сохранён: ${error.message}.`; event.currentTarget.reportValidity(); }
+  } catch (error) {
+    const messages = {
+      CASE_RECORD_DUPLICATE:"Точная копия кейса не сохранена: три кейса должны иметь различимый след.",
+      PRACTICE_DATE_INVALID:"Укажите действительную дату практики не позднее сегодняшней.",
+    };
+    $("#case-error").textContent = messages[error.message] ?? `Кейс не сохранён: ${error.message}.`; event.currentTarget.reportValidity();
+  }
 });
 
 $("#review-form").addEventListener("submit", (event) => {
@@ -98,7 +107,15 @@ $("#review-form").addEventListener("submit", (event) => {
     const review = buildSupervisionReview(state.active, { reviewerName:formValue(form,"reviewer_name"), reviewerRole:formValue(form,"reviewer_role"), reviewDate:formValue(form,"review_date"), recommendation:formValue(form,"recommendation"), reviewNote:formValue(form,"review_note"), assessments });
     const dossier = attachSupervisionReview(state.active, review); const saved = saveActive(dossier); renderDashboard(dossier); renderJournal();
     if (!saved.ok) $("#review-error").textContent = "Разбор собран, но локальная запись не подтверждена. Скачайте JSON.";
-  } catch (error) { $("#review-error").textContent = `Разбор не сохранён: ${error.message}.`; event.currentTarget.reportValidity(); }
+  } catch (error) {
+    const messages = {
+      READY_RECOMMENDATION_REQUIRES_CASES:"Рекомендацию готовности нельзя записать до трёх технически подходящих кейсов.",
+      READY_RECOMMENDATION_REQUIRES_OBSERVED_COMPETENCIES:"Для рекомендации готовности все пять компетенций должны иметь статус observed.",
+      REVIEW_PRECEDES_CASE:"Дата разбора не может предшествовать включённому кейсу.",
+      REVIEW_DATE_INVALID:"Укажите действительную дату разбора не позднее сегодняшней.",
+    };
+    $("#review-error").textContent = messages[error.message] ?? `Разбор не сохранён: ${error.message}.`; event.currentTarget.reportValidity();
+  }
 });
 
 $("#package-form").addEventListener("submit", (event) => {
