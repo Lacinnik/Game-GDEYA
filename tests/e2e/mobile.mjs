@@ -39,7 +39,16 @@ function serveSite() {
 
 async function assertFitsScreen(page, label) {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-  assert.ok(overflow <= 1, `${label}: page scrolls horizontally by ${overflow}px`);
+  if (overflow > 1) {
+    const elements = await page.evaluate(() => [...document.querySelectorAll("body *")].flatMap(element => {
+      const rect = element.getBoundingClientRect();
+      return rect.width && (rect.right > innerWidth + 1 || rect.left < -1) ? [{
+        tag: element.tagName, id: element.id, className: String(element.className),
+        left: rect.left, right: rect.right, width: rect.width,
+      }] : [];
+    }).slice(0, 20));
+    assert.fail(`${label}: page scrolls horizontally by ${overflow}px; elements=${JSON.stringify(elements)}`);
+  }
 }
 
 async function startGame(page, site) {
