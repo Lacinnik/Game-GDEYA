@@ -165,9 +165,9 @@ test("shell, local journal and offline route are wired", async () => {
   const root = new URL("../public-web/public/labs/certification/", import.meta.url);
   const [html, app, worker] = await Promise.all([readFile(new URL("index.html", root), "utf8"), readFile(new URL("app.mjs", root), "utf8"), readFile(new URL("../../sw.js", root), "utf8")]);
   assert.match(html, /CERTIFICATE ISSUED = FALSE/u);
-  assert.match(html, /styles\.css\?v=certification-20261020-r1/u);
+  assert.match(html, /styles\.css\?v=certification-20261110-r3/u);
   assert.match(html, /app\.mjs\?v=certification-20261022-r2/u);
   assert.match(app, /architectonica\.certification\.dossiers\.v1/u);
-  assert.match(worker, /CACHE_REVISION = 'certification-audit-20261022-r2'/u);
+  assert.match(worker, /CACHE_REVISION = 'integration-20261110-r1'/u);
   assert.match(worker, /\.\/labs\/certification\/index\.html/u);
 });
