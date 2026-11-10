@@ -45,7 +45,7 @@ jobs:
 
   deploy:
     if: github.event_name != 'pull_request'
-    needs: verify
+    needs: [verify, mobile]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

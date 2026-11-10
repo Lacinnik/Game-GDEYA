@@ -1,4 +1,4 @@
-const CACHE_REVISION = 'exchange-20261021-r1';
+const CACHE_REVISION = 'integration-20261110-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
@@ -120,9 +120,9 @@ const SHELL = [
   './labs/frontier/CONTRACT.md',
   './labs/certification/',
   './labs/certification/index.html',
-  './labs/certification/styles.css?v=certification-20261020-r1',
-  './labs/certification/app.mjs?v=certification-20261020-r1',
-  './labs/certification/protocol.mjs?v=certification-20261020-r1',
+  './labs/certification/styles.css?v=certification-20261110-r3',
+  './labs/certification/app.mjs?v=certification-20261022-r2',
+  './labs/certification/protocol.mjs?v=certification-20261022-r2',
   './labs/certification/catalog.mjs',
   './labs/certification/CONTRACT.md',
   './labs/axis-cycle/',
