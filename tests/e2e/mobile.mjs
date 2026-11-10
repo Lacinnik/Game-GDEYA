@@ -47,7 +47,179 @@ async function startGame(page, site) {
   await page.getByText("ВОЙТИ В ЖИВОЙ ЦИКЛ").click();
   await page.locator("textarea").nth(0).fill("Запустить проект");
   await page.locator("textarea").nth(1).fill("Сохранить ясность");
+  const sc5Link = await page.getByRole("link", {name: /ИСХОДНАЯ САМООЦЕНКА/}).getAttribute("href");
+  const cycleId = new URL(sc5Link, site.url()).searchParams.get("cycleId");
   await page.getByRole("button", { name: "РОДИТЬ ТОЧКУ" }).click();
+  return cycleId;
+}
+
+async function finishQuickGame(page) {
+  for (let turn = 0; turn < 4; turn++) {
+    const count = Number((await page.locator(".eventTop").innerText()).match(/N = (\d+)/u)[1]);
+    for (let i = 0; i < count; i++) {
+      await page.locator(".inputRow input").fill(`Синтетическое состояние ${i}`);
+      await page.locator(".inputRow button").click();
+    }
+    await page.getByRole("button", {name: "УВИДЕТЬ ГЕОМЕТРИЮ"}).click();
+    await page.locator(".geometryGrid button").first().click();
+    await page.locator(".pointGrid button").first().click();
+    await page.locator(".creatorCheck textarea").fill("Синтетическое наблюдение: не вход Chronos");
+    await page.getByRole("button", {name: "СОБРАТЬ ФОРМУЛУ"}).click();
+    await page.locator(".formulaChoices:not(.three) button").first().click();
+    await page.locator(".formulaChoices.three button").first().click();
+    await page.locator(".txGrid button").first().click();
+    await page.getByPlaceholder("Что активирую внутри?").fill("Тестовая индукция");
+    await page.getByPlaceholder("Что втягиваю из будущего?").fill("Тестовая инверсия");
+    await page.getByRole("button", {name: "ПРОВЕСТИ ФОРМУЛУ"}).click();
+    await page.getByRole("button", {name: turn === 3 ? "СВЕРНУТЬ ЦИКЛ" : "СЛЕДУЮЩИЙ УЗЕЛ"}).click();
+  }
+  await page.waitForSelector(".end");
+}
+
+async function checkChronosIntegration(page, context, site, name) {
+  const cycleId = await startGame(page, site);
+  await finishQuickGame(page);
+  const panel = page.getByRole("region", {name: "Chronos AI · исследование"});
+  const run = panel.getByRole("button");
+  const status = panel.getByRole("status");
+  assert.match(await panel.innerText(), /Семантический анализ не выполнен/u);
+  assert.match(await panel.innerText(), /Qsim в расчёт не поступают/u);
+  const followupLink = new URL(await page.getByRole("link", {name: "SC-5 × CHRONOS · ИССЛЕДОВАНИЕ"}).getAttribute("href"), site.url());
+  assert.equal(followupLink.searchParams.get("cycleId"), cycleId);
+  assert.equal(followupLink.searchParams.get("phase"), "after");
+  await run.click(); // Existing records of another cycle must not qualify.
+  await status.filter({hasText: "минимум два"}).waitFor();
+
+  // Save real lab records in another tab, then run from the game's end screen.
+  let lab = await context.newPage();
+  for (const [phase, choice] of [["before", 2], ["after", 3]]) {
+    if (phase === "after") {
+      await lab.close();
+      const opened = context.waitForEvent("page");
+      await page.getByRole("link", {name: "SC-5 × CHRONOS · ИССЛЕДОВАНИЕ"}).click();
+      lab = await opened;
+      await lab.waitForURL(followupLink.href);
+    } else {
+      await lab.goto(site.url(`labs/sc5-chronos/?cycleId=${cycleId}&phase=${phase}`));
+    }
+    await lab.locator("#consent").check();
+    for (const question of await lab.locator("#items .question").all()) await question.locator("button").nth(choice).click();
+    await lab.locator("#save").click();
+    assert.match(await lab.locator("#status").innerText(), /Запись сохранена/u);
+  }
+  await lab.close();
+  const original = await page.evaluate(() => localStorage.getItem("gdeya.sc5.research.v1"));
+  const requests = [];
+  const trackRequest = request => requests.push(request.url());
+  page.on("request", trackRequest);
+  await run.click();
+  await status.filter({hasText: "Измерений SC-5: 2"}).waitFor();
+  page.off("request", trackRequest);
+  assert.deepEqual(requests, [], "Chronos must not send input to a server");
+  const report = await status.innerText();
+  assert.match(report, /Семантический анализ не выполнен/u);
+  assert.match(report, /невалидированные эвристики/u);
+  assert.match(report, /недостаточно истории для проверки/u);
+  assert.equal(await run.isEnabled(), true);
+  assert.equal(await page.evaluate(() => localStorage.getItem("gdeya.sc5.research.v1")), original);
+  await run.click();
+  await status.filter({hasText: "Измерений SC-5: 2"}).waitFor();
+  assert.equal(await status.innerText(), report, "repeated clicks must not accumulate engine memory");
+
+  await page.evaluate(cycleId => {
+    const data = JSON.parse(localStorage.getItem("gdeya.sc5.research.v1"));
+    data.records.find(r => r.cycleId === cycleId).factors.alpha = .9;
+    localStorage.setItem("gdeya.sc5.research.v1", JSON.stringify(data));
+  }, cycleId);
+  await run.click();
+  await status.filter({hasText: "Неверный формат истории"}).waitFor();
+  assert.doesNotMatch(await status.innerText(), /Тип \(эвристика\)/u, "failure must replace the old success report");
+  await page.evaluate(() => localStorage.setItem("gdeya.sc5.research.v1", "{broken private content"));
+  await run.click();
+  await status.filter({hasText: "Неверный формат истории"}).waitFor();
+  assert.doesNotMatch(await status.innerText(), /private content/u);
+  await page.evaluate(raw => localStorage.setItem("gdeya.sc5.research.v1", raw), original);
+  await run.click();
+  await status.filter({hasText: "Измерений SC-5: 2"}).waitFor();
+  await assertFitsScreen(page, `${name} Chronos end screen`);
+  await page.getByRole("button", {name: "НОВЫЙ ВИТОК"}).click();
+  assert.equal(await panel.count(), 0);
+  const newCycle = new URL(await page.getByRole("link", {name: /ИСХОДНАЯ САМООЦЕНКА/}).getAttribute("href"), site.url()).searchParams.get("cycleId");
+  assert.notEqual(newCycle, cycleId);
+}
+
+async function checkCertificationIntegration(page, site, name) {
+  await page.goto(site.url("labs/certification/"));
+  const certificationValues = {
+    candidate_name:"Кандидат E2E", candidate_role:"Ведущий практики", requested_scope:"Одна групповая практика ГДЕЯ", method_scope:"ГДЕЯ и РЕЗОН",
+    prerequisite_trace:"Три учебных протокола", supervision_plan:"Три кейса под наблюдением", object:"Подготовка досье ведущего",
+    subject_manifestation:"Кандидат завершил учебный цикл", reflected_image:"Подготовка кажется достаточной для проверки", target_relation:"Собрать проверяемый пакет",
+    context:"Учебная группа и локальные записи", invariant:"Не присваивать решение участника", canon_reference:"draft/canon-v0.1", competency_version:"draft-0.1", ethics_reference:"draft/ethics-v0.1",
+  };
+  for (const [field,value] of Object.entries(certificationValues)) await page.locator(`#dossier-form [name="${field}"]`).fill(value);
+  for (const field of ["authorship_ack","consent_ack","boundary_ack","authorization_ack"]) await page.locator(`#dossier-form [name="${field}"]`).check();
+  await page.getByRole("button",{name:"Собрать досье готовности →"}).click();
+  await page.waitForSelector("#dashboard:not([hidden])");
+  assert.match(await page.locator("#case-count").innerText(),/0 \/ 3/u);
+  assert.match(await page.locator("#dashboard").innerText(),/certificate_issued=false/u);
+  assert.equal(await page.locator('#package-form button[type="submit"]').isEnabled(),false);
+
+  const certificationReview = {
+    reviewer_name:"Заявленный супервизор E2E", reviewer_role:"Заявленная роль супервизора", review_date:"2026-10-20",
+    review_note:"Рекомендация относится только к технической передаче пакета.",
+  };
+  for (const [field,value] of Object.entries(certificationReview)) await page.locator(`#review-form [name="${field}"]`).fill(value);
+  for (const competency of ["object-authorship","evidence-separation","consent-withdrawal","process-boundary","evidence-escalation"]) {
+    await page.locator(`#review-form [name="status-${competency}"]`).selectOption("observed");
+    await page.locator(`#review-form [name="basis-${competency}"]`).fill(`Синтетическое основание ${competency}`);
+  }
+  await page.locator('#review-form [name="recommendation"]').selectOption("ready-for-authorized-review");
+  await page.getByRole("button",{name:"Сохранить разбор ↓"}).click();
+  assert.match(await page.locator("#review-error").innerText(),/до трёх технически подходящих кейсов/u);
+  assert.equal(await page.locator("#review-list article").count(),0);
+
+  for (let index = 1; index <= 3; index += 1) {
+    const certificationCase = {
+      case_title:`Супервизируемый кейс ${index}`, practice_date:"2026-10-20", object:"Один проектный переход", participant_scope:"Добровольный участник без персональных данных",
+      observed_trace:"Участник сам сформулировал объект и следующий шаг", candidate_reflection:"Ведущий удержал процесс", consent_trace:`consent/case-${index}.md`,
+      supervisor_reference:"supervision/review.md", evidence_pointer:`evidence/case-${index}.json`,
+    };
+    for (const [field,value] of Object.entries(certificationCase)) await page.locator(`#case-form [name="${field}"]`).fill(value);
+    await page.locator('#case-form [name="participant_consent"]').check();
+    await page.getByRole("button",{name:"Сохранить кейс ↓"}).click();
+  }
+  assert.match(await page.locator("#case-count").innerText(),/3 \/ 3/u);
+  assert.match(await page.locator("#dashboard").innerText(),/result=false/u);
+  assert.equal(await page.locator('#package-form button[type="submit"]').isEnabled(),false);
+
+  await page.locator('#review-form [name="status-process-boundary"]').selectOption("needs-review");
+  await page.getByRole("button",{name:"Сохранить разбор ↓"}).click();
+  assert.match(await page.locator("#review-error").innerText(),/все пять компетенций/u);
+  await page.locator('#review-form [name="status-process-boundary"]').selectOption("observed");
+  await page.getByRole("button",{name:"Сохранить разбор ↓"}).click();
+  assert.equal(await page.locator("#review-list article").count(),1);
+  assert.match(await page.locator("#package-gate").innerText(),/подлинность и утверждённость студия не проверяет/u);
+  assert.equal(await page.locator('#package-form button[type="submit"]').isEnabled(),true);
+
+  const certificationPackage = {
+    canon_reference:"fake://canon", competency_reference:"fake://competencies", ethics_reference:"fake://ethics",
+    access_policy_reference:"fake://access", legal_review_reference:"fake://legal", requested_decision:"Синтетический запрос на человеческое рассмотрение",
+  };
+  for (const [field,value] of Object.entries(certificationPackage)) await page.locator(`#package-form [name="${field}"]`).fill(value);
+  await page.getByRole("button",{name:"Собрать пакет рассмотрения →"}).click();
+  assert.match(await page.locator("#package-result").innerText(),/ТЕХНИЧЕСКИ СОБРАН · СВЕДЕНИЯ НЕ ВЕРИФИЦИРОВАНЫ/u);
+  assert.match(await page.locator("#package-result").innerText(),/reviewer_authority_verified=false/u);
+  assert.match(await page.locator("#package-result").innerText(),/canon_approved=false/u);
+  const dossier = await page.evaluate(() => JSON.parse(localStorage.getItem("architectonica.certification.dossiers.v1"))[0]);
+  assert.ok(Object.values(dossier.flags).every(value => value === false));
+  assert.equal(dossier.q, null);
+  assert.equal(dossier.tensor.Q, null);
+  const reviewPackage = dossier.authorization_packages[0];
+  assert.equal(reviewPackage.readiness_scope, "technical-package-only");
+  assert.equal(reviewPackage.decision, null);
+  assert.ok(Object.values(reviewPackage.flags).every(value => value === false));
+  assert.ok(Object.values(reviewPackage.verification).every(value => value === false));
+  await assertFitsScreen(page,`${name} certification readiness`);
 }
 
 const engines = { chromium, webkit };
@@ -100,6 +272,7 @@ try {
     assert.match(await page.locator("#history").innerText(), /Парное изменение/u);
     assert.match(await page.locator("#history").innerText(), /alpha 0\.250/u);
     await assertFitsScreen(page, `${name} SC-5 lab`);
+    await checkChronosIntegration(page, context, site, name);
     const desktopContext = await browser.newContext({ viewport: { width: 1440, height: 900 } });
     const desktopPage = await desktopContext.newPage();
     desktopPage.on("pageerror", (error) => errors.push(`desktop: ${error.message}`));
@@ -358,30 +531,17 @@ try {
     assert.equal(await desktopPage.locator('[name="object"]').inputValue(),frontierValues.object);
     assert.equal(await desktopPage.locator('[name="invariant"]').inputValue(),frontierValues.invariant);
 
-    await desktopPage.goto(site.url("labs/certification/"));
-    const certificationValues = {
-      candidate_name:"Кандидат E2E", candidate_role:"Ведущий практики", requested_scope:"Одна групповая практика ГДЕЯ", method_scope:"ГДЕЯ и РЕЗОН",
-      prerequisite_trace:"Три учебных протокола", supervision_plan:"Три кейса под наблюдением", object:"Подготовка досье ведущего",
-      subject_manifestation:"Кандидат завершил учебный цикл", reflected_image:"Подготовка кажется достаточной для проверки", target_relation:"Собрать проверяемый пакет",
-      context:"Учебная группа и локальные записи", invariant:"Не присваивать решение участника", canon_reference:"draft/canon-v0.1", competency_version:"draft-0.1", ethics_reference:"draft/ethics-v0.1",
-    };
-    for (const [field,value] of Object.entries(certificationValues)) await desktopPage.locator(`#dossier-form [name="${field}"]`).fill(value);
-    for (const field of ["authorship_ack","consent_ack","boundary_ack","authorization_ack"]) await desktopPage.locator(`#dossier-form [name="${field}"]`).check();
-    await desktopPage.getByRole("button",{name:"Собрать досье готовности →"}).click();
-    await desktopPage.waitForSelector("#dashboard:not([hidden])");
-    assert.match(await desktopPage.locator("#case-count").innerText(),/0 \/ 3/u);
-    assert.match(await desktopPage.locator("#dashboard").innerText(),/certificate_issued=false/u);
-    const certificationCase = {
-      case_title:"Первый супервизируемый кейс", practice_date:"2026-10-20", object:"Один проектный переход", participant_scope:"Добровольный участник без персональных данных",
-      observed_trace:"Участник сам сформулировал объект и следующий шаг", candidate_reflection:"Ведущий удержал процесс", consent_trace:"consent/case-1.md",
-      supervisor_reference:"supervision/case-1.md", evidence_pointer:"evidence/case-1.json",
-    };
-    for (const [field,value] of Object.entries(certificationCase)) await desktopPage.locator(`#case-form [name="${field}"]`).fill(value);
-    await desktopPage.locator('#case-form [name="participant_consent"]').check();
-    await desktopPage.getByRole("button",{name:"Сохранить кейс ↓"}).click();
-    assert.match(await desktopPage.locator("#case-count").innerText(),/1 \/ 3/u);
-    assert.match(await desktopPage.locator("#dashboard").innerText(),/result=false/u);
-    await assertFitsScreen(desktopPage,`${name} certification readiness desktop`);
+    await checkCertificationIntegration(desktopPage, site, `${name} desktop`);
+
+    // Both products share an origin: exercise the complete certification route
+    // on mobile between real Chronos runs and preserve each other's journals.
+    const sc5History = await page.evaluate(() => localStorage.getItem("gdeya.sc5.research.v1"));
+    await checkCertificationIntegration(page, site, `${name} mobile`);
+    assert.equal(await page.evaluate(() => localStorage.getItem("gdeya.sc5.research.v1")), sc5History);
+    const dossierHistory = await page.evaluate(() => localStorage.getItem("architectonica.certification.dossiers.v1"));
+    assert.ok(dossierHistory);
+    await checkChronosIntegration(page, context, site, name);
+    assert.equal(await page.evaluate(() => localStorage.getItem("architectonica.certification.dossiers.v1")), dossierHistory);
     await desktopContext.close();
     assert.deepEqual(errors, [], `${name}: page errors`);
     await browser.close();

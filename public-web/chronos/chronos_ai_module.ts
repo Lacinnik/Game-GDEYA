@@ -1,7 +1,7 @@
 /**
  * chronos_ai_module.ts
  *
- * Production-oriented Chronos AI module:
+ * Authorial Chronos AI research prototype (unvalidated heuristics):
  * - temporal memory
  * - semantic feature interface
  * - trajectory analysis
@@ -10,7 +10,10 @@
  * - sequence analysis
  * - outcome feedback / calibration hooks
  *
- * This module is intentionally framework-agnostic.
+ * This module is intentionally framework-agnostic. Probability-named outputs
+ * are heuristic scores, not calibrated forecasts, diagnoses or access decisions.
+ * GDEYA's numeric-only adapter does not supply semantic inputs; empty embeddings
+ * still yield default semantic terms in these formulas, not observed meaning.
  */
 
 export type Plate = "РЕСУРС" | "ВЛАСТЬ" | "ОТНОШЕНИЯ" | "РЕЗУЛЬТАТ";

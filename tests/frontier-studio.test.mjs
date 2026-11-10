@@ -100,7 +100,7 @@ test("frontier shell and offline route are wired", async () => {
   assert.match(html, /styles\.css\?v=frontier-20261020-r1/u);
   assert.match(html, /app\.mjs\?v=frontier-20261020-r1/u);
   assert.match(app, /frontierTrackByProduct/u);
-  assert.match(worker, /CACHE_REVISION = 'exchange-20261021-r1'/u);
+  assert.match(worker, /CACHE_REVISION = 'certification-audit-20261022-r2'/u);
   assert.match(worker, /\.\/labs\/frontier\/index\.html/u);
 });
 

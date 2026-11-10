@@ -1,7 +1,8 @@
 import {replayAssessmentHistory,REPLAY_VERSION} from "./temporal-replay.mjs";
 
-// Boundary for a future independently verified Chronos AI implementation.
-// Default path never invokes an unregistered engine or produces predictions.
+// Separate injectable research boundary; not the game end-screen runner.
+// The end screen uses app/chronos-run.ts with the recovered authorial engine.
+// This experimental path still fails closed without an explicitly supplied engine.
 export const CHRONOS_ADAPTER_VERSION="ChronosAdapter.v1";
 export function prepareChronosInput(records,{cycleId=null}={}){
  const replay=replayAssessmentHistory(records,{cycleId});

@@ -13,3 +13,33 @@ test("дубликаты импорта отклонены",()=>{const r=score(i
 
 test("сопоставление только одной пары цикла",()=>{const a=score({...input(),assessmentId:"p1",cycleId:"cycle-test-001",phase:"before"});const b=score({...input(Array(15).fill(.75)),assessmentId:"p2",timestamp:"2026-11-01T00:00:00.000Z",cycleId:"cycle-test-001",phase:"after"});assert.equal(compareCycle([a,b],"cycle-test-001").delta.alpha,.25);assert.equal(compareCycle([a],"cycle-test-001").status,"incomplete-pair");assert.equal(compareCycle([a,b],"cycle-other").status,"incomplete-pair")});
 test("двойная итоговая оценка не дает ложную пару",()=>{const a=score({...input(),assessmentId:"p1",cycleId:"cycle-test-002",phase:"before"});const b=score({...input(),assessmentId:"p2",cycleId:"cycle-test-002",phase:"after"});const c=score({...input(),assessmentId:"p3",cycleId:"cycle-test-002",phase:"after"});assert.equal(compareCycle([a,b,c],"cycle-test-002").status,"incomplete-pair")});
+
+test("different plates cannot create a paired change",()=>{
+ const a=score({...input(),assessmentId:"p1",cycleId:"cycle-test-003",phase:"before"});
+ const b=score({...input(),assessmentId:"p2",cycleId:"cycle-test-003",phase:"after",plate:"ВЛАСТЬ"});
+ assert.equal(compareCycle([a,b],"cycle-test-003").status,"different-plates");
+});
+test("different contexts cannot create a paired change",()=>{
+ const a=score({...input(),assessmentId:"p1",cycleId:"cycle-test-003",phase:"before"});
+ const b=score({...input(),assessmentId:"p2",cycleId:"cycle-test-003",phase:"after",context:"Другой контекст"});
+ assert.equal(compareCycle([a,b],"cycle-test-003").status,"different-contexts");
+});
+test("reversed before/after instants cannot create a paired change",()=>{
+ const a=score({...input(),assessmentId:"p1",cycleId:"cycle-test-003",phase:"before"});
+ const b=score({...input(),assessmentId:"p2",cycleId:"cycle-test-003",phase:"after",timestamp:"2026-10-30T22:00:00Z"});
+ assert.equal(compareCycle([a,b],"cycle-test-003").status,"invalid-order");
+});
+
+test("summary cannot report a change across cycles, plates or contexts",()=>{
+ const a=score(input());
+ for(const changed of [{cycleId:"cycle-other-001"},{plate:"ВЛАСТЬ"},{context:"Другой контекст"}]){
+  const b=score({...input(Array(15).fill(.75)),assessmentId:"b",...changed});
+  const result=summarizeChronos([a,b]);
+  assert.equal(result.delta,null);assert.match(result.warning,/разные циклы, плиты или контексты/);
+ }
+});
+test("summary respects actual instants in offset timestamps",()=>{
+ const a=score({...input(),timestamp:"2026-10-31T12:00:00+03:00"});
+ const b=score({...input(Array(15).fill(.75)),assessmentId:"b",timestamp:"2026-10-31T10:00:00Z"});
+ assert.equal(summarizeChronos([b,a]).delta.alpha,.25);
+});
