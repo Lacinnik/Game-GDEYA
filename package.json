@@ -24,7 +24,8 @@
     "vendor:update": "node scripts/vendor-sync.mjs --update",
     "ecosystem:status": "node scripts/ecosystem-status.mjs",
     "typecheck": "tsc --noEmit -p .",
-    "test:mobile": "npm run build && node tests/e2e/mobile.mjs"
+    "test:mobile": "npm run build && node tests/e2e/mobile.mjs",
+    "test:pwa": "npm run build && node tests/e2e/pwa-update.mjs"
   },
   "dependencies": {
     "react": "19.2.6",

@@ -168,6 +168,6 @@ test("shell, local journal and offline route are wired", async () => {
   assert.match(html, /styles\.css\?v=certification-20261110-r3/u);
   assert.match(html, /app\.mjs\?v=certification-20261022-r2/u);
   assert.match(app, /architectonica\.certification\.dossiers\.v1/u);
-  assert.match(worker, /CACHE_REVISION = 'integration-20261110-r1'/u);
+  assert.match(worker, /CACHE_REVISION = 'sc5-offline-20261112-r1'/u);
   assert.match(worker, /\.\/labs\/certification\/index\.html/u);
 });

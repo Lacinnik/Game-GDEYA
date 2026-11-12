@@ -1,8 +1,12 @@
-const CACHE_REVISION = 'integration-20261110-r1';
+const CACHE_REVISION = 'sc5-offline-20261112-r1';
 const CACHE_PREFIX = 'architectonica-public-';
 const SHELL_CACHE = `${CACHE_PREFIX}${CACHE_REVISION}`;
 const SHELL = [
   './manifest.webmanifest',
+  './labs/sc5-chronos/',
+  './labs/sc5-chronos/index.html',
+  './labs/sc5-chronos/sc5-core.mjs',
+  './labs/sc5-chronos/temporal-replay.mjs',
   './platform/',
   './platform/index.html',
   './platform/styles.css',
@@ -163,7 +167,10 @@ self.addEventListener('activate', (event) => {
 });
 
 function navigationFallback(request) {
+  // A missing module must fail as a module, never receive an HTML fallback.
+  if (request.mode !== 'navigate') return undefined;
   const { pathname } = new URL(request.url);
+  if (/\/labs\/sc5-chronos\/(?:index\.html)?$/u.test(pathname)) return caches.match('./labs/sc5-chronos/index.html');
   if (/\/labs\/core-separation(?:\/|$)/u.test(pathname)) return caches.match('./labs/core-separation/index.html');
   if (/\/labs\/voidocr(?:\/|$)/u.test(pathname)) return caches.match('./labs/voidocr/index.html');
   if (/\/labs\/module(?:\/|$)/u.test(pathname)) return caches.match('./labs/module/index.html');
