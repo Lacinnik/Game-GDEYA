@@ -159,6 +159,9 @@ async function checkChronosIntegration(page, context, site, name) {
 
 async function checkCertificationIntegration(page, site, name) {
   await page.goto(site.url("labs/certification/"));
+  // Keep real pointer and layout checks, but do not race CSS smooth scrolling
+  // while the automation moves rapidly between distant form fields.
+  await page.addStyleTag({content:"html { scroll-behavior: auto !important; }"});
   const certificationValues = {
     candidate_name:"Кандидат E2E", candidate_role:"Ведущий практики", requested_scope:"Одна групповая практика ГДЕЯ", method_scope:"ГДЕЯ и РЕЗОН",
     prerequisite_trace:"Три учебных протокола", supervision_plan:"Три кейса под наблюдением", object:"Подготовка досье ведущего",
