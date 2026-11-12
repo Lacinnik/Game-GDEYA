@@ -1,5 +1,5 @@
-// Real service-worker lifecycle on one origin. No page.route(), synthetic worker,
-// fake caches, or HTTP-cache substitute. `npm run test:pwa` builds the candidate.
+// Application lifecycle on one origin uses the real workers and caches.
+// No page.route() or HTTP-cache substitute; a separate synthetic probe checks the offline flag. `npm run test:pwa` builds the candidate.
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {createServer} from 'node:http';
@@ -58,7 +58,10 @@ async function serve(roots) {
     } catch {res.writeHead(404,{'Cache-Control':'no-store'}).end('Not found');}
   });
   await new Promise(done=>server.listen(0,'127.0.0.1',done));
-  return {state,url:(path='')=>`http://127.0.0.1:${server.address().port}${BASE}${path}`,close:()=>new Promise(done=>{server.closeAllConnections();server.close(done)})};
+  const port=server.address().port;
+  const stop=async()=>{if(!server.listening)return;await new Promise(done=>{server.close(done);server.closeAllConnections()});};
+  const start=async()=>{if(server.listening)return;await new Promise(done=>server.listen(port,'127.0.0.1',done));};
+  return {state,url:(path='')=>`http://127.0.0.1:${port}${BASE}${path}`,close:stop,disconnect:async()=>{state.online=false;await stop();assert.equal(server.listening,false)},connect:async()=>{await start();state.online=true}};
 }
 
 async function waitWorker(page,key) {
@@ -101,7 +104,7 @@ async function saveDossier(page,site) {
   assert.ok(await page.evaluate(key=>!!localStorage.getItem(key),DOSSIERS));
 }
 async function offline(context,site,value) {
-  site.state.online=!value; // Also blocks worker-originated fetches independently of browser emulation.
+  if(value)await site.disconnect();else await site.connect();
   if(site.state.emulateOffline) await context.setOffline(value);
 }
 
@@ -146,7 +149,7 @@ async function assertLab(page,url,count) {
   assert.equal(response.fromServiceWorker(),true);
   try {await page.waitForSelector('.question');}
   catch(error) {
-    const cacheState=await page.evaluate(async()=>{const entries=[];for(const key of await caches.keys()){const cache=await caches.open(key);for(const request of await cache.keys())if(request.url.includes('/sc5-chronos/')){const response=await cache.match(request);entries.push({key,url:request.url,status:response.status,type:response.headers.get('content-type'),size:(await response.text()).length})}}return entries});
+    const cacheState=await page.evaluate(async()=>{const entries=[];for(const key of await caches.keys()){const cache=await caches.open(key);for(const request of await cache.keys())if(request.url.includes('/sc5-chronos/')){const response=await cache.match(request);entries.push({key,url:request.url,status:response.status,type:response.headers.get('content-type'),size:(await response.text()).length})}}return entries}).catch(error=>[{diagnosticError:String(error)}]);
     throw Error(`${error.message}\nSC-5 launch diagnostics: ${JSON.stringify({failures,pageErrors,moduleResponses,cacheState})}`,{cause:error});
   } finally {page.off('requestfailed',failed);page.off('pageerror',errored);page.off('response',responded);}
   assert.equal(await page.locator('.question').count(),15);
@@ -180,8 +183,8 @@ try {
       result.offlineFlagProbe=offlineFlagProbe;
       if(name==='chromium') assert.equal(result.offlineFlagProbe.supported,true,'Required Chromium offline emulation is unavailable');
       site.state.emulateOffline=result.offlineFlagProbe.supported;
-      result.offlineMode=site.state.emulateOffline?'browser-offline-and-origin-disconnected':'origin-disconnected-only';
-      if(!site.state.emulateOffline) console.log(`${name}: offline flag rejects even a literal worker response; origin-disconnection control only, not iOS airplane-mode evidence`);
+      result.offlineMode=site.state.emulateOffline?'browser-offline-and-origin-stopped':'origin-stopped-only';
+      if(!site.state.emulateOffline) console.log(`${name}: offline flag rejects even a literal worker response; stopped-origin control only, not iOS airplane-mode evidence`);
       await page.goto(site.url('platform/'));
       await waitWorker(page,OLD);
       // Verify the browser can retain CacheStorage across a document lifecycle
@@ -263,15 +266,16 @@ try {
       const serverRequests=site.state.requests.length;
       const resourceResponses=[];
       context.on('response',r=>{if(/sc5-chronos\/(sc5-core|temporal-replay)\.mjs$/u.test(r.url()))resourceResponses.push({url:r.url(),status:r.status(),worker:r.fromServiceWorker(),type:r.headers()['content-type']})});
+      const controlPage=page;
       page=await context.newPage();
       try {
         await assertLab(page,site.url('labs/sc5-chronos/?cycleId=cycle-pwa-test-20261112&phase=after'),2);
       } catch(error) {
-        result.offlineDiagnostics=await context.pages()[0].evaluate(async ({key,url})=>{
+        result.offlineDiagnostics=await controlPage.evaluate(async ({key,url})=>{
           const cache=await caches.open(key),cached=await cache.match(url);
           let fetched;try{const r=await fetch(url);fetched={status:r.status(),type:r.headers.get('content-type')}}catch(e){fetched={error:String(e)}}
           return {controlled:!!navigator.serviceWorker.controller,caches:await caches.keys(),cachedStatus:cached?.status,fetched};
-        },{key:CANDIDATE,url:site.url('labs/sc5-chronos/index.html')});
+        },{key:CANDIDATE,url:site.url('labs/sc5-chronos/index.html')}).catch(error=>({diagnosticError:String(error)}));
         throw error;
       }
       assert.deepEqual(await snapshot(page),updated);
@@ -335,7 +339,7 @@ try {
         await assertLab(cold,site.url('labs/sc5-chronos/?cycleId=cycle-first-offline-001&phase=before'),0);
         assert.equal(await cold.evaluate(key=>localStorage.getItem(key),SC5),null);
         record('clean candidate installation launches SC-5 offline before its first visit');
-      } finally {await clean.close();site.state.online=true;}
+      } finally {await clean.close();}
       result.status='passed';console.log(`✓ ${name}: ${result.checks.length} PWA lifecycle checks`);
     } catch(error) {result.status='failed';result.error=String(error);throw error;}
     finally {await context.close();await site.close();}

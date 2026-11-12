@@ -35,6 +35,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run test:mobile
+
+  pwa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0 # PWA upgrade tests build two pinned historical releases.
       - uses: actions/setup-node@v4
@@ -43,7 +55,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium webkit
-      - run: npm run test:mobile
+      - run: npm run build:public
       - name: Verify PWA upgrade and offline SC-5
         run: node tests/e2e/pwa-update.mjs
       - uses: actions/upload-artifact@v4
@@ -54,7 +66,7 @@ jobs:
 
   deploy:
     if: github.event_name != 'pull_request'
-    needs: [verify, mobile]
+    needs: [verify, mobile, pwa]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
