@@ -136,10 +136,19 @@ async function expectUnavailable(page,url) {
   assert.equal(opened,false,'Baseline unexpectedly supports cold offline SC-5; re-audit the release');
 }
 async function assertLab(page,url,count) {
+  const failures=[],pageErrors=[],moduleResponses=[];
+  const failed=request=>failures.push({url:request.url(),error:request.failure()?.errorText});
+  const errored=error=>pageErrors.push(error.message);
+  const responded=response=>{if(/\.mjs$/u.test(response.url()))moduleResponses.push({url:response.url(),status:response.status(),worker:response.fromServiceWorker(),type:response.headers()['content-type']})};
+  page.on('requestfailed',failed);page.on('pageerror',errored);page.on('response',responded);
   const response=await page.goto(url);
   assert.equal(response.status(),200);
   assert.equal(response.fromServiceWorker(),true);
-  await page.waitForSelector('.question');
+  try {await page.waitForSelector('.question');}
+  catch(error) {
+    const cacheState=await page.evaluate(async()=>{const entries=[];for(const key of await caches.keys()){const cache=await caches.open(key);for(const request of await cache.keys())if(request.url.includes('/sc5-chronos/')){const response=await cache.match(request);entries.push({key,url:request.url,status:response.status,type:response.headers.get('content-type'),size:(await response.text()).length})}}return entries});
+    throw Error(`${error.message}\nSC-5 launch diagnostics: ${JSON.stringify({failures,pageErrors,moduleResponses,cacheState})}`,{cause:error});
+  } finally {page.off('requestfailed',failed);page.off('pageerror',errored);page.off('response',responded);}
   assert.equal(await page.locator('.question').count(),15);
   assert.match(await page.locator('#count').innerText(),new RegExp(`: ${count}$`,'u'));
   assert.ok((await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth))<=1,'Mobile SC-5 horizontal overflow');
@@ -151,10 +160,16 @@ try {
   for(const name of (process.env.E2E_BROWSERS??'chromium,webkit').split(',')) {
     assert.ok(['chromium','webkit'].includes(name),'Unknown E2E_BROWSERS entry');
     const engine={chromium,webkit}[name];
-    const browser=await engine.launch(name==='chromium' && process.env.PLAYWRIGHT_CHROMIUM_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH}:{});
+    const launchOptions=name==='chromium' && process.env.PLAYWRIGHT_CHROMIUM_PATH?{executablePath:process.env.PLAYWRIGHT_CHROMIUM_PATH}:{};
+    const probeBrowser=await engine.launch(launchOptions);
+    let offlineFlagProbe;
+    try {offlineFlagProbe=await probeOfflineFlag(probeBrowser);}finally{await probeBrowser.close();}
     const site=await serve(roots);
-    const context=await browser.newContext({...devices['iPhone 13'],serviceWorkers:'allow',acceptDownloads:true});
-    const result={engine:name,browser:browser.version(),profile:'iPhone 13',previous:PREVIOUS,published:PUBLISHED,checks:[]};
+    // Installed PWA storage belongs to a persistent profile. Ephemeral WebKit
+    // contexts can discard CacheStorage on navigation (Playwright #41618).
+    const contextOptions={...launchOptions,...devices['iPhone 13'],serviceWorkers:'allow',acceptDownloads:true};
+    const context=await engine.launchPersistentContext(resolve(temporary,`${name}-profile`),contextOptions);
+    const result={engine:name,browser:context.browser()?.version(),profile:'iPhone 13',storageMode:'persistent',previous:PREVIOUS,published:PUBLISHED,checks:[]};
     results.push(result);
     const record=message=>{result.checks.push(message);console.log(`${name}: ${message}`)};
     context.setDefaultTimeout(15000);
@@ -162,13 +177,20 @@ try {
     context.on('page',page=>page.on('pageerror',e=>errors.push(e.message)));
     let page=await context.newPage();
     try {
-      result.offlineFlagProbe=await probeOfflineFlag(browser);
+      result.offlineFlagProbe=offlineFlagProbe;
       if(name==='chromium') assert.equal(result.offlineFlagProbe.supported,true,'Required Chromium offline emulation is unavailable');
       site.state.emulateOffline=result.offlineFlagProbe.supported;
       result.offlineMode=site.state.emulateOffline?'browser-offline-and-origin-disconnected':'origin-disconnected-only';
       if(!site.state.emulateOffline) console.log(`${name}: offline flag rejects even a literal worker response; origin-disconnection control only, not iOS airplane-mode evidence`);
       await page.goto(site.url('platform/'));
       await waitWorker(page,OLD);
+      // Verify the browser can retain CacheStorage across a document lifecycle
+      // before interpreting any failure as an application regression.
+      await page.evaluate(async()=>{const cache=await caches.open('pwa-test-persistence');await cache.put('/__pwa_storage_probe',new Response('keep'))});
+      await page.reload();
+      assert.equal(await page.evaluate(async()=>{const cache=await caches.open('pwa-test-persistence');return (await cache.match('/__pwa_storage_probe'))?.text()}),'keep','Browser CacheStorage persistence is broken');
+      await page.evaluate(()=>caches.delete('pwa-test-persistence'));
+      result.cacheStoragePersistence='passed';
       await saveAssessment(page,site);
       await saveDossier(page,site);
       await page.waitForLoadState('networkidle');
@@ -275,8 +297,10 @@ try {
       assert.match(await page.locator('#status').innerText(),/Импортировано 3/u);
       assert.deepEqual(JSON.parse((await snapshot(page))[SC5]).records,JSON.parse(saved[SC5]).records);
       assert.equal((await snapshot(page))[DOSSIERS],original[DOSSIERS]);
-      // Close every document; no in-memory app state can satisfy the next launch.
-      for(const tab of context.pages())await tab.close();
+      // Close every application document. Keep an origin-free blank window:
+      // closing the last window terminates persistent WebKit itself.
+      const keeper=await context.newPage();
+      for(const tab of context.pages())if(tab!==keeper)await tab.close();
       page=await context.newPage();
       await assertLab(page,site.url('labs/sc5-chronos/?cycleId=cycle-pwa-test-20261112&phase=after'),3);
       assert.deepEqual(JSON.parse((await snapshot(page))[SC5]).records,JSON.parse(saved[SC5]).records);
@@ -302,7 +326,7 @@ try {
       record(`full React game cold offline launch observed: ${gameOpened}`);
       // A clean installation has never visited SC-5 and has no old module cache.
       await offline(context,site,false);
-      const clean=await browser.newContext({...devices['iPhone 13'],serviceWorkers:'allow'});
+      const clean=await engine.launchPersistentContext(resolve(temporary,`${name}-clean-profile`),contextOptions);
       try {
         const first=await clean.newPage();
         await first.goto(site.url('platform/'));await waitWorker(first,CANDIDATE);
@@ -314,7 +338,7 @@ try {
       } finally {await clean.close();site.state.online=true;}
       result.status='passed';console.log(`✓ ${name}: ${result.checks.length} PWA lifecycle checks`);
     } catch(error) {result.status='failed';result.error=String(error);throw error;}
-    finally {await context.close();await browser.close();await site.close();}
+    finally {await context.close();await site.close();}
   }
 } finally {
   await writeFile(resolve(evidenceRoot,'results.json'),JSON.stringify({createdAt:new Date().toISOString(),scope:'Mobile browser emulation and real service workers; OS Add to Home Screen not simulated',results},null,2));
