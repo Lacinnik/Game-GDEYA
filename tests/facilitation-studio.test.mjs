@@ -68,6 +68,6 @@ test("facilitation shell, offline route and two handoffs stay connected", async 
   assert.match(html,/app\.mjs\?v=facilitation-20261020-r1/u);
   assert.match(app,/handoffUrl\("\.\.\/practice\//u);
   assert.match(app,/handoffUrl\("\.\.\/tactics\//u);
-  assert.match(worker,/CACHE_REVISION = 'integration-20261110-r1'/u);
+  assert.match(worker,/CACHE_REVISION = 'sc5-offline-20261112-r1'/u);
   assert.match(worker,/\.\/labs\/facilitation\/index\.html/u);
 });

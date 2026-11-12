@@ -16,8 +16,8 @@ function createWorkerHarness(source, workerUrl, fetchResource = async () => { th
         this.entries.set(url, new Response(`cached:${url}`));
       }
     }
-    async match(input) { return this.entries.get(normalize(input)); }
-    async put(input, response) { this.entries.set(normalize(input), response); }
+    async match(input) { return this.entries.get(normalize(input))?.clone(); }
+    async put(input, response) { this.entries.set(normalize(input), response.clone()); }
   }
 
   const cacheStorage = {
@@ -83,6 +83,46 @@ test("Service Worker refreshes code online and retains the same version offline"
   assert.equal(await (await worker.navigate(path, "cors")).text(), "current-module-version");
   online = false;
   assert.equal(await (await worker.navigate(path, "cors")).text(), "current-module-version");
+});
+
+test("SC-5 cold offline launch supports directory/index and new cycle/phase parameters", async () => {
+  const source = await readFile(new URL("../public-web/public/sw.js", import.meta.url), "utf8");
+  const worker = createWorkerHarness(source, "https://example.test/Game-GDEYA/sw.js");
+  await worker.install();
+  for (const path of ["./labs/sc5-chronos/", "./labs/sc5-chronos/?cycleId=cycle-new-001&phase=after", "./labs/sc5-chronos/index.html?phase=before"]) {
+    const response = await worker.navigate(path);
+    assert.equal(response.status, 200);
+    assert.match(await response.text(), /labs\/sc5-chronos\/(?:index\.html)?$/u);
+  }
+  for (const file of ["sc5-core.mjs", "temporal-replay.mjs"]) {
+    const response = await worker.navigate(`./labs/sc5-chronos/${file}`, "cors");
+    assert.equal(response.status, 200);
+    assert.match(await response.text(), new RegExp(file.replaceAll(".", "\\.") + "$", "u"));
+  }
+  // No broad HTML fallback for missing JS, unknown pages, or the uncached game root.
+  for (const [path, mode] of [["./labs/sc5-chronos/missing.mjs", "cors"], ["./labs/sc5-chronos/unknown", "navigate"], ["./?offline=1", "navigate"]]) {
+    assert.equal((await worker.navigate(path, mode)).type, "error");
+  }
+});
+
+test("SC-5 shell contains its real transitive local module dependencies", async () => {
+  const root = new URL("../public-web/public/", import.meta.url);
+  const worker = await readFile(new URL("sw.js", root), "utf8");
+  const shell = new Set([...worker.matchAll(/'\.\/([^']+)'/gu)].map(match => match[1]));
+  const pending = ["labs/sc5-chronos/index.html"];
+  const visited = new Set();
+  while (pending.length) {
+    const file = pending.pop();
+    if (visited.has(file)) continue;
+    visited.add(file);
+    assert.ok(shell.has(file), `Missing precache entry: ${file}`);
+    const source = await readFile(new URL(file, root), "utf8");
+    for (const match of source.matchAll(/(?:from\s*|import\s*)["'](\.[^"']+)["']/gu)) {
+      pending.push(new URL(match[1], new URL(file, root)).href.slice(root.href.length));
+    }
+  }
+  assert.ok(visited.has("labs/sc5-chronos/temporal-replay.mjs"));
+  assert.ok(visited.has("labs/sc5-chronos/sc5-core.mjs"));
 });
 
 test("public Service Worker restores Platform 2.1, the ecosystem, labs and the live axis while offline", async () => {
